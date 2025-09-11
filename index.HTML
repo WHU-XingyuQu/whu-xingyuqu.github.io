@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Xingyu Qu (曲星宇)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+      color: #111;
+      background: #fff;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.2em;
+    }
+    h2 {
+      margin-top: 2em;
+      font-size: 1.5em;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.2em;
+    }
+    .profile {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .profile img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    ul {
+      margin: 0.5em 0 0.5em 1.2em;
+    }
+    footer {
+      margin-top: 3em;
+      font-size: 0.8em;
+      color: #555;
+      border-top: 1px solid #ccc;
+      padding-top: 1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile">
+    <img src="assets/me.jpg" alt="Xingyu Qu">
+    <div>
+      <h1>Xingyu Qu (曲星宇)</h1>
+      <p>Undergraduate Researcher, School of Computer Science, Wuhan University</p>
+      <p>Email: <a href="mailto:whu-quxy@whu.edu.cn">whu-quxy@whu.edu.cn</a><br>
+         GitHub: <a href="https://github.com/WHU-XingyuQu">WHU-XingyuQu</a></p>
+    </div>
+  </div>
+
+  <h2>About</h2>
+  <p>
+    Benxi Senior School 2021–2024<br>
+    Bachelor, Wuhan University 2024–Now
+  </p>
+  <p>
+    I focus on system optimization of Retrieval-Augmented Generation (RAG) in high-concurrency scenarios, multi-query scheduling of vector databases, throughput improvement, and other related issues.
+    The goal is to achieve synergistic optimization of retrieval and inference, and to develop system work that is <strong>deployable</strong>, <strong>reproducible</strong>, and <strong>scalable</strong>.
+  </p>
+
+  <h2>Research Interests</h2>
+  <ul>
+    <li><strong>Multi-Query Concurrency</strong> and <strong>Throughput Optimization</strong> for RAG systems (multi-vector query, batching, scheduling).</li>
+    <li>Robustness and engineering implementation of vector retrieval structures (e.g., HDR-Tree, FAISS Indexes) on high-dimensional data.</li>
+    <li><strong>Joint Optimization</strong> between inference (LLM Decoding) and retrieval (kNN/Subgraph/Caching).</li>
+    <li><strong>Cache Consistency and Reuse Strategy</strong> under KV-cache / Retrieval Cache / Semantic Sharding.</li>
+  </ul>
+
+  <h2>Projects</h2>
+  <ul>
+    <li><strong>MoRAG (Doing)</strong> — RAG System Optimization for Multiple Queries scenarios
+      <ul>
+        <li>Batch Retrieval and Multi-Query Scheduling</li>
+        <li>Same-Batch Joint Inference</li>
+        <li>System-Level Optimization Design</li>
+      </ul>
+      <img src="assets/morag_repo.png" alt="MoRAG Repo Preview" width="160">
+      <br>Documents (Preparing)
+    </li>
+    <li><strong>Migration Scripts for OpenTenBase</strong> — Tencent Opensource Database
+      <br>Updating OpenTenBase from v2.6 to v5.0 without changing any data.
+      <br><a href="https://github.com/WHU-XingyuQu/opentenbase-migrate-v2.6tov5.0">Repo</a>
+    </li>
+    <li><strong>RAG-demo</strong> — Realizing RAG simply
+      <br>A minimal and easy-to-run demo showing how Retrieval-Augmented Generation works in practice.
+      <br><a href="https://github.com/WHU-XingyuQu/RAG-demo">Demo Repo</a>
+    </li>
+  </ul>
+
+  <h2>CV</h2>
+  <p>Preparing (will be uploaded as PDF)</p>
+
+  <h2>Contact</h2>
+  <p>
+    Email: <a href="mailto:whu-quxy@whu.edu.cn">whu-quxy@whu.edu.cn</a><br>
+    GitHub: <a href="https://github.com/whuxingyuqu">@whuxingyuqu</a><br>
+    WeChat: xingyuCSer<br>
+    Address: B701, School of Computer Science, Wuhan University
+  </p>
+
+  <footer>
+    © <script>document.write(new Date().getFullYear());</script> Xingyu Qu
+  </footer>
+
+</body>
+</html>
