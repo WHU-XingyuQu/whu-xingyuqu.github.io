@@ -1,175 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Xingyu Qu (曲星宇)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: "Helvetica Neue", Arial, sans-serif;
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      line-height: 1.6;
-      color: #111;
-      background: #fff;
-    }
-    h1 {
-      font-size: 2em;
-      margin-bottom: 0.2em;
-    }
-    h2 {
-      margin-top: 2em;
-      font-size: 1.5em;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 0.2em;
-    }
-    .profile {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-    .profile img {
-      width: 140px;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-    }
-    ul {
-      margin: 0.5em 0 0.5em 1.2em;
-    }
-    footer {
-      margin-top: 3em;
-      font-size: 0.8em;
-      color: #555;
-      border-top: 1px solid #ccc;
-      padding-top: 1em;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xingyu Qu (曲星宇) - Wuhan University</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #004d99; /* 学术深蓝色 */
+            --text-color: #333;
+            --bg-color: #ffffff;
+            --section-margin: 2.5rem;
+        }
+
+        body {
+            font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            padding: 3rem 2rem;
+            gap: 3rem;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            flex: 1;
+            max-width: 250px;
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%; /* 圆形头像 */
+            object-fit: cover;
+            border: 3px solid #f0f0f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .name-zh {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .social-links {
+            margin-top: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            margin: 0 10px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 主内容样式 */
+        .main-content {
+            flex: 3;
+        }
+
+        h1 { font-size: 2.5rem; margin: 0; color: var(--text-color); }
+        h2 { 
+            font-size: 1.5rem; 
+            border-bottom: 1.5px solid #eee; 
+            padding-bottom: 0.5rem; 
+            margin-top: var(--section-margin);
+            color: var(--primary-color);
+        }
+
+        .bio { font-size: 1.1rem; text-align: justify; }
+
+        /* 教育和奖项列表 */
+        .item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+
+        .item-title { font-weight: 600; }
+        .item-date { color: #777; font-variant-numeric: tabular-nums; }
+
+        /* 项目样式 */
+        .project-card {
+            margin-bottom: 2rem;
+        }
+
+        .project-header {
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .project-desc {
+            margin: 0.5rem 0;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .project-img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .tag {
+            display: inline-block;
+            background: #f0f4f8;
+            color: #446688;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-right: 5px;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #888;
+            text-align: center;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; padding: 2rem 1rem; }
+            .sidebar { max-width: 100%; }
+            .main-content { width: 100%; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="profile">
-    <img src="assets/me.jpg" alt="Xingyu Qu">
-    <div>
-      <h1>Xingyu Qu (曲星宇)</h1>
-      <p>Undergraduate Student, School of Computer Science, Wuhan University</p>
-      <p>Email: whu-quxy[at]whu[dot]edu[dot]cn</a><br>
-         GitHub: <a href="https://github.com/WHU-XingyuQu">WHU-XingyuQu</a></p>
-    </div>
-  </div>
+<div class="container">
+    <aside class="sidebar">
+        <img src="assets/me.jpg" alt="Xingyu Qu" class="profile-img">
+        <h1>Xingyu Qu</h1>
+        <div class="name-zh">曲星宇</div>
+        <p style="margin-top: 1rem;">
+            Undergraduate Student<br>
+            Wuhan University
+        </p>
+        
+        <div class="social-links">
+            <a href="mailto:whu-quxy@whu.edu.cn" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://github.com/WHU-XingyuQu" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="Xingyu Qu_2026-01-09.pdf" target="_blank" title="CV"><i class="fas fa-file-pdf"></i></a>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: #777; margin-top: 2rem;">
+            School of Computer Science<br>
+            Room B701, WHU<br>
+            Wuhan, China
+        </p>
+    </aside>
 
-  <h2>About</h2>
-  <p>
-    <div style="max-width: 800px; margin: 0 auto;">
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <strong>Undergraduate in Computer Science, Wuhan University</strong>
-        <span>2024–Now</span>
-      </div>
-  </p>
+    <main class="main-content">
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="bio">
+                <p>
+                    I am a second-year undergraduate student in the <strong>Hongyi Honor Class</strong>, School of Computer Science at <strong>Wuhan University</strong>. 
+                    I joined the <a href="http://totemdb.whu.edu.cn/" target="_blank">Luojia Totem Database Lab</a> in my freshman year, where I am fortunate to be advised by 
+                    <a href="https://sheng.whu.edu.cn/" target="_blank">Prof. Sheng Wang</a>.
+                </p>
+                <p>
+                    My research focuses on the <strong>systematic optimization of Retrieval-Augmented Generation (RAG)</strong> in high-concurrency scenarios, 
+                    aiming to build efficient and "intelligent" data management systems. 
+                    I'm also passionate about Database Systems and LLM infrastructure (e.g., KV-cache optimization).
+                </p>
+            </div>
+        </section>
 
-  <p>
-    Hi, this is Xingyu. I'm a second-year undergraduate in Hongyi Honor Class, Computer Science at Wuhan University. I joined the <a href="http://totemdb.whu.edu.cn/">Luojia Totem Database Lab</a>, Wuhan University in my freshman year, where I am fortunate to be advised by 
-    <a href="https://sheng.whu.edu.cn/">Sheng Wang</a>. I'm now focusing on systematical optimization of Retrieval-Augmented Generation (RAG) 
-    in high-concurrency scenarios, in order to manage "intelligent" data.
-  </p>
+        <section id="education">
+            <h2>Education</h2>
+            <div class="item">
+                <span class="item-title">Wuhan University</span>
+                <span class="item-date">Sept. 2024 – Present</span>
+            </div>
+            <div style="margin-top: -0.5rem; font-size: 0.95rem; color: #555;">
+                B.Eng. in Computer Science (Hongyi Honor Class)
+            </div>
+        </section>
 
-  <h2>Awards and Honors</h2>
-  <p>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <strong> Scholarship for Excellent Academic Performance, Shenzhen Tianyuan Dic Information Technology Co., Ltd</strong>
-        <span>2025.11</span>
-      </div>
-    
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <strong> Scholarship for Excellent Academic Performance, Wuhan University</strong>
-        <span>2025.9</span>
-      </div>
+        <section id="interests">
+            <h2>Research Interests</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <span class="tag">RAG Throughput Optimization</span>
+                <span class="tag">Vector Database</span>
+                <span class="tag">Database Systems</span>
+                <span class="tag">LLM KV-cache</span>
+                <span class="tag">System Level Design</span>
+            </div>
+        </section>
 
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <strong> Outstanding Student, Wuhan University</strong>
-        <span>2025.9</span>
-      </div>
-    
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <strong>Tencent Open Source Contributor</strong>
-        <span>2025.9</span>
-      </div>
-      
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <strong>Tencent Open Source Award(total ￥6000)</strong>
-        <span>2025.9</span>
-      </div>
+        <section id="honors">
+            <h2>Awards and Honors</h2>
+            <div class="item">
+                <span class="item-title">Scholarship for Excellent Academic Performance (Tianyuan Dic)</span>
+                <span class="item-date">Nov. 2025</span>
+            </div>
+            <div class="item">
+                <span class="item-title">Scholarship for Excellent Academic Performance, WHU</span>
+                <span class="item-date">Sept. 2025</span>
+            </div>
+            <div class="item">
+                <span class="item-title">Outstanding Student, Wuhan University</span>
+                <span class="item-date">Sept. 2025</span>
+            </div>
+            <div class="item">
+                <span class="item-title">Tencent Open Source Core Contributor / Award</span>
+                <span class="item-date">Sept. 2025</span>
+            </div>
+            <div class="item">
+                <span class="item-title">Outstanding Freshman Award, Wuhan University</span>
+                <span class="item-date">Sept. 2024</span>
+            </div>
+        </section>
 
-      <div style="display: flex; justify-content: space-between;">
-        <strong>Outstanding Freshman Award, Wuhan University</strong>
-        <span>2024.9</span>
-      </div>
-  </p>  
+        <section id="projects">
+            <h2>Research & Projects</h2>
+            
+            <div class="project-card">
+                <div class="project-header">
+                    <span>MoRAG: Multi-Query Optimized RAG</span>
+                    <span class="item-date">2025 – Present</span>
+                </div>
+                <div class="project-desc">
+                    Researching RAG system optimization for high-concurrency scenarios. Key components include:
+                    <ul>
+                        <li>Batch Retrieval and Multi-Query Scheduling algorithms.</li>
+                        <li>Same-Batch Joint Inference for improved throughput.</li>
+                        <li>System-level optimization for "Intelligent" data management.</li>
+                    </ul>
+                </div>
+                <img src="assets/morag_repo.png" alt="MoRAG System Architecture" class="project-img">
+            </div>
 
-  <h2>Research Interests</h2>
-  <ul>
-    <li>Throughput Optimization of RAG System</li>
-    <li>Vector Database</li>
-    <li>Database System</li>
-    <li>KV-cache in LLM</li>
-  </ul>
+            <div class="project-card">
+                <div class="project-header">
+                    <span>OpenTenBase Migration & Optimization</span>
+                    <span class="item-date">2025</span>
+                </div>
+                <div class="project-desc">
+                    Selected for the <strong>Tencent Rhino Bird Open Source Program</strong>.
+                    <ul>
+                        <li>Developed migration scripts to update OpenTenBase from v2.6 to v5.0 with zero data loss.</li>
+                        <li>Successfully achieved the first full compilation of OpenTenBase v5.0 on Ubuntu.</li>
+                        <li>Conferred as "Tencent Open-source Core Contributor".</li>
+                    </ul>
+                    <a href="https://github.com/WHU-XingyuQu/opentenbase-migrate-v2.6tov5.0" target="_blank">[Migration Repo]</a> 
+                    <a href="https://github.com/WHU-XingyuQu/OpenTenBase-v5.0_compile-and-install" target="_blank">[Compile Repo]</a>
+                </div>
+            </div>
+        </section>
 
-  <h2>Projects</h2>
-  <ul>
-    <li><strong>2025 MoRAG(Multi-Query Optimized RAG)(Ongoing)</strong> —I started research for RAG system optimization for Multi-queries scenarios.
-      <ul>
-        <li>Batch Retrieval and Multi-Query Scheduling</li>
-        <li>Same-Batch Joint Inference</li>
-        <li>System-Level Optimization Design</li>
-      </ul>
-      <img src="assets/morag_repo.png" alt="MoRAG Repo Preview" width="560">
-    </li>
-    <li><strong>2025 Migration Scripts for OpenTenBase</strong> —I was selected by 2025 Tencent Rhino Bird Open Source Talent Training Program.
-      <br>Updating OpenTenBase from v2.6 to v5.0 without changing any data.
-      <br><a href="https://github.com/WHU-XingyuQu/opentenbase-migrate-v2.6tov5.0">Repo</a>
-      <br>Compiling OpentenBase v5.0 successfully for the first time on Ubuntu.
-      <br><a href="https://github.com/WHU-XingyuQu/OpenTenBase-v5.0_compile-and-install">Repo</a>
-      <br>I was conferred on "Tencent Open-source Core Contributor".
-    </li>
-  </ul>
-
-  <h2>CV</h2>
-  <a href="Xingyu Qu_2026-01-09.pdf" target="_blank">RESUME</a>
-
-  <h2>Contact</h2>
-  <p>
-    Email: whu-quxy[at]whu[dot]edu[dot]cn</a><br>
-    Address: B701, School of Computer Science, Wuhan University
-  </p>
-
-  <footer>
-    © <script>document.write(new Date().getFullYear());</script> Xingyu Qu
-  </footer>
+        <footer>
+            &copy; <script>document.write(new Date().getFullYear());</script> Xingyu Qu. Powered by HTML/CSS.
+        </footer>
+    </main>
+</div>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
