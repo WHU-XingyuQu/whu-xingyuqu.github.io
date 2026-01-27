@@ -22,39 +22,47 @@
             padding: 0;
         }
 
+        /* 修改容器间距 */
         .container {
             max-width: 1000px;
             margin: 0 auto;
             display: flex;
             padding: 3rem 2rem;
-            gap: 3rem;
+            gap: 1.5rem; /* 缩小间距，从 3rem 减为 1.5rem */
         }
-
-        /* 侧边栏样式 */
+        
+        /* 侧边栏收窄 */
         .sidebar {
-            flex: 1;
-            max-width: 250px;
+            flex: 0 0 180px; /* 固定宽度为 180px，不收缩也不扩张 */
             text-align: center;
         }
-
+        
+        /* 头像相应缩小 */
         .profile-img {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%; /* 圆形头像 */
+            width: 160px;  /* 从 220px 缩小到 160px */
+            height: 160px;
+            border-radius: 50%;
             object-fit: cover;
             border: 3px solid #f0f0f0;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
-
+        
+        /* 调整侧边栏文字大小以适应窄空间 */
+        .sidebar h1 {
+            font-size: 1.8rem; /* 名字稍微调小一点 */
+        }
+        
         .name-zh {
-            font-size: 1.2rem;
-            color: #666;
-            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar p {
+            font-size: 0.9rem; /* 侧边栏文字整体微调 */
         }
 
         .social-links {
-            margin-top: 1.5rem;
-            font-size: 1.5rem;
+            margin-top: 0.9rem;
+            font-size: 0.9rem;
         }
 
         .social-links a {
@@ -279,3 +287,4 @@
 
 </body>
 </html>
+
