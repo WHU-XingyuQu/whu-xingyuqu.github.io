@@ -102,6 +102,29 @@
         .item-title { font-weight: 600; }
         .item-date { color: #777; font-variant-numeric: tabular-nums; }
 
+        .education-entry {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .education-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        .education-text {
+            flex: 1;
+        }
+
+        .education-subtitle {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
         /* 项目样式 */
         .project-card {
             margin-bottom: 2rem;
@@ -151,6 +174,7 @@
             .container { flex-direction: column; padding: 2rem 1rem; }
             .sidebar { max-width: 100%; }
             .main-content { width: 100%; }
+            .education-logo { width: 48px; height: 48px; }
         }
     </style>
 </head>
@@ -186,34 +210,47 @@
                 <p>
                     I am a second-year undergraduate student in the <a href="https://cs.whu.edu.cn/info/1079/48211.htm" target="_blank">Hongyi Honor Class</a>, School of Computer Science at <strong>Wuhan University</strong>. 
                     I joined the <a href="http://totemdb.whu.edu.cn/" target="_blank">Luojia Totem Database Lab</a> in my freshman year, where I am fortunate to be advised by 
-                    <a href="https://sheng.whu.edu.cn/" target="_blank">Prof. Sheng Wang</a>.
+                    <a href="https://sheng.whu.edu.cn/" target="_blank">Prof. Sheng Wang</a>. And I am also fortune to be advised by <a href="https://zhiyuchen.com/" target="_blank">Zhiyu Chen</a> from Amazon.
                 </p>
                 <p>
-                    My research focuses on the <strong>systematic optimization of Retrieval-Augmented Generation (RAG)</strong> in high-concurrency scenarios, 
-                    aiming to build efficient and "intelligent" data management systems. 
-                    I'm also passionate about Database Systems and LLM infrastructure (e.g., KV-cache optimization).
+                    My research focuses on the <strong>LLM System</strong>\, 
+                    aiming to make efficient and "intelligent" data management in mordern systems. 
+                    I'm also passionate about AI infrastructure and Database Systems.
                 </p>
             </div>
         </section>
 
         <section id="education">
             <h2>Education</h2>
-            <div class="item">
-                <span class="item-title">Wuhan University</span>
-                <span class="item-date">Sept. 2024 – Present</span>
+            <div class="education-entry">
+                <img src="assets/whu.png" alt="Wuhan University logo" class="education-logo">
+                <div class="education-text">
+                    <div class="item">
+                        <span class="item-title">Wuhan University</span>
+                        <span class="item-date">Sept. 2024 – Present</span>
+                    </div>
+                    <div class="education-subtitle">
+                        B.Eng. in Computer Science (Hongyi Honor Class)
+                    </div>
+                </div>
             </div>
-            <div style="margin-top: -0.5rem; font-size: 0.95rem; color: #555;">
-                B.Eng. in Computer Science (Hongyi Honor Class)
+        </section>
+
+        <section id="experience">
+            <h2>Experience</h2>
+            <div class="item">
+                <span class="item-title">Incoming Summer Research Intern, Prof. Tao Lin's Lab, Westlake University</span>
+                <span class="item-date">Summer 2026</span>
             </div>
         </section>
 
         <section id="interests">
             <h2>Research Interests</h2>
             <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                <span class="tag">RAG Throughput Optimization</span>
+                <span class="tag">LLM System</span>
+                <span class="tag">AI infrastructure</span>
                 <span class="tag">Vector Database</span>
-                <span class="tag">Query Optimization</span>
-                <span class="tag">LLM KV-cache</span>
+                <span class="tag">Database System</span>
             </div>
         </section>
 
