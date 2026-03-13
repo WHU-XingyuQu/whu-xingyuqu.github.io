@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #0b3d6d;
+            --primary-color: #2f6fb3;
             --text-color: #1f2937;
             --muted-color: #6b7280;
             --bg-color: #f8fafc;
@@ -104,6 +104,52 @@
         .main-content {
             flex: 1;
             min-width: 0;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+            padding: 0.35rem;
+            border: 1px solid var(--line-color);
+            border-radius: 12px;
+            background: var(--surface-color);
+        }
+
+        .top-tab {
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--muted-color);
+            border-radius: 8px;
+            padding: 0.48rem 0.95rem;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .top-tab:hover {
+            color: var(--primary-color);
+            background: #edf4fc;
+        }
+
+        .top-tab.active {
+            color: #ffffff;
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .top-tab:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 1px;
+        }
+
+        .tab-page {
+            display: none;
+        }
+
+        .tab-page.active {
+            display: block;
         }
 
         section + section {
@@ -249,6 +295,15 @@
                 width: 100%;
             }
 
+            .top-nav {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .top-tab {
+                flex: 1 0 auto;
+            }
+
             .education-logo {
                 width: 48px;
                 height: 48px;
@@ -291,133 +346,145 @@
     </aside>
 
     <main class="main-content">
-        <section id="about">
-            <h2>About Me</h2>
-            <div class="bio">
-                <p>
-                    I am a second-year undergraduate student in the <a href="https://cs.whu.edu.cn/info/1079/48211.htm" target="_blank">Hongyi Honor Class</a>, School of Computer Science at <strong>Wuhan University</strong>. 
-                    I joined the <a href="http://totemdb.whu.edu.cn/" target="_blank">Luojia Totem Database Lab</a> in my freshman year, where I am fortunate to be advised by 
-                    <a href="https://sheng.whu.edu.cn/" target="_blank">Prof. Sheng Wang</a>. And I am also fortune to be advised by <a href="https://zhiyuchen.com/" target="_blank">Zhiyu Chen</a> from Amazon.
-                </p>
-                <p>
-                    My research focuses on the <strong>LLM System</strong>, 
-                    aiming to make efficient and "intelligent" data management in mordern systems. 
-                    I'm also passionate about topics on AI infrastructure and Database Systems.
-                </p>
-            </div>
-        </section>
+        <nav class="top-nav" role="tablist" aria-label="Content Tabs">
+            <button class="top-tab active" type="button" role="tab" aria-selected="true" aria-controls="tab-home" data-tab-target="tab-home" data-tab-hash="about">About</button>
+            <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-awards" data-tab-target="tab-awards" data-tab-hash="awards">Awards</button>
+            <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-projects" data-tab-target="tab-projects" data-tab-hash="projects">Projects</button>
+        </nav>
 
-        <section id="education">
-            <h2>Education</h2>
-            <div class="education-entry">
-                <img src="assets/whu.png" alt="Wuhan University logo" class="education-logo">
-                <div class="education-text">
-                    <div class="item">
-                        <span class="item-title">Wuhan University</span>
-                        <span class="item-date">Sept. 2024 - Present</span>
+        <div id="tab-home" class="tab-page active">
+            <section id="about">
+                <h2>About Me</h2>
+                <div class="bio">
+                    <p>
+                        I am a second-year undergraduate student in the <a href="https://cs.whu.edu.cn/info/1079/48211.htm" target="_blank">Hongyi Honor Class</a>, School of Computer Science at <strong>Wuhan University</strong>. 
+                        I joined the <a href="http://totemdb.whu.edu.cn/" target="_blank">Luojia Totem Database Lab</a> in my freshman year, where I am fortunate to be advised by 
+                        <a href="https://sheng.whu.edu.cn/" target="_blank">Prof. Sheng Wang</a>. And I am also fortune to be advised by <a href="https://zhiyuchen.com/" target="_blank">Zhiyu Chen</a> from Amazon.
+                    </p>
+                    <p>
+                        My research focuses on the <strong>LLM System</strong>, 
+                        aiming to make efficient and "intelligent" data management in mordern systems. 
+                        I'm also passionate about topics on AI infrastructure and Database Systems.
+                    </p>
+                </div>
+            </section>
+
+            <section id="education">
+                <h2>Education</h2>
+                <div class="education-entry">
+                    <img src="assets/whu.png" alt="Wuhan University logo" class="education-logo">
+                    <div class="education-text">
+                        <div class="item">
+                            <span class="item-title">Wuhan University</span>
+                            <span class="item-date">Sept. 2024 - Present</span>
+                        </div>
+                        <div class="education-subtitle">
+                            B.Eng. in Computer Science (Hongyi Honor Class)
+                        </div>
                     </div>
-                    <div class="education-subtitle">
-                        B.Eng. in Computer Science (Hongyi Honor Class)
+                </div>
+            </section>
+
+            <section id="experience">
+                <h2>Experience</h2>
+                <div class="item">
+                    <span class="item-title">Totem Database Lab, Wuhan University</span>
+                    <span class="item-date">2025.1-present</span>
+                </div>
+                <div class="item">
+                    <span class="item-title">Incoming Summer Research Intern, <a href="https://lins-lab.github.io/" target="_blank">Prof. Tao Lin's Lab</a>, Westlake University</span>
+                    <span class="item-date">Summer 2026</span>
+                </div>
+            </section>
+
+            <section id="interests">
+                <h2>Research Interests</h2>
+                <div class="tag-list">
+                    <span class="tag">LLM System</span>
+                    <span class="tag">AI infrastructure</span>
+                    <span class="tag">Vector Database</span>
+                    <span class="tag">Database System</span>
+                </div>
+            </section>
+        </div>
+
+        <div id="tab-awards" class="tab-page">
+            <section id="honors">
+                <h2>Awards and Honors</h2>
+                <div class="item">
+                    <span class="item-title">Scholarship for Excellent Academic Performance (Tianyuan Dic)</span>
+                    <span class="item-date">Nov. 2025</span>
+                </div>
+                <div class="item">
+                    <span class="item-title">Scholarship for Excellent Academic Performance, WHU</span>
+                    <span class="item-date">Sept. 2025</span>
+                </div>
+                <div class="item">
+                    <span class="item-title">Outstanding Student, Wuhan University</span>
+                    <span class="item-date">Sept. 2025</span>
+                </div>
+                <div class="item">
+                    <span class="item-title">Tencent Open Source Core Contributor / Award</span>
+                    <span class="item-date">Sept. 2025</span>
+                </div>
+                <div class="item">
+                    <span class="item-title">Outstanding Freshman Award, Wuhan University</span>
+                    <span class="item-date">Sept. 2024</span>
+                </div>
+            </section>
+        </div>
+
+        <div id="tab-projects" class="tab-page">
+            <section id="projects">
+                <h2>Research & Projects</h2>
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <span>MoRAG: Multi-Query Optimized RAG</span>
+                        <span class="item-date">2025 - Present</span>
+                    </div>
+                    <div class="project-desc">
+                        Researching RAG system optimization for high-concurrency scenarios. Key components include:
+                        <ul>
+                            <li>Batch Retrieval and Multi-Query Scheduling algorithms.</li>
+                            <li>Same-Batch Joint Inference for improved throughput.</li>
+                            <li>System-level optimization for "Intelligent" data management.</li>
+                        </ul>
+                    </div>
+                    <img src="assets/morag_20260202.png" alt="MoRAG System Architecture" class="project-img">
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <span>OpenTenBase Migration & Optimization</span>
+                        <span class="item-date">2025</span>
+                    </div>
+                    <div class="project-desc">
+                        Selected for the <strong>Tencent Rhino Bird Open Source Program</strong>.
+                        <ul>
+                            <li>Developed migration scripts to update OpenTenBase from v2.6 to v5.0 with zero data loss.</li>
+                            <li>Successfully achieved the first full compilation of OpenTenBase v5.0 on Ubuntu.</li>
+                            <li>Conferred as "Tencent Open-source Core Contributor".</li>
+                        </ul>
+                        <a href="https://github.com/WHU-XingyuQu/opentenbase-migrate-v2.6tov5.0" target="_blank">[Migration Repo]</a> 
+                        <a href="https://github.com/WHU-XingyuQu/OpenTenBase-v5.0_compile-and-install" target="_blank">[Compile Repo]</a>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <section id="experience">
-            <h2>Experience</h2>
-            <div class="item">
-                <span class="item-title">Totem Database Lab, Wuhan University</span>
-                <span class="item-date">2025.1-present</span>
-            </div>
-            <div class="item">
-                <span class="item-title">Incoming Summer Research Intern, <a href="https://lins-lab.github.io/" target="_blank">Prof. Tao Lin's Lab</a>, Westlake University</span>
-                <span class="item-date">Summer 2026</span>
-            </div>
-        </section>
-
-        <section id="interests">
-            <h2>Research Interests</h2>
-            <div class="tag-list">
-                <span class="tag">LLM System</span>
-                <span class="tag">AI infrastructure</span>
-                <span class="tag">Vector Database</span>
-                <span class="tag">Database System</span>
-            </div>
-        </section>
-
-        <section id="honors">
-            <h2>Awards and Honors</h2>
-            <div class="item">
-                <span class="item-title">Scholarship for Excellent Academic Performance (Tianyuan Dic)</span>
-                <span class="item-date">Nov. 2025</span>
-            </div>
-            <div class="item">
-                <span class="item-title">Scholarship for Excellent Academic Performance, WHU</span>
-                <span class="item-date">Sept. 2025</span>
-            </div>
-            <div class="item">
-                <span class="item-title">Outstanding Student, Wuhan University</span>
-                <span class="item-date">Sept. 2025</span>
-            </div>
-            <div class="item">
-                <span class="item-title">Tencent Open Source Core Contributor / Award</span>
-                <span class="item-date">Sept. 2025</span>
-            </div>
-            <div class="item">
-                <span class="item-title">Outstanding Freshman Award, Wuhan University</span>
-                <span class="item-date">Sept. 2024</span>
-            </div>
-        </section>
-
-        <section id="projects">
-            <h2>Research & Projects</h2>
-            
-            <div class="project-card">
-                <div class="project-header">
-                    <span>MoRAG: Multi-Query Optimized RAG</span>
-                    <span class="item-date">2025 - Present</span>
+                <div class="project-card">
+                    <div class="project-header">
+                        <span>XRDB: A SQL Database Engine in Rust.</span>
+                        <span class="item-date">2026</span>
+                    </div>
+                    <div class="project-desc">
+                        A project to learn the language Rust. Key components include:
+                    </div>
+                    <img src="assets/XRDB_overview.png" alt="XRDB Overview" class="project-img">
+                    <a href="https://github.com/WHU-XingyuQu/XRDB" target="_blank">[Repo]</a>
                 </div>
-                <div class="project-desc">
-                    Researching RAG system optimization for high-concurrency scenarios. Key components include:
-                    <ul>
-                        <li>Batch Retrieval and Multi-Query Scheduling algorithms.</li>
-                        <li>Same-Batch Joint Inference for improved throughput.</li>
-                        <li>System-level optimization for "Intelligent" data management.</li>
-                    </ul>
-                </div>
-                <img src="assets/morag_20260202.png" alt="MoRAG System Architecture" class="project-img">
-            </div>
-
-            <div class="project-card">
-                <div class="project-header">
-                    <span>OpenTenBase Migration & Optimization</span>
-                    <span class="item-date">2025</span>
-                </div>
-                <div class="project-desc">
-                    Selected for the <strong>Tencent Rhino Bird Open Source Program</strong>.
-                    <ul>
-                        <li>Developed migration scripts to update OpenTenBase from v2.6 to v5.0 with zero data loss.</li>
-                        <li>Successfully achieved the first full compilation of OpenTenBase v5.0 on Ubuntu.</li>
-                        <li>Conferred as "Tencent Open-source Core Contributor".</li>
-                    </ul>
-                    <a href="https://github.com/WHU-XingyuQu/opentenbase-migrate-v2.6tov5.0" target="_blank">[Migration Repo]</a> 
-                    <a href="https://github.com/WHU-XingyuQu/OpenTenBase-v5.0_compile-and-install" target="_blank">[Compile Repo]</a>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-header">
-                    <span>XRDB: A SQL Database Engine in Rust.</span>
-                    <span class="item-date">2026</span>
-                </div>
-                <div class="project-desc">
-                    A project to learn the language Rust. Key components include:
-                </div>
-                <img src="assets/XRDB_overview.png" alt="XRDB Overview" class="project-img">
-                <a href="https://github.com/WHU-XingyuQu/XRDB" target="_blank">[Repo]</a>
-            </div>
-            
-        </section>
+                
+            </section>
+        </div>
 
         <footer>
             &copy; <script>document.write(new Date().getFullYear());</script> Xingyu Qu. Powered by HTML/CSS.
@@ -425,12 +492,61 @@
     </main>
 </div>
 
+<script>
+    (function () {
+        var tabs = document.querySelectorAll(".top-tab");
+        var pages = document.querySelectorAll(".tab-page");
+        var hashToTarget = {
+            about: "tab-home",
+            awards: "tab-awards",
+            projects: "tab-projects"
+        };
+
+        function activateTab(targetId, syncHash) {
+            var activeTab = null;
+
+            pages.forEach(function (page) {
+                page.classList.toggle("active", page.id === targetId);
+            });
+
+            tabs.forEach(function (tab) {
+                var isActive = tab.dataset.tabTarget === targetId;
+                tab.classList.toggle("active", isActive);
+                tab.setAttribute("aria-selected", isActive ? "true" : "false");
+                if (isActive) activeTab = tab;
+            });
+
+            if (syncHash && activeTab) {
+                var hash = activeTab.dataset.tabHash;
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, "", "#" + hash);
+                } else {
+                    window.location.hash = hash;
+                }
+            }
+        }
+
+        function activateFromHash() {
+            var hashKey = window.location.hash.replace("#", "");
+            var targetId = hashToTarget[hashKey];
+            if (targetId) {
+                activateTab(targetId, false);
+            }
+        }
+
+        tabs.forEach(function (tab) {
+            tab.addEventListener("click", function () {
+                activateTab(tab.dataset.tabTarget, true);
+            });
+        });
+
+        activateFromHash();
+        window.addEventListener("hashchange", activateFromHash);
+    })();
+</script>
+
 </body>
 </html>
-
-
-
-
 
 
 
