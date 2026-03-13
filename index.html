@@ -3,109 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xingyu Qu (曲星宇) - Wuhan University</title>
+    <title>Xingyu Qu (&#26354;&#26143;&#23431;) - Wuhan University</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #004d99; /* 学术深蓝色 */
-            --text-color: #333;
-            --bg-color: #ffffff;
-            --section-margin: 2.5rem;
+            --primary-color: #0b3d6d;
+            --text-color: #1f2937;
+            --muted-color: #6b7280;
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --line-color: #e5e7eb;
+            --section-margin: 2rem;
         }
 
         body {
             font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            line-height: 1.6;
+            line-height: 1.65;
             color: var(--text-color);
             background-color: var(--bg-color);
             margin: 0;
             padding: 0;
         }
 
-        /* 修改容器间距 */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
         .container {
-            max-width: 1000px;
+            max-width: 1080px;
             margin: 0 auto;
             display: flex;
-            padding: 3rem 2rem;
-            gap: 1.5rem; /* 缩小间距，从 3rem 减为 1.5rem */
+            align-items: flex-start;
+            padding: 3.5rem 2rem 4rem;
+            gap: 2.5rem;
         }
-        
-        /* 侧边栏收窄 */
+
         .sidebar {
-            flex: 0 0 180px; /* 固定宽度为 180px，不收缩也不扩张 */
-            text-align: center;
+            flex: 0 0 220px;
+            text-align: left;
+            position: sticky;
+            top: 1.5rem;
+            padding-right: 1.5rem;
+            border-right: 1px solid var(--line-color);
         }
-        
-        /* 头像相应缩小 */
+
         .profile-img {
-            width: 160px;  /* 从 220px 缩小到 160px */
-            height: 160px;
+            width: 128px;
+            height: 128px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #f0f0f0;
-            margin-bottom: 1.2rem;
+            border: 2px solid var(--line-color);
+            margin-bottom: 1rem;
         }
-        
-        /* 调整侧边栏文字大小以适应窄空间 */
+
         .sidebar h1 {
-            font-size: 1.8rem; /* 名字稍微调小一点 */
+            font-size: 1.75rem;
+            line-height: 1.2;
+            margin: 0;
         }
-        
+
         .name-zh {
-            font-size: 1.1rem;
+            margin-top: 0.2rem;
+            font-size: 1rem;
+            color: var(--muted-color);
         }
-        
-        .sidebar p {
-            font-size: 0.9rem; /* 侧边栏文字整体微调 */
+
+        .sidebar-role {
+            margin-top: 0.9rem;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-address {
+            font-size: 0.88rem;
+            color: var(--muted-color);
+            margin-top: 1.6rem;
         }
 
         .social-links {
             margin-top: 0.9rem;
-            font-size: 0.9rem;
+            display: flex;
+            gap: 0.9rem;
+            font-size: 1rem;
         }
 
         .social-links a {
             color: var(--text-color);
-            margin: 0 10px;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color 0.2s;
         }
 
         .social-links a:hover {
             color: var(--primary-color);
         }
 
-        /* 主内容样式 */
         .main-content {
-            flex: 3;
+            flex: 1;
+            min-width: 0;
         }
 
-        h1 { font-size: 2.5rem; margin: 0; color: var(--text-color); }
-        h2 { 
-            font-size: 1.5rem; 
-            border-bottom: 1.5px solid #eee; 
-            padding-bottom: 0.5rem; 
+        section + section {
             margin-top: var(--section-margin);
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            border-bottom: 1px solid var(--line-color);
+            padding-bottom: 0.45rem;
+            margin: 0 0 0.95rem;
             color: var(--primary-color);
         }
 
-        .bio { font-size: 1.1rem; text-align: justify; }
+        .bio {
+            font-size: 1.03rem;
+            text-align: justify;
+        }
 
-        /* 教育和奖项列表 */
+        .bio p {
+            margin: 0 0 0.75rem;
+        }
+
         .item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.8rem;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.7rem;
         }
 
-        .item-title { font-weight: 600; }
-        .item-date { color: #777; font-variant-numeric: tabular-nums; }
+        .item-title {
+            font-weight: 600;
+        }
+
+        .item-date {
+            color: var(--muted-color);
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
 
         .education-entry {
             display: flex;
             gap: 1rem;
             align-items: flex-start;
+            padding: 0.3rem 0;
         }
 
         .education-logo {
@@ -113,7 +158,7 @@
             height: 56px;
             object-fit: contain;
             flex-shrink: 0;
-            margin-top: 0.2rem;
+            margin-top: 0.15rem;
         }
 
         .education-text {
@@ -122,59 +167,101 @@
 
         .education-subtitle {
             font-size: 0.95rem;
-            color: #555;
+            color: var(--muted-color);
         }
 
-        /* 项目样式 */
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #334155;
+            padding: 0.18rem 0.58rem;
+            border-radius: 999px;
+            font-size: 0.84rem;
+            border: 1px solid #e2e8f0;
+        }
+
         .project-card {
-            margin-bottom: 2rem;
+            margin-bottom: 1.15rem;
+            border: 1px solid var(--line-color);
+            background: var(--surface-color);
+            border-radius: 10px;
+            padding: 1rem 1rem 1.1rem;
         }
 
         .project-header {
-            font-weight: bold;
-            font-size: 1.1rem;
+            font-weight: 700;
+            font-size: 1.06rem;
             display: flex;
             justify-content: space-between;
+            gap: 1rem;
         }
 
         .project-desc {
-            margin: 0.5rem 0;
-            color: #555;
+            margin-top: 0.5rem;
+            color: #4b5563;
             font-size: 0.95rem;
+        }
+
+        .project-desc ul {
+            margin: 0.55rem 0 0 1.2rem;
+            padding: 0;
         }
 
         .project-img {
             width: 100%;
             max-width: 500px;
-            border-radius: 5px;
-            margin-top: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .tag {
-            display: inline-block;
-            background: #f0f4f8;
-            color: #446688;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            margin-right: 5px;
+            border-radius: 8px;
+            margin-top: 0.7rem;
+            border: 1px solid var(--line-color);
         }
 
         footer {
-            margin-top: 4rem;
-            padding-bottom: 2rem;
-            font-size: 0.9rem;
-            color: #888;
-            text-align: center;
+            margin-top: 2.8rem;
+            padding-bottom: 1rem;
+            font-size: 0.88rem;
+            color: var(--muted-color);
+            text-align: left;
         }
 
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            .container { flex-direction: column; padding: 2rem 1rem; }
-            .sidebar { max-width: 100%; }
-            .main-content { width: 100%; }
-            .education-logo { width: 48px; height: 48px; }
+        @media (max-width: 860px) {
+            .container {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 2.1rem 1.1rem 2.5rem;
+            }
+
+            .sidebar {
+                position: static;
+                border-right: 0;
+                border-bottom: 1px solid var(--line-color);
+                padding-right: 0;
+                padding-bottom: 1rem;
+                width: 100%;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+
+            .education-logo {
+                width: 48px;
+                height: 48px;
+            }
+
+            .item {
+                flex-wrap: wrap;
+                gap: 0.35rem;
+            }
+
+            .project-header {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -184,8 +271,8 @@
     <aside class="sidebar">
         <img src="assets/me.jpg" alt="Xingyu Qu" class="profile-img">
         <h1>Xingyu Qu</h1>
-        <div class="name-zh">曲星宇</div>
-        <p style="margin-top: 1rem;">
+        <div class="name-zh">&#26354;&#26143;&#23431;</div>
+        <p class="sidebar-role">
             Undergraduate Student<br>
             Wuhan University
         </p>
@@ -196,7 +283,7 @@
             <a href="Xingyu Qu_2026-01-09.pdf" target="_blank" title="CV"><i class="fas fa-file-pdf"></i></a>
         </div>
         
-        <p style="font-size: 0.85rem; color: #777; margin-top: 2rem;">
+        <p class="sidebar-address">
             School of Computer Science<br>
             Room B701, WHU<br>
             Wuhan, China
@@ -213,9 +300,9 @@
                     <a href="https://sheng.whu.edu.cn/" target="_blank">Prof. Sheng Wang</a>. And I am also fortune to be advised by <a href="https://zhiyuchen.com/" target="_blank">Zhiyu Chen</a> from Amazon.
                 </p>
                 <p>
-                    My research focuses on the <strong>LLM System</strong>\, 
+                    My research focuses on the <strong>LLM System</strong>, 
                     aiming to make efficient and "intelligent" data management in mordern systems. 
-                    I'm also passionate about AI infrastructure and Database Systems.
+                    I'm also passionate about topics on AI infrastructure and Database Systems.
                 </p>
             </div>
         </section>
@@ -227,7 +314,7 @@
                 <div class="education-text">
                     <div class="item">
                         <span class="item-title">Wuhan University</span>
-                        <span class="item-date">Sept. 2024 – Present</span>
+                        <span class="item-date">Sept. 2024 - Present</span>
                     </div>
                     <div class="education-subtitle">
                         B.Eng. in Computer Science (Hongyi Honor Class)
@@ -239,6 +326,10 @@
         <section id="experience">
             <h2>Experience</h2>
             <div class="item">
+                <span class="item-title">Totem Database Lab, Wuhan University</span>
+                <span class="item-date">2025.1-present</span>
+            </div>
+            <div class="item">
                 <span class="item-title">Incoming Summer Research Intern, <a href="https://lins-lab.github.io/" target="_blank">Prof. Tao Lin's Lab</a>, Westlake University</span>
                 <span class="item-date">Summer 2026</span>
             </div>
@@ -246,7 +337,7 @@
 
         <section id="interests">
             <h2>Research Interests</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <div class="tag-list">
                 <span class="tag">LLM System</span>
                 <span class="tag">AI infrastructure</span>
                 <span class="tag">Vector Database</span>
@@ -284,7 +375,7 @@
             <div class="project-card">
                 <div class="project-header">
                     <span>MoRAG: Multi-Query Optimized RAG</span>
-                    <span class="item-date">2025 – Present</span>
+                    <span class="item-date">2025 - Present</span>
                 </div>
                 <div class="project-desc">
                     Researching RAG system optimization for high-concurrency scenarios. Key components include:
@@ -316,7 +407,7 @@
 
             <div class="project-card">
                 <div class="project-header">
-                    <span>XRDB：A SQL Database Engine in Rust.</span>
+                    <span>XRDB: A SQL Database Engine in Rust.</span>
                     <span class="item-date">2026</span>
                 </div>
                 <div class="project-desc">
@@ -336,6 +427,7 @@
 
 </body>
 </html>
+
 
 
 
