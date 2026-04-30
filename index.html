@@ -392,6 +392,70 @@
             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
         }
 
+        .medal-board {
+            display: grid;
+            gap: 0.55rem;
+            margin-top: 0.7rem;
+        }
+
+        .medal-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.45rem 0.5rem;
+        }
+
+        .medal-category {
+            min-width: 4.8rem;
+            color: #334155;
+            font-weight: 800;
+        }
+
+        .medal-badge i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 0.55rem;
+            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.14);
+        }
+
+        .gold-medal {
+            border: 1px solid rgba(180, 83, 9, 0.24);
+            background: linear-gradient(135deg, #fffaf0 0%, #fef3c7 100%);
+            color: #92400e;
+            box-shadow: 0 6px 14px rgba(180, 83, 9, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .gold-medal i {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+        }
+
+        .silver-medal {
+            border: 1px solid rgba(100, 116, 139, 0.25);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #475569;
+            box-shadow: 0 6px 14px rgba(100, 116, 139, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .silver-medal i {
+            background: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
+        }
+
+        .bronze-medal {
+            border: 1px solid rgba(146, 64, 14, 0.24);
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+            color: #7c2d12;
+            box-shadow: 0 6px 14px rgba(146, 64, 14, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .bronze-medal i {
+            background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
+        }
+
         .project-desc {
             margin-top: 0.5rem;
             color: #4b5563;
@@ -409,6 +473,24 @@
             border-radius: 8px;
             margin-top: 0.7rem;
             border: 1px solid var(--line-color);
+        }
+
+        .service-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.8rem;
+            max-width: 760px;
+            margin-top: 0.9rem;
+        }
+
+        .service-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            object-position: center 62%;
+            border-radius: 8px;
+            border: 1px solid var(--line-color);
+            background: #f8fafc;
         }
 
         .research-interest-img {
@@ -483,6 +565,10 @@
 
             .project-header {
                 flex-wrap: wrap;
+            }
+
+            .service-gallery {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -636,9 +722,31 @@
         <div id="tab-service" class="tab-page">
             <section id="service">
                 <h2>Service</h2>
-                <div class="item">
-                    <span class="item-title">Academic and community service</span>
-                    <span class="item-date">Coming soon</span>
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-title">Captain, WHU School of Computer Science Table Tennis Team</span>
+                        <span class="item-date">Sept. 2025 - Present</span>
+                    </div>
+                    <div class="project-desc">
+                        Led the school team in table tennis training and competitions.
+                        <div class="medal-board" aria-label="Table tennis achievements">
+                            <div class="medal-row">
+                                <span class="medal-category">Team</span>
+                                <span class="project-badge medal-badge gold-medal"><i class="fas fa-medal" aria-hidden="true"></i> Gold Medal</span>
+                                <span class="project-badge medal-badge silver-medal"><i class="fas fa-medal" aria-hidden="true"></i> Silver Medal</span>
+                            </div>
+                            <div class="medal-row">
+                                <span class="medal-category">Individual</span>
+                                <span class="project-badge medal-badge gold-medal"><i class="fas fa-medal" aria-hidden="true"></i> Gold Medal</span>
+                                <span class="project-badge medal-badge silver-medal"><i class="fas fa-medal" aria-hidden="true"></i> Silver Medal</span>
+                                <span class="project-badge medal-badge bronze-medal"><i class="fas fa-medal" aria-hidden="true"></i> Bronze Medal</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="service-gallery">
+                        <img src="assets/pingpang_1.jpg" alt="WHU School of Computer Science table tennis team" class="service-img" loading="lazy">
+                        <img src="assets/pingpang_2.jpg" alt="Table tennis team at Wuhan University venue" class="service-img" loading="lazy">
+                    </div>
                 </div>
             </section>
         </div>
