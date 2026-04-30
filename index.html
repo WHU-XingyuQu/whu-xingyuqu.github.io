@@ -372,6 +372,26 @@
             box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.16);
         }
 
+        .starstruck-badge {
+            border: 1px solid rgba(124, 58, 237, 0.22);
+            background: linear-gradient(135deg, #f8f7ff 0%, #eef6ff 48%, #fff1f2 100%);
+            color: #6d28d9;
+            box-shadow: 0 6px 14px rgba(124, 58, 237, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .starstruck-badge i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            color: #ffffff;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            font-size: 0.55rem;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+
         .project-desc {
             margin-top: 0.5rem;
             color: #4b5563;
@@ -659,7 +679,10 @@
 
                 <div class="project-card">
                     <div class="project-header">
-                        <span>XRDB: A SQL Database Engine in Rust.</span>
+                        <span class="project-title">
+                            XRDB: A SQL Database Engine in Rust.
+                            <span class="project-badge starstruck-badge"><i class="fas fa-star" aria-hidden="true"></i> Starstruck</span>
+                        </span>
                         <span class="item-date">2026</span>
                     </div>
                     <div class="project-desc">
