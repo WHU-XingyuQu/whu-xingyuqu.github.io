@@ -517,7 +517,8 @@
         <nav class="top-nav" role="tablist" aria-label="Content Tabs">
             <button class="top-tab active" type="button" role="tab" aria-selected="true" aria-controls="tab-home" data-tab-target="tab-home" data-tab-hash="about">About</button>
             <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-awards" data-tab-target="tab-awards" data-tab-hash="awards">Awards</button>
-            <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-projects" data-tab-target="tab-projects" data-tab-hash="projects">Projects</button>
+            <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-service" data-tab-target="tab-service" data-tab-hash="service">Service</button>
+            <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-projects" data-tab-target="tab-projects" data-tab-hash="research">Research</button>
         </nav>
 
         <div id="tab-home" class="tab-page active">
@@ -632,9 +633,19 @@
             </section>
         </div>
 
+        <div id="tab-service" class="tab-page">
+            <section id="service">
+                <h2>Service</h2>
+                <div class="item">
+                    <span class="item-title">Academic and community service</span>
+                    <span class="item-date">Coming soon</span>
+                </div>
+            </section>
+        </div>
+
         <div id="tab-projects" class="tab-page">
-            <section id="projects">
-                <h2>Research & Projects</h2>
+            <section id="research">
+                <h2>Research</h2>
                 
                 <div class="project-card">
                     <div class="project-header">
@@ -710,6 +721,8 @@
         var hashToTarget = {
             about: "tab-home",
             awards: "tab-awards",
+            service: "tab-service",
+            research: "tab-projects",
             projects: "tab-projects"
         };
 
