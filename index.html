@@ -327,29 +327,32 @@
             box-shadow: 0 6px 14px rgba(47, 111, 179, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
 
-        .paper-badge::before {
-            content: "";
-            width: 0.68rem;
-            height: 0.84rem;
-            flex: 0 0 auto;
-            border: 1px solid rgba(47, 111, 179, 0.42);
-            border-radius: 0.14rem;
-            background:
-                linear-gradient(135deg, transparent 0 68%, rgba(47, 111, 179, 0.18) 69% 100%) top right / 0.34rem 0.34rem no-repeat,
-                linear-gradient(#2f6fb3, #2f6fb3) 50% 43% / 0.42rem 1px no-repeat,
-                linear-gradient(#2f6fb3, #2f6fb3) 50% 60% / 0.42rem 1px no-repeat,
-                linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%);
-            box-shadow: 0 1px 3px rgba(31, 41, 55, 0.08);
+        a.paper-badge:hover {
+            text-decoration: none;
+            border-color: rgba(47, 111, 179, 0.38);
+            box-shadow: 0 8px 18px rgba(47, 111, 179, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
 
-        .paper-badge::after {
-            content: "";
-            width: 0.34rem;
-            height: 0.34rem;
-            margin-left: 0.05rem;
-            border-radius: 50%;
-            background: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.16);
+        .paper-badge .arxiv-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.68rem;
+            height: 1rem;
+            flex: 0 0 auto;
+            border: 1px solid rgba(47, 111, 179, 0.42);
+            border-radius: 0.22rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%);
+            box-shadow: 0 1px 3px rgba(31, 41, 55, 0.08);
+            color: #b31b1b;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 0.58rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .paper-badge .arxiv-icon::before {
+            content: "arXiv";
         }
 
         .contributor-badge {
@@ -760,7 +763,10 @@
                     <div class="project-header">
                         <span class="project-title">
                             PRISM: Fast Online Serving via Scheduling-Memory Co-design
-                            <span class="project-badge paper-badge">Paper: coming soon</span>
+                            <a class="project-badge paper-badge" href="https://arxiv.org/abs/2605.08581" target="_blank" rel="noopener noreferrer" title="Read PRISM on arXiv">
+                                <span class="arxiv-icon" aria-hidden="true"></span>
+                                arXiv
+                            </a>
                         </span>
                         <span class="item-date">2025 - Present</span>
                     </div>
