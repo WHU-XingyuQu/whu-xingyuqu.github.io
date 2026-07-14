@@ -572,14 +572,250 @@
             background: #f8fafc;
         }
 
-        .research-interest-img {
-            display: block;
-            width: 100%;
-            max-width: 720px;
-            border-radius: 10px;
-            margin: 0.2rem 0 1rem;
+        .research-map {
+            margin: 0.2rem 0 1.35rem;
+            padding: 1.1rem;
             border: 1px solid var(--line-color);
-            background: var(--surface-color);
+            border-radius: 14px;
+            background:
+                radial-gradient(circle at top left, rgba(47, 111, 179, 0.08), transparent 34%),
+                var(--surface-color);
+        }
+
+        .research-map-heading {
+            margin-bottom: 1rem;
+        }
+
+        .research-map-eyebrow {
+            display: block;
+            color: var(--primary-color);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+
+        .research-map-heading h3 {
+            margin: 0.2rem 0 0;
+            font-size: 1.15rem;
+            line-height: 1.35;
+        }
+
+        .research-map-heading p {
+            margin: 0.25rem 0 0;
+            color: var(--muted-color);
+            font-size: 0.86rem;
+        }
+
+        .research-venn {
+            display: grid;
+            grid-template-columns: minmax(145px, 0.8fr) minmax(315px, 1.6fr) minmax(145px, 0.8fr);
+            grid-template-areas:
+                "data core inference"
+                ". training .";
+            align-items: center;
+            column-gap: 1rem;
+            row-gap: 0.45rem;
+        }
+
+        .research-core {
+            grid-area: core;
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            height: 355px;
+            justify-self: center;
+            isolation: isolate;
+        }
+
+        .research-node {
+            width: 100%;
+            border: 1px solid transparent;
+            border-radius: 14px;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+
+        .research-node:hover,
+        .research-node:focus-visible,
+        .research-node.is-selected {
+            border-color: var(--track-color);
+            box-shadow: 0 9px 22px rgba(15, 23, 42, 0.12);
+        }
+
+        .research-node:focus-visible {
+            outline: 2px solid var(--track-color);
+            outline-offset: 2px;
+        }
+
+        .research-focus {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 190px;
+            height: 190px;
+            padding: 1.15rem;
+            border-radius: 50%;
+            color: #172033;
+            text-align: center;
+            background: var(--track-fill);
+            border: 2px solid var(--track-color);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        .research-focus:hover,
+        .research-focus:focus-visible,
+        .research-focus.is-selected {
+            transform: scale(1.045);
+            z-index: 5;
+        }
+
+        .research-focus-data {
+            --track-color: #a54449;
+            --track-fill: rgba(224, 139, 143, 0.78);
+            left: 0;
+            top: 18px;
+        }
+
+        .research-focus-training {
+            --track-color: #8f4c99;
+            --track-fill: rgba(197, 126, 207, 0.76);
+            left: 50%;
+            top: 158px;
+            margin-left: -95px;
+        }
+
+        .research-focus-inference {
+            --track-color: #317d98;
+            --track-fill: rgba(158, 210, 226, 0.78);
+            right: 0;
+            top: 52px;
+        }
+
+        .research-node-kicker {
+            display: block;
+            margin-bottom: 0.32rem;
+            color: var(--track-color);
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .research-focus strong,
+        .research-project-node strong {
+            display: block;
+            line-height: 1.25;
+        }
+
+        .research-focus strong {
+            font-size: 1.28rem;
+        }
+
+        .research-focus small {
+            display: block;
+            margin-top: 0.4rem;
+            color: #253044;
+            line-height: 1.4;
+        }
+
+        .research-project-branch {
+            position: relative;
+            display: grid;
+            gap: 0.58rem;
+            align-self: center;
+        }
+
+        .research-project-branch::after {
+            content: "";
+            position: absolute;
+            background: var(--track-color);
+            opacity: 0.62;
+        }
+
+        .research-data-projects {
+            grid-area: data;
+            --track-color: #a54449;
+            --track-border: #e8b7ba;
+        }
+
+        .research-data-projects::after {
+            top: 50%;
+            right: -1rem;
+            width: 1rem;
+            height: 2px;
+        }
+
+        .research-inference-projects {
+            grid-area: inference;
+            --track-color: #317d98;
+            --track-border: #add6e2;
+        }
+
+        .research-inference-projects::after {
+            top: 50%;
+            left: -1rem;
+            width: 1rem;
+            height: 2px;
+        }
+
+        .research-training-projects {
+            grid-area: training;
+            width: min(230px, 100%);
+            justify-self: center;
+            --track-color: #8f4c99;
+            --track-border: #dfb9e3;
+        }
+
+        .research-training-projects::after {
+            top: -0.45rem;
+            left: 50%;
+            width: 2px;
+            height: 0.45rem;
+            transform: translateX(-50%);
+        }
+
+        .research-project-node {
+            min-height: 82px;
+            padding: 0.7rem 0.75rem;
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.94);
+            border-color: var(--track-border);
+        }
+
+        .research-project-node:hover,
+        .research-project-node:focus-visible,
+        .research-project-node.is-selected {
+            transform: translateY(-3px);
+        }
+
+        .research-project-node small {
+            display: block;
+            margin-top: 0.28rem;
+            color: var(--muted-color);
+            line-height: 1.35;
+        }
+
+        .research-map-status {
+            min-height: 1.4em;
+            margin: 0.85rem 0 0;
+            color: var(--muted-color);
+            font-size: 0.8rem;
+        }
+
+        .project-card {
+            scroll-margin-top: 1.5rem;
+            transition: border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .project-card.map-highlight {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(47, 111, 179, 0.14);
         }
 
         .project-links {
@@ -648,6 +884,78 @@
 
             .service-gallery {
                 grid-template-columns: 1fr;
+            }
+
+            .research-venn {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-areas:
+                    "core core"
+                    "data inference"
+                    "training training";
+                gap: 0.9rem;
+            }
+
+            .research-core {
+                width: min(350px, 100%);
+            }
+
+            .research-project-branch::after {
+                display: none;
+            }
+
+            .research-project-node {
+                min-height: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .research-map {
+                padding: 0.9rem;
+            }
+
+            .research-core {
+                height: 305px;
+            }
+
+            .research-focus {
+                width: 158px;
+                height: 158px;
+                padding: 0.8rem;
+            }
+
+            .research-focus-data {
+                left: 3%;
+                top: 10px;
+            }
+
+            .research-focus-inference {
+                right: 3%;
+                top: 38px;
+            }
+
+            .research-focus-training {
+                top: 137px;
+                margin-left: -79px;
+            }
+
+            .research-focus strong {
+                font-size: 1.08rem;
+            }
+
+            .research-focus small {
+                font-size: 0.76rem;
+            }
+
+            .research-node-kicker {
+                font-size: 0.61rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .research-node,
+            .project-card {
+                scroll-behavior: auto;
+                transition: none;
             }
         }
     </style>
@@ -878,9 +1186,67 @@
         <div id="tab-projects" class="tab-page">
             <section id="research">
                 <h2>Research</h2>
-                <img src="assets/research%20topic.png" alt="Research topic overview" class="research-interest-img">
+                <!-- Interactive research map: edit the labels, descriptions, and project targets here. -->
+                <div class="research-map" aria-labelledby="research-map-title">
+                    <div class="research-map-heading">
+                        <span class="research-map-eyebrow">Research &amp; Project Map</span>
+                        <h3 id="research-map-title">Systems, Architecture &amp; Infrastructure for ML/AI</h3>
+                        <p>Hover to explore a relationship. Click a project to jump to its details.</p>
+                    </div>
+
+                    <div class="research-venn">
+                        <div class="research-core" aria-label="Overlapping research areas">
+                            <button class="research-node research-focus research-focus-data" type="button" data-map-key="data" data-map-message="Data Systems connects database architecture with efficient data management.">
+                                <span class="research-node-kicker">Research Area</span>
+                                <strong>Data</strong>
+                                <small>Distributed databases</small>
+                            </button>
+                            <button class="research-node research-focus research-focus-training" type="button" data-map-key="training" data-map-message="Training Infrastructure focuses on system-level optimization for reinforcement learning workloads.">
+                                <span class="research-node-kicker">Research Area</span>
+                                <strong>Training</strong>
+                                <small>RL infrastructure</small>
+                            </button>
+                            <button class="research-node research-focus research-focus-inference" type="button" data-map-key="inference" data-map-message="Inference Systems focuses on low-latency online LLM serving.">
+                                <span class="research-node-kicker">Research Area</span>
+                                <strong>Inference</strong>
+                                <small>Scheduling &amp; KV cache</small>
+                            </button>
+                        </div>
+
+                        <div class="research-project-branch research-data-projects" aria-label="Data projects">
+                            <button class="research-node research-project-node" type="button" data-map-key="data" data-project-target="project-opentenbase" data-map-message="OpenTenBase applies the Data Systems direction to distributed database migration and optimization.">
+                                <span class="research-node-kicker">Project · 2025</span>
+                                <strong>OpenTenBase</strong>
+                                <small>Distributed database optimization.</small>
+                            </button>
+                            <button class="research-node research-project-node" type="button" data-map-key="data" data-project-target="project-xrdb" data-map-message="XRDB explores database-engine internals through a SQL engine written in Rust.">
+                                <span class="research-node-kicker">Project · 2026</span>
+                                <strong>XRDB</strong>
+                                <small>SQL engine in Rust.</small>
+                            </button>
+                        </div>
+
+                        <div class="research-project-branch research-inference-projects" aria-label="Inference projects">
+                            <button class="research-node research-project-node" type="button" data-map-key="inference" data-project-target="project-prism" data-map-message="PRISM connects scheduling and KV-cache management for lower-latency online LLM serving.">
+                                <span class="research-node-kicker">Paper · 2025–Present</span>
+                                <strong>PRISM</strong>
+                                <small>Scheduling–memory co-design.</small>
+                            </button>
+                        </div>
+
+                        <div class="research-project-branch research-training-projects" aria-label="Training projects">
+                            <button class="research-node research-project-node" type="button" data-map-key="training" data-map-message="Slime is the current exploration point for RL infrastructure and training-system optimization.">
+                                <span class="research-node-kicker">Exploration</span>
+                                <strong>Slime / RL Infra</strong>
+                                <small>Training-system optimization.</small>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="research-map-status" aria-live="polite">Select a research or project block to inspect its relationship.</p>
+                </div>
                 
-                <div class="project-card">
+                <div class="project-card" id="project-prism">
                     <div class="project-header">
                         <span class="project-title">
                             PRISM: Fast Online Serving via Scheduling-Memory Co-design
@@ -900,7 +1266,7 @@
                     </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card" id="project-opentenbase">
                     <div class="project-header">
                         <span class="project-title">
                             OpenTenBase Migration & Optimization
@@ -923,7 +1289,7 @@
                     </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card" id="project-xrdb">
                     <div class="project-header">
                         <span class="project-title">
                             XRDB: A SQL Database Engine in Rust.
@@ -996,6 +1362,53 @@
         tabs.forEach(function (tab) {
             tab.addEventListener("click", function () {
                 activateTab(tab.dataset.tabTarget, true);
+            });
+        });
+
+        var mapNodes = document.querySelectorAll(".research-node");
+        var mapStatus = document.querySelector(".research-map-status");
+        var highlightedCard = null;
+
+        function selectMapNode(node, shouldScroll) {
+            var mapKey = node.dataset.mapKey;
+            var targetId = node.dataset.projectTarget;
+
+            mapNodes.forEach(function (candidate) {
+                var isSelected = candidate.dataset.mapKey === mapKey;
+                candidate.classList.toggle("is-selected", isSelected);
+                candidate.setAttribute("aria-pressed", isSelected ? "true" : "false");
+            });
+
+            if (mapStatus) {
+                mapStatus.textContent = node.dataset.mapMessage;
+            }
+
+            if (highlightedCard) {
+                highlightedCard.classList.remove("map-highlight");
+            }
+
+            highlightedCard = targetId ? document.getElementById(targetId) : null;
+            if (highlightedCard) {
+                highlightedCard.classList.add("map-highlight");
+                if (shouldScroll) {
+                    highlightedCard.scrollIntoView({
+                        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+                        block: "start"
+                    });
+                }
+            }
+        }
+
+        mapNodes.forEach(function (node) {
+            node.setAttribute("aria-pressed", "false");
+            node.addEventListener("click", function () {
+                selectMapNode(node, Boolean(node.dataset.projectTarget));
+            });
+            node.addEventListener("mouseenter", function () {
+                if (mapStatus) mapStatus.textContent = node.dataset.mapMessage;
+            });
+            node.addEventListener("focus", function () {
+                if (mapStatus) mapStatus.textContent = node.dataset.mapMessage;
             });
         });
 
