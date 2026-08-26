@@ -355,6 +355,32 @@
             border: 1px solid #e2e8f0;
         }
 
+        .publication-list {
+            color: #000000;
+        }
+
+        .publication-entry {
+            margin: 0 0 2rem;
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+
+        .publication-title {
+            color: #000000;
+        }
+
+        .publication-entry a {
+            text-decoration: underline;
+        }
+
+        .publication-authors {
+            color: grey;
+        }
+
+        .publication-authors strong {
+            color: rgb(50, 50, 50);
+        }
+
         .project-card {
             margin-bottom: 1.15rem;
             border: 1px solid var(--line-color);
@@ -971,7 +997,7 @@
 
 <div class="container">
     <aside class="sidebar">
-        <img src="assets/me.jpg" alt="Xingyu Qu" class="profile-img">
+        <img src="assets/face_20260826.png" alt="Xingyu Qu" class="profile-img">
         <h1>Xingyu Qu</h1>
         <div class="name-zh">&#26354;&#26143;&#23431;</div>
         <p class="sidebar-role">
@@ -1042,6 +1068,7 @@
         <nav class="top-nav" role="tablist" aria-label="Content Tabs">
             <button class="top-tab active" type="button" role="tab" aria-selected="true" aria-controls="tab-home" data-tab-target="tab-home" data-tab-hash="about">About</button>
             <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-projects" data-tab-target="tab-projects" data-tab-hash="research">Research</button>
+            <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-publications" data-tab-target="tab-publications" data-tab-hash="publications">Publication</button>
             <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-awards" data-tab-target="tab-awards" data-tab-hash="awards">Awards</button>
             <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-service" data-tab-target="tab-service" data-tab-hash="service">Service</button>
         </nav>
@@ -1055,7 +1082,7 @@
                         I am a second-year undergraduate student in the <a href="https://cs.whu.edu.cn/info/1079/48211.htm" target="_blank">Hongyi Honor Class</a>, School of Computer Science at <a href="https://www.whu.edu.cn/" target="_blank"><strong>Wuhan University</strong></a>.
                         I joined the <a href="http://totemdb.whu.edu.cn/" target="_blank">Totem Database Laboratory</a> in my freshman year, where I am fortunate to be advised by
                         <a href="https://sheng.whu.edu.cn/" target="_blank">Prof. Sheng Wang</a>. And I really appreciate the guidance from <a href="https://zhiyuchen.com/" target="_blank">Dr. Zhiyu Chen</a> at Amazon.
-                        I'm currently working with <a href="https://tlin-taolin.github.io/" target="_blank">Prof. Tao Lin</a> and <a href="https://siyuan.lu/" target="_blank">Dr. Siyuan Lu</a> at Westlake University, focusing on building efficient agent-serving systems.
+                        I'm currently working with <a href="https://tlin-taolin.github.io/" target="_blank">Prof. Tao Lin</a> and <a href="https://siyuan.lu/" target="_blank">Dr. Siyuan Lu</a> at Westlake University, focusing on building efficient LLM systems.
                     </p>
                     <p>
                         My research focuses on <strong>Systems for ML</strong>,
@@ -1322,6 +1349,20 @@
             </section>
         </div>
 
+        <div id="tab-publications" class="tab-page">
+            <section id="publications">
+                <h2>Publications</h2>
+                <div class="publication-list">
+                    <p class="publication-entry">
+                        <span class="publication-title">PRISM: Fast Online LLM Serving via Scheduling-Memory Co-design</span>
+                        <a href="https://arxiv.org/abs/2605.08581" target="_blank" rel="noopener noreferrer">[Paper]</a><br>
+                        <span class="publication-authors"><strong>Xingyu Qu</strong>, Tianhao Lin, Yiqi Li, Zhiyu Chen, and Sheng Wang</span><br>
+                        arXiv preprint (arXiv'26)<br>
+                    </p>
+                </div>
+            </section>
+        </div>
+
         <footer>
             &copy; <script>document.write(new Date().getFullYear());</script> Xingyu Qu. Powered by HTML/CSS.
         </footer>
@@ -1337,7 +1378,9 @@
             awards: "tab-awards",
             service: "tab-service",
             research: "tab-projects",
-            projects: "tab-projects"
+            projects: "tab-projects",
+            publications: "tab-publications",
+            publication: "tab-publications"
         };
 
         function activateTab(targetId, syncHash) {
