@@ -1072,6 +1072,7 @@
             <button class="top-tab active" type="button" role="tab" aria-selected="true" aria-controls="tab-home" data-tab-target="tab-home" data-tab-hash="about">About</button>
             <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-projects" data-tab-target="tab-projects" data-tab-hash="research">Research</button>
             <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-publications" data-tab-target="tab-publications" data-tab-hash="publications">Publication</button>
+            <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-recruiting" data-tab-target="tab-recruiting" data-tab-hash="recruiting">Recruiting</button>
             <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-awards" data-tab-target="tab-awards" data-tab-hash="awards">Awards</button>
             <button class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-service" data-tab-target="tab-service" data-tab-hash="service">Service</button>
         </nav>
@@ -1093,9 +1094,6 @@
                     </p>
                     <p>
                         I also share technical notes and reflections on research through my <a href="https://www.zhihu.com/people/cookie-47-37-39" target="_blank" rel="noopener noreferrer">Zhihu blog</a> and <a href="https://www.xiaohongshu.com/user/profile/669cdd2a000000002401cf4d" target="_blank" rel="noopener noreferrer">Xiaohongshu</a>. Feel free to visit if you use Chinese social media.
-                    </p>
-                    <p>
-                        Our lab at WHU always looks for high-motivated undergraduate students and interns/RA. If you are interested in topics about databases/LLM/AI infra/ML, feel free to contact <a href="https://sheng.whu.edu.cn/" target="_blank" rel="noopener noreferrer">Prof. Sheng Wang</a> or email me directly. We can offer guidance and support within our means.
                     </p>
                 </div>
             </section>
@@ -1377,6 +1375,20 @@
             </section>
         </div>
 
+        <div id="tab-recruiting" class="tab-page">
+            <section id="recruiting">
+                <h2>Recruiting</h2>
+                <div class="bio">
+                    <p>
+                        <a href="https://sheng.whu.edu.cn/group.html" target="_blank" rel="noopener noreferrer">Our lab</a> at WHU always looks for high-motivated undergraduate students and interns/RA. If you are interested in topics about databases/LLM/AI infra/ML, feel free to contact <a href="https://sheng.whu.edu.cn/" target="_blank" rel="noopener noreferrer">Prof. Sheng Wang</a> or email me directly. We can offer guidance and support within our means.
+                    </p>
+                    <p>
+                        My experience in the lab has been highly rewarding. I have received excellent guidance and benefited from a supportive and collaborative lab environment. Along the way, I have developed practical insights into getting started with research in machine learning and database systems, and I am always open to research collaborations.
+                    </p>
+                </div>
+            </section>
+        </div>
+
         <footer>
             &copy; <script>document.write(new Date().getFullYear());</script> Xingyu Qu. Powered by HTML/CSS.
         </footer>
@@ -1394,7 +1406,9 @@
             research: "tab-projects",
             projects: "tab-projects",
             publications: "tab-publications",
-            publication: "tab-publications"
+            publication: "tab-publications",
+            recruiting: "tab-recruiting",
+            recruitment: "tab-recruiting"
         };
 
         function activateTab(targetId, syncHash) {
