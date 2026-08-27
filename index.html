@@ -53,10 +53,11 @@
         }
 
         .profile-img {
-            width: 128px;
-            height: 128px;
-            border-radius: 50%;
-            object-fit: cover;
+            display: block;
+            width: 190px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
             border: 2px solid var(--line-color);
             margin-bottom: 1rem;
         }
@@ -1272,6 +1273,11 @@
                                 <strong>PRISM</strong>
                                 <small>Scheduling–memory co-design.</small>
                             </button>
+                            <button class="research-node research-project-node" type="button" data-map-key="inference" data-project-target="project-cachebridge" data-map-message="CacheBridge explores efficient KV-cache transfer across models.">
+                                <span class="research-node-kicker">Paper · Coming Soon</span>
+                                <strong>CacheBridge</strong>
+                                <small>Cross-model KV cache transfer.</small>
+                            </button>
                         </div>
 
                         <div class="research-project-branch research-training-projects" aria-label="Training projects">
@@ -1304,6 +1310,13 @@
                             <li>Scheduling-Memory Co-design for lower latency.</li>
                         </ul>
                     </div>
+                </div>
+
+                <div class="project-card" id="project-cachebridge">
+                    <div class="project-header">
+                        <span class="project-title">CacheBridge: Efficient Cross-Model KV Cache Transfer</span>
+                    </div>
+                    <div class="project-desc">Paper coming soon.</div>
                 </div>
 
                 <div class="project-card" id="project-opentenbase">
