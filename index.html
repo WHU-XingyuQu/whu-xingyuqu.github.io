@@ -1272,8 +1272,8 @@
                                 <strong>PRISM</strong>
                                 <small>Scheduling–memory co-design.</small>
                             </button>
-                            <button class="research-node research-project-node" type="button" data-map-key="inference" data-project-target="project-cachebridge" data-map-message="CacheBridge explores efficient KV-cache transfer across models.">
-                                <span class="research-node-kicker">Paper · Coming Soon</span>
+                            <button class="research-node research-project-node" type="button" data-map-key="inference" data-project-target="project-cachebridge" data-map-message="CacheBridge co-designs attention-aligned mapping and efficient GPU construction for cross-model KV-cache transfer.">
+                                <span class="research-node-kicker">Paper · 2026</span>
                                 <strong>CacheBridge</strong>
                                 <small>Cross-model KV cache transfer.</small>
                             </button>
@@ -1313,9 +1313,22 @@
 
                 <div class="project-card" id="project-cachebridge">
                     <div class="project-header">
-                        <span class="project-title">CacheBridge: Efficient Cross-Model KV Cache Transfer</span>
+                        <span class="project-title">
+                            CacheBridge: Efficient Cross-Model KV Cache Transfer
+                            <a class="project-badge paper-badge" href="https://arxiv.org/abs/2609.00891" target="_blank" rel="noopener noreferrer" title="Read CacheBridge on arXiv">
+                                <span class="arxiv-icon" aria-hidden="true"></span>
+                                arXiv
+                            </a>
+                        </span>
+                        <span class="item-date">2026</span>
                     </div>
-                    <div class="project-desc">Paper coming soon.</div>
+                    <div class="project-desc">
+                        Cross-Model KV Cache Transfer:
+                        <ul>
+                            <li>Attention-aligned, head-wise mapping across model architectures.</li>
+                            <li>Memory-efficient GPU construction and low-cost online application.</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="project-card" id="project-opentenbase">
@@ -1365,6 +1378,12 @@
             <section id="publications">
                 <h2>Publications</h2>
                 <div class="publication-list">
+                    <p class="publication-entry">
+                        <span class="publication-title">CacheBridge: Efficient Cross-Model KV Cache Transfer</span>
+                        <a href="https://arxiv.org/abs/2609.00891" target="_blank" rel="noopener noreferrer">[Paper]</a><br>
+                        <span class="publication-authors"><strong>Xingyu Qu</strong>, Siyuan Lu, Zhiyu Chen, Sheng Wang, and Tao Lin</span><br>
+                        arXiv preprint (arXiv'26)<br>
+                    </p>
                     <p class="publication-entry">
                         <span class="publication-title">PRISM: Fast Online LLM Serving via Scheduling-Memory Co-design</span>
                         <a href="https://arxiv.org/abs/2605.08581" target="_blank" rel="noopener noreferrer">[Paper]</a><br>
