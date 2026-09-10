@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="曲星宇的计算机组成与体系结构笔记，涵盖 RISC-V、处理器、流水线、存储系统、总线与 I/O。">
+    <title>技术笔记 | 曲星宇</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a aria-current="page" href="index.html">全部笔记</a>
+            <a href="../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="notes-shell">
+        <section class="series-intro">
+            <p class="eyebrow">技术笔记</p>
+            <h1>计算机组成与体系结构</h1>
+            <p>本系列共 13 篇，按照课程进度从 RISC-V 指令集出发，依次介绍运算部件、处理器数据通路、流水线、存储系统、总线与 I/O。本站版本在保留原有技术结构的基础上，统一了术语和书面表达。</p>
+            <div class="series-meta">
+                <span>13 篇笔记</span>
+                <span>2025 年 9 月至 12 月</span>
+                <a href="https://www.zhihu.com/column/c_1949874045978936715" target="_blank" rel="noopener noreferrer">知乎原专栏</a>
+            </div>
+        </section>
+        <section class="note-grid" aria-label="课程笔记">
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 0 讲</span><time>2025年9月12日</time></div>
+                <h2><a href="lecture-0.html">计算机组成与体系结构 &#183; 第 0 讲</a></h2>
+                <p>介绍计算机体系结构的八个核心设计思想，并说明执行时间、CPU 时间、CPI、时钟频率等性能指标；随后讨论功耗墙、多核处理器与 SPEC 基准测试。</p>
+                <a class="read-link" href="lecture-0.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 1 讲</span><time>2025年9月18日</time></div>
+                <h2><a href="lecture-1.html">计算机组成与体系结构 &#183; 第 1 讲</a></h2>
+                <p>从软件与硬件接口的角度介绍 RISC-V 指令集，梳理算术、数据传送与控制流指令，以及寄存器、内存、立即数和主要指令格式。</p>
+                <a class="read-link" href="lecture-1.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 2 讲</span><time>2025年9月24日</time></div>
+                <h2><a href="lecture-2.html">计算机组成与体系结构 &#183; 第 2 讲</a></h2>
+                <p>逐一讲解 RISC-V 的 R、I、S、B、U、J 型指令，说明立即数编码、访存、分支与跳转语义，并总结字段布局背后的设计原则。</p>
+                <a class="read-link" href="lecture-2.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 3 讲</span><time>2025年9月26日</time></div>
+                <h2><a href="lecture-3.html">计算机组成与体系结构 &#183; 第 3 讲</a></h2>
+                <p>以递归函数为例说明 RISC-V 过程调用、寄存器保存和栈帧变化，同时介绍常见寻址模式，以及使用 LR/SC 实现同步的原子操作。</p>
+                <a class="read-link" href="lecture-3.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 4 讲</span><time>2025年10月1日</time></div>
+                <h2><a href="lecture-4.html">计算机组成与体系结构 &#183; 第 4 讲</a></h2>
+                <p>从一位逻辑与加法单元扩展到 32 位 ALU，分析减法、比较和溢出判断，并推导分层超前进位加法器及其 Verilog 实现。</p>
+                <a class="read-link" href="lecture-4.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 5 讲</span><time>2025年10月14日</time></div>
+                <h2><a href="lecture-5.html">计算机组成与体系结构 &#183; 第 5 讲</a></h2>
+                <p>梳理乘法器与除法器的数据通路、迭代过程和 RISC-V 指令，并介绍 IEEE 754 浮点数表示，以及浮点加法和乘法的执行步骤。</p>
+                <a class="read-link" href="lecture-5.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 6 讲</span><time>2025年10月15日</time></div>
+                <h2><a href="lecture-6.html">计算机组成与体系结构 &#183; 第 6 讲</a></h2>
+                <p>介绍处理器的基本组成和指令执行阶段，分别构建 R 型、load/store 与分支指令的数据通路，最后组合成单周期 RISC-V 完整数据通路。</p>
+                <a class="read-link" href="lecture-6.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 7 讲</span><time>2025年10月16日</time></div>
+                <h2><a href="lecture-7.html">计算机组成与体系结构 &#183; 第 7 讲</a></h2>
+                <p>围绕单周期处理器的控制通路，说明不同指令所需的控制信号、ALU 控制器、组合逻辑与 ROM 控制方案，并分析指令延迟和关键路径。</p>
+                <a class="read-link" href="lecture-7.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 8 讲</span><time>2025年11月5日</time></div>
+                <h2><a href="lecture-8.html">计算机组成与体系结构 &#183; 第 8 讲</a></h2>
+                <p>从多周期处理器过渡到五级流水线，讲解流水线寄存器和数据通路的组织方式，并区分结构冒险、数据冒险与控制冒险。</p>
+                <a class="read-link" href="lecture-8.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 9 讲</span><time>2025年11月22日</time></div>
+                <h2><a href="lecture-9.html">计算机组成与体系结构 &#183; 第 9 讲</a></h2>
+                <p>完善流水线控制通路，介绍前递、暂停与冒险检测机制；进一步讨论一位和两位分支预测器、分支目标缓冲，以及流水线中的异常处理。</p>
+                <a class="read-link" href="lecture-9.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 10 讲</span><time>2025年12月4日</time></div>
+                <h2><a href="lecture-10.html">计算机组成与体系结构 &#183; 第 10 讲</a></h2>
+                <p>从局部性原理出发建立存储层次，比较 SRAM、DRAM、闪存与磁盘的特点，并讲解直接映射 Cache 的地址划分、命中判断和数据访问过程。</p>
+                <a class="read-link" href="lecture-10.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 11 讲</span><time>2025年12月7日</time></div>
+                <h2><a href="lecture-11.html">计算机组成与体系结构 &#183; 第 11 讲</a></h2>
+                <p>讨论 Cache 的写直达与写回策略、AMAT 和相联度，扩展到多级 Cache；随后介绍虚拟内存、页表、缺页处理和 TLB 地址转换。</p>
+                <a class="read-link" href="lecture-11.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 12 讲</span><time>2025年12月9日</time></div>
+                <h2><a href="lecture-12.html">计算机组成与体系结构 &#183; 第 12 讲</a></h2>
+                <p>系统梳理无条件传送、查询、中断和 DMA 四种 I/O 方式，并介绍总线分类、性能、仲裁、定时与系统结构，以及常用接口和外部设备。</p>
+                <a class="read-link" href="lecture-12.html">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

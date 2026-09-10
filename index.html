@@ -601,6 +601,35 @@
             background: #f8fafc;
         }
 
+        .service-note-card {
+            margin-top: 1.2rem;
+            background:
+                radial-gradient(circle at top right, rgba(47, 111, 179, 0.09), transparent 38%),
+                var(--surface-color);
+        }
+
+        .service-note-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.8rem;
+        }
+
+        .service-note-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.9rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .service-note-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
         .research-map {
             margin: 0.2rem 0 1.35rem;
             padding: 1.1rem;
@@ -1217,6 +1246,24 @@
                     <div class="service-gallery">
                         <img src="assets/pingpang_1.jpg" alt="WHU School of Computer Science table tennis team" class="service-img" loading="lazy">
                         <img src="assets/pingpang_2.jpg" alt="Table tennis team at Wuhan University venue" class="service-img" loading="lazy">
+                    </div>
+                </div>
+                <div class="project-card service-note-card">
+                    <div class="project-header">
+                        <span class="project-title">Technical Notes: Computer Organization and Architecture</span>
+                        <span class="item-date">Sept. - Dec. 2025</span>
+                    </div>
+                    <div class="project-desc">
+                        A 13-part course-note series covering RISC-V, processor design, pipelines, memory systems, buses, and I/O. The website edition preserves the technical structure while removing social-media-specific material and standardizing the presentation.
+                        <div class="service-note-meta" aria-label="Technical note topics">
+                            <span class="tag">RISC-V</span>
+                            <span class="tag">Processor Design</span>
+                            <span class="tag">Memory Systems</span>
+                        </div>
+                        <div class="service-note-links">
+                            <a href="notes/index.html">Browse all notes <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                            <a href="https://www.zhihu.com/column/c_1949874045978936715" target="_blank" rel="noopener noreferrer">Original Zhihu column <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                        </div>
                     </div>
                 </div>
             </section>
