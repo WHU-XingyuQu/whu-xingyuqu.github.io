@@ -675,12 +675,9 @@
         .research-venn {
             display: grid;
             grid-template-columns: minmax(145px, 0.8fr) minmax(315px, 1.6fr) minmax(145px, 0.8fr);
-            grid-template-areas:
-                "data core inference"
-                ". training .";
+            grid-template-areas: "data core inference";
             align-items: center;
             column-gap: 1rem;
-            row-gap: 0.45rem;
         }
 
         .research-core {
@@ -688,7 +685,7 @@
             position: relative;
             width: 100%;
             max-width: 350px;
-            height: 355px;
+            height: 250px;
             justify-self: center;
             isolation: isolate;
         }
@@ -744,22 +741,14 @@
             --track-color: #a54449;
             --track-fill: rgba(224, 139, 143, 0.78);
             left: 0;
-            top: 18px;
-        }
-
-        .research-focus-training {
-            --track-color: #8f4c99;
-            --track-fill: rgba(197, 126, 207, 0.76);
-            left: 50%;
-            top: 158px;
-            margin-left: -95px;
+            top: 30px;
         }
 
         .research-focus-inference {
             --track-color: #317d98;
             --track-fill: rgba(158, 210, 226, 0.78);
             right: 0;
-            top: 52px;
+            top: 30px;
         }
 
         .research-node-kicker {
@@ -827,22 +816,6 @@
             left: -1rem;
             width: 1rem;
             height: 2px;
-        }
-
-        .research-training-projects {
-            grid-area: training;
-            width: min(230px, 100%);
-            justify-self: center;
-            --track-color: #8f4c99;
-            --track-border: #dfb9e3;
-        }
-
-        .research-training-projects::after {
-            top: -0.45rem;
-            left: 50%;
-            width: 2px;
-            height: 0.45rem;
-            transform: translateX(-50%);
         }
 
         .research-project-node {
@@ -955,8 +928,7 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
                 grid-template-areas:
                     "core core"
-                    "data inference"
-                    "training training";
+                    "data inference";
                 gap: 0.9rem;
             }
 
@@ -979,7 +951,7 @@
             }
 
             .research-core {
-                height: 305px;
+                height: 205px;
             }
 
             .research-focus {
@@ -990,17 +962,12 @@
 
             .research-focus-data {
                 left: 3%;
-                top: 10px;
+                top: 22px;
             }
 
             .research-focus-inference {
                 right: 3%;
-                top: 38px;
-            }
-
-            .research-focus-training {
-                top: 137px;
-                margin-left: -79px;
+                top: 22px;
             }
 
             .research-focus strong {
@@ -1288,11 +1255,6 @@
                                 <strong>Data</strong>
                                 <small>Distributed databases</small>
                             </button>
-                            <button class="research-node research-focus research-focus-training" type="button" data-map-key="training" data-map-message="Training Infrastructure focuses on system-level optimization for reinforcement learning workloads.">
-                                <span class="research-node-kicker">Research Area</span>
-                                <strong>Training</strong>
-                                <small>RL infrastructure</small>
-                            </button>
                             <button class="research-node research-focus research-focus-inference" type="button" data-map-key="inference" data-map-message="Inference Systems focuses on low-latency online LLM serving.">
                                 <span class="research-node-kicker">Research Area</span>
                                 <strong>Inference</strong>
@@ -1323,14 +1285,6 @@
                                 <span class="research-node-kicker">Paper · 2026.05</span>
                                 <strong>PRISM</strong>
                                 <small>Scheduling–memory co-design.</small>
-                            </button>
-                        </div>
-
-                        <div class="research-project-branch research-training-projects" aria-label="Training projects">
-                            <button class="research-node research-project-node" type="button" data-map-key="training" data-map-message="Slime is the current exploration point for RL infrastructure and training-system optimization.">
-                                <span class="research-node-kicker">Exploration</span>
-                                <strong>Slime / RL Infra</strong>
-                                <small>Training-system optimization.</small>
                             </button>
                         </div>
                     </div>
