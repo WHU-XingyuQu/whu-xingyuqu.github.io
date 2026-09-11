@@ -672,22 +672,65 @@
             font-size: 0.86rem;
         }
 
-        .research-venn {
-            display: grid;
-            grid-template-columns: minmax(145px, 0.8fr) minmax(315px, 1.6fr) minmax(145px, 0.8fr);
-            grid-template-areas: "data core inference";
+        .research-bridge {
+            display: flex;
             align-items: center;
-            column-gap: 1rem;
+            gap: 0.8rem;
+            margin: 0 0 1rem;
+            color: var(--muted-color);
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.035em;
+            text-align: center;
         }
 
-        .research-core {
-            grid-area: core;
-            position: relative;
-            width: 100%;
-            max-width: 350px;
-            height: 250px;
-            justify-self: center;
-            isolation: isolate;
+        .research-bridge::before,
+        .research-bridge::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            border-radius: 999px;
+        }
+
+        .research-bridge::before {
+            background: linear-gradient(90deg, transparent, #a54449);
+        }
+
+        .research-bridge::after {
+            background: linear-gradient(90deg, #317d98, transparent);
+        }
+
+        .research-bridge span {
+            max-width: 330px;
+        }
+
+        .research-pillars {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .research-pillar {
+            display: grid;
+            align-content: start;
+            gap: 0.75rem;
+            padding: 0.85rem;
+            border: 1px solid var(--track-border);
+            border-top: 4px solid var(--track-color);
+            border-radius: 16px;
+            background: linear-gradient(180deg, var(--track-fill), rgba(255, 255, 255, 0.92) 42%);
+        }
+
+        .research-pillar-data {
+            --track-color: #a54449;
+            --track-border: #e8b7ba;
+            --track-fill: rgba(224, 139, 143, 0.18);
+        }
+
+        .research-pillar-inference {
+            --track-color: #317d98;
+            --track-border: #add6e2;
+            --track-fill: rgba(158, 210, 226, 0.2);
         }
 
         .research-node {
@@ -713,42 +756,20 @@
         }
 
         .research-focus {
-            position: absolute;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            width: 190px;
-            height: 190px;
-            padding: 1.15rem;
-            border-radius: 50%;
+            min-height: 132px;
+            padding: 1rem;
             color: #172033;
-            text-align: center;
-            background: var(--track-fill);
-            border: 2px solid var(--track-color);
-            backdrop-filter: blur(2px);
-            z-index: 1;
+            background: rgba(255, 255, 255, 0.82);
+            border-color: var(--track-border);
         }
 
         .research-focus:hover,
         .research-focus:focus-visible,
         .research-focus.is-selected {
-            transform: scale(1.045);
-            z-index: 5;
-        }
-
-        .research-focus-data {
-            --track-color: #a54449;
-            --track-fill: rgba(224, 139, 143, 0.78);
-            left: 0;
-            top: 30px;
-        }
-
-        .research-focus-inference {
-            --track-color: #317d98;
-            --track-fill: rgba(158, 210, 226, 0.78);
-            right: 0;
-            top: 30px;
+            transform: translateY(-3px);
         }
 
         .research-node-kicker {
@@ -779,43 +800,9 @@
         }
 
         .research-project-branch {
-            position: relative;
             display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 0.58rem;
-            align-self: center;
-        }
-
-        .research-project-branch::after {
-            content: "";
-            position: absolute;
-            background: var(--track-color);
-            opacity: 0.62;
-        }
-
-        .research-data-projects {
-            grid-area: data;
-            --track-color: #a54449;
-            --track-border: #e8b7ba;
-        }
-
-        .research-data-projects::after {
-            top: 50%;
-            right: -1rem;
-            width: 1rem;
-            height: 2px;
-        }
-
-        .research-inference-projects {
-            grid-area: inference;
-            --track-color: #317d98;
-            --track-border: #add6e2;
-        }
-
-        .research-inference-projects::after {
-            top: 50%;
-            left: -1rem;
-            width: 1rem;
-            height: 2px;
         }
 
         .research-project-node {
@@ -924,20 +911,8 @@
                 grid-template-columns: 1fr;
             }
 
-            .research-venn {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                grid-template-areas:
-                    "core core"
-                    "data inference";
-                gap: 0.9rem;
-            }
-
-            .research-core {
-                width: min(350px, 100%);
-            }
-
-            .research-project-branch::after {
-                display: none;
+            .research-pillars {
+                grid-template-columns: 1fr;
             }
 
             .research-project-node {
@@ -950,24 +925,18 @@
                 padding: 0.9rem;
             }
 
-            .research-core {
-                height: 205px;
+            .research-bridge {
+                gap: 0.55rem;
+                font-size: 0.68rem;
             }
 
             .research-focus {
-                width: 158px;
-                height: 158px;
-                padding: 0.8rem;
+                min-height: 0;
+                padding: 0.9rem;
             }
 
-            .research-focus-data {
-                left: 3%;
-                top: 22px;
-            }
-
-            .research-focus-inference {
-                right: 3%;
-                top: 22px;
+            .research-project-branch {
+                grid-template-columns: 1fr;
             }
 
             .research-focus strong {
@@ -1248,45 +1217,50 @@
                         <p>Hover to explore a relationship. Click a project to jump to its details.</p>
                     </div>
 
-                    <div class="research-venn">
-                        <div class="research-core" aria-label="Overlapping research areas">
+                    <div class="research-bridge" aria-label="Shared systems principles">
+                        <span>Shared systems principles: scheduling, memory, and data movement</span>
+                    </div>
+
+                    <div class="research-pillars">
+                        <section class="research-pillar research-pillar-data" aria-label="Data Systems research and projects">
                             <button class="research-node research-focus research-focus-data" type="button" data-map-key="data" data-map-message="Data Systems connects database architecture with efficient data management.">
                                 <span class="research-node-kicker">Research Area</span>
-                                <strong>Data</strong>
+                                <strong>Data Systems</strong>
                                 <small>Distributed databases</small>
                             </button>
+                            <div class="research-project-branch research-data-projects" aria-label="Data projects">
+                                <button class="research-node research-project-node" type="button" data-map-key="data" data-project-target="project-opentenbase" data-map-message="OpenTenBase applies the Data Systems direction to distributed database migration and optimization.">
+                                    <span class="research-node-kicker">Project · 2025</span>
+                                    <strong>OpenTenBase</strong>
+                                    <small>Distributed database optimization.</small>
+                                </button>
+                                <button class="research-node research-project-node" type="button" data-map-key="data" data-project-target="project-xrdb" data-map-message="XRDB explores database-engine internals through a SQL engine written in Rust.">
+                                    <span class="research-node-kicker">Project · 2026</span>
+                                    <strong>XRDB</strong>
+                                    <small>SQL engine in Rust.</small>
+                                </button>
+                            </div>
+                        </section>
+
+                        <section class="research-pillar research-pillar-inference" aria-label="Inference Systems research and projects">
                             <button class="research-node research-focus research-focus-inference" type="button" data-map-key="inference" data-map-message="Inference Systems focuses on low-latency online LLM serving.">
                                 <span class="research-node-kicker">Research Area</span>
-                                <strong>Inference</strong>
+                                <strong>Inference Systems</strong>
                                 <small>Scheduling &amp; KV cache</small>
                             </button>
-                        </div>
-
-                        <div class="research-project-branch research-data-projects" aria-label="Data projects">
-                            <button class="research-node research-project-node" type="button" data-map-key="data" data-project-target="project-opentenbase" data-map-message="OpenTenBase applies the Data Systems direction to distributed database migration and optimization.">
-                                <span class="research-node-kicker">Project · 2025</span>
-                                <strong>OpenTenBase</strong>
-                                <small>Distributed database optimization.</small>
-                            </button>
-                            <button class="research-node research-project-node" type="button" data-map-key="data" data-project-target="project-xrdb" data-map-message="XRDB explores database-engine internals through a SQL engine written in Rust.">
-                                <span class="research-node-kicker">Project · 2026</span>
-                                <strong>XRDB</strong>
-                                <small>SQL engine in Rust.</small>
-                            </button>
-                        </div>
-
-                        <div class="research-project-branch research-inference-projects" aria-label="Inference projects">
-                            <button class="research-node research-project-node" type="button" data-map-key="inference" data-project-target="project-cachebridge" data-map-message="CacheBridge co-designs attention-aligned mapping and efficient GPU construction for cross-model KV-cache transfer.">
-                                <span class="research-node-kicker">Paper · 2026</span>
-                                <strong>CacheBridge</strong>
-                                <small>Cross-model KV cache transfer.</small>
-                            </button>
-                            <button class="research-node research-project-node" type="button" data-map-key="inference" data-project-target="project-prism" data-map-message="PRISM connects scheduling and KV-cache management for lower-latency online LLM serving.">
-                                <span class="research-node-kicker">Paper · 2026.05</span>
-                                <strong>PRISM</strong>
-                                <small>Scheduling–memory co-design.</small>
-                            </button>
-                        </div>
+                            <div class="research-project-branch research-inference-projects" aria-label="Inference projects">
+                                <button class="research-node research-project-node" type="button" data-map-key="inference" data-project-target="project-cachebridge" data-map-message="CacheBridge co-designs attention-aligned mapping and efficient GPU construction for cross-model KV-cache transfer.">
+                                    <span class="research-node-kicker">Paper · 2026</span>
+                                    <strong>CacheBridge</strong>
+                                    <small>Cross-model KV cache transfer.</small>
+                                </button>
+                                <button class="research-node research-project-node" type="button" data-map-key="inference" data-project-target="project-prism" data-map-message="PRISM connects scheduling and KV-cache management for lower-latency online LLM serving.">
+                                    <span class="research-node-kicker">Paper · 2026.05</span>
+                                    <strong>PRISM</strong>
+                                    <small>Scheduling–memory co-design.</small>
+                                </button>
+                            </div>
+                        </section>
                     </div>
 
                     <p class="research-map-status" aria-live="polite">Select a research or project block to inspect its relationship.</p>
