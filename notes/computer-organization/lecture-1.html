@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="从软件与硬件接口的角度介绍 RISC-V 指令集，梳理算术、数据传送与控制流指令，以及寄存器、内存、立即数和主要指令格式。">
+    <title>计算机组成与体系结构 &#183; 第 1 讲 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">计算机组成与体系结构</p>
+                <h1>计算机组成与体系结构 &#183; 第 1 讲</h1>
+                <p class="article-summary">从软件与硬件接口的角度介绍 RISC-V 指令集，梳理算术、数据传送与控制流指令，以及寄存器、内存、立即数和主要指令格式。</p>
+                <div class="article-meta">
+                    <time datetime="2025-09-18">2025年9月18日</time>
+                    <span>本站整理版</span>
+                    <a href="https://zhuanlan.zhihu.com/p/1951986046796534922" target="_blank" rel="noopener noreferrer">查看知乎原文</a>
+                </div>
+            </header>
+            <div class="article-body">
+<p>本讲概述 RISC-V 的主要特性与整体指令架构，具体编码细节将在下一讲展开。</p><h2>（一）指令：计算机的语言</h2><p>为实现计算机的基本功能，指令集至少需要支持以下几类操作：</p><h3>（1）算术指令：完成基本算术与逻辑运算。</h3><h3>（2）数据传送指令</h3><p>在经典存储程序体系结构中，计算与存储由不同部件承担，因此需要数据传送指令在寄存器与内存之间移动数据。</p><h3>（3）跳转指令</h3><p>程序需要控制，高级语言转换成的机器语言不一定是顺序执行的。</p><p>指令集架构（ISA）定义软件与硬件之间的接口；汇编表示使机器操作具有可读形式，体现了抽象在系统设计中的作用。</p><h2>（二）RISC-V的操作数</h2><p>课程中使用32位的RISC-V架构，包含32个寄存器。（x0~x31）</p><p>RISC-V 指令涉及寄存器、内存数据和立即数三类操作对象，下面分别介绍。</p><h3>1. 寄存器——更小则更快</h3><p>寄存器内置于CPU中，极短的通信距离和极小的硬件结构加快了数据的传送速度。</p><figure><img src="../../assets/notes/lecture-1/figure-01.jpg" alt="第 1 讲技术示意图" loading="lazy"><figcaption>RISC-V寄存器的功能</figcaption></figure><figure><img src="../../assets/notes/lecture-1/figure-02.jpg" alt="第 1 讲技术示意图" loading="lazy"><figcaption>RISC-V汇编示例</figcaption></figure><h3>2. 内存</h3><p>RISC-V 采用 load/store 架构：算术运算主要在寄存器中完成，数据通过 load 与 store 指令在寄存器和内存之间移动。</p><p>（1）通过存、取指令实现数据的存储和提取<br></p><figure><img src="../../assets/notes/lecture-1/figure-03.jpg" alt="第 1 讲技术示意图" loading="lazy"><figcaption>l,s指令</figcaption></figure><p>（2）字节寻址（byte-addressed）</p><p>RISC-V 将整个内存空间划分为最小单元为 “8 位（1 字节）” 的存储单元，每个这样的单元都被分配一个唯一的整数地址（如 0x00000000、0x00000001、0x00000002 等）。这里的 “address”（地址）就是用来唯一标识这些 8 位字节单元的编号，每个地址精确对应一块 8 位的存储空间。</p><p>（3）小端法</p><p>一个多字节 “字”（word，如 32 位或 64 位数据）中，最低有效字节存储在该字的最低地址处。</p><p>（4）非对齐</p><p>RISC-V 的基本指令说明了自然对齐访问；非对齐 load/store 是否由硬件透明支持取决于执行环境，也可能触发异常并由软件处理。</p><h3>3.立即数</h3><p>立即数只能作为源操作数；</p><p>立即数直接编码在指令中，可减少额外的数据读取；</p><p>立即数有大小限制，这一点在后面的指令格式中可以看见。</p><h2>（三）RISC-V的指令分类</h2><p><b>简单源于规整</b>：RV32I 基础指令采用固定的 32 位编码。</p><ol><li>R型指令</li></ol><p><b>三操作数算术指令</b></p><figure><img src="../../assets/notes/lecture-1/figure-04.jpg" alt="第 1 讲技术示意图" loading="lazy"><figcaption>R 型指令格式</figcaption></figure><p>rs1, rs2分别为两个源操作数；rd为目的操作数（都为寄存器）</p><p>opcode 为主操作码；funct3 与 funct7 用于进一步区分具体操作。</p><p>操作数的字段长度全部为5位，恰好能表示0~31号寄存器</p><p><b>优秀的设计需要适当的折中</b>——为保持指令长度不变，设计人员将指令分类处理</p><p>2. I型指令</p><p><b>立即数算术指令与加载指令</b></p><figure><img src="../../assets/notes/lecture-1/figure-05.jpg" alt="第 1 讲技术示意图" loading="lazy"><figcaption>I 型指令格式</figcaption></figure><p>immediate：按指令语义解释并扩展的立即数字段</p><p>rs1 表示源寄存器，rd 表示目的寄存器；opcode 与 funct3 共同确定具体操作。</p><p>3. S型指令</p><p><b>存储指令</b></p><figure><img src="../../assets/notes/lecture-1/figure-06.jpg" alt="第 1 讲技术示意图" loading="lazy"><figcaption>S 型指令格式</figcaption></figure><p>S指令的12位立即数字段分为低5位和高7位，这种设计是因为保持所有指令格式的rs1和rs2处于同一字段。</p><p>rs1：保存基址的源寄存器；imm：地址偏移量</p><p>rs2：提供待写入数据的源寄存器</p><p>opcode/funct3：操作码</p><h2>总结</h2><p>本讲概述 RISC-V 指令与 CPU 的基本关系，并归纳三个经典设计原则：</p><p><b>1.更小则更快</b></p><p><b>2.简单源于规整</b></p><p><b>3.优秀的设计需要适当的折中</b></p><p><b>这些设计原则也适用于后续的体系结构与系统研究。</b></p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻笔记">
+            <a href="lecture-0.html">← 第 0 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="lecture-2.html">第 2 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

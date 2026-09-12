@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="介绍计算机体系结构的八个核心设计思想，并说明执行时间、CPU 时间、CPI、时钟频率等性能指标；随后讨论功耗墙、多核处理器与 SPEC 基准测试。">
+    <title>计算机组成与体系结构 &#183; 第 0 讲 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">计算机组成与体系结构</p>
+                <h1>计算机组成与体系结构 &#183; 第 0 讲</h1>
+                <p class="article-summary">介绍计算机体系结构的八个核心设计思想，并说明执行时间、CPU 时间、CPI、时钟频率等性能指标；随后讨论功耗墙、多核处理器与 SPEC 基准测试。</p>
+                <div class="article-meta">
+                    <time datetime="2025-09-12">2025年9月12日</time>
+                    <span>本站整理版</span>
+                    <a href="https://zhuanlan.zhihu.com/p/1948846824816379443" target="_blank" rel="noopener noreferrer">查看知乎原文</a>
+                </div>
+            </header>
+            <div class="article-body">
+<p>本讲概述计算机体系结构中的核心设计思想，并介绍性能、功耗与成本的基本度量方法。</p><p> 本系列以 RISC-V 为基础，结合数据通路与控制逻辑实验，逐步建立从指令集到微型计算机系统的整体认识。</p><p>本文是系列导论，集中介绍后续内容所需的基本概念。</p><h2>（一）计算机体系结构中的8个伟大思想</h2><p>这八个伟大思想会贯穿全书始终。</p><h3>1. 摩尔定律（Moore's Law）</h3><p>摩尔定律：单芯片上所集成的晶体管资源每18-24个月翻一倍。</p><p>计算机架构师必须预计设计完成后计算机的芯片水平来设计。</p><h3>2. 面向抽象设计</h3><p>抽象表示不同的设计层次，隐藏低层细节，给高层更简单的模型，可以提高硬件和软件的生产率。</p><h3>3. 优先优化常见情形</h3><p>通过实验与测量识别常见路径，优先优化高频事件，以获得更显著的整体性能收益。</p><h3>4. 并行</h3><p>并行计算提升性能。</p><h3>5. 流水线</h3><p>将任务划分为多个阶段并重叠执行，以提高吞吐率。</p><h3>6. 预测</h3><p>当预测错误的恢复成本可控时，推测执行可以提升平均性能。</p><h3>7. 存储层次</h3><p>存储层次将小而快的存储置于上层、将大而慢的存储置于下层，在成本、容量与访问速度之间取得平衡。</p><h3>8. 通过冗余提高可靠性</h3><p>冗余组件可用于故障检测、容错与服务恢复，以提高系统可靠性。</p><h2>（二）计算机性能的衡量</h2><h3>1.执行时间(execution time)</h3><p>墙钟时间包含操作系统与 I/O 等开销，反映用户观察到的整体响应时间。</p><h3>2. CPU 时间</h3><p>CPU 时间是处理器执行某项任务所消耗的时间，包括用户态 CPU 时间与系统态 CPU 时间。</p><p>2.1 时钟周期</p><p>Clock period（时钟周期）是一个时钟周期的持续时间。例如，250 ps = 0.25 ns = 250 × 10^-12 s。</p><p>2.2 时钟频率</p><p>Clock frequency（时钟频率）是时钟周期的倒数。例如，4 GHz = 4000 MHz = 4 × 10^9 Hz。</p><p>2.3 计算CPU</p><p>CPU Time=CPU Clock Cycles×Clock Cycle Time（数量×单位时间）=CPU Clocks Cycles/Clock Rate（数量/速率）</p><p>注：如果不同指令之间的CPI差距过大，则应该分别计算不同指令的总周期数再相加。</p><p>从公式可以看出，CPU 性能可以通过以下方法提升：</p><p>（1）减少时钟周期数</p><p>（2）提升时钟频率</p><p>（3）在时钟周期、每条指令的周期数与指令总数之间进行整体权衡。</p><p><b>对这对矛盾的理解：</b><br>缩短时钟周期可能要求把工作拆分到更多流水级，从而改变每条指令的周期数与相关开销。</p><p>增加单周期内的逻辑工作量会拉长关键路径，从而限制最高时钟频率。 </p><p>处理器设计需要综合考虑关键路径、时钟周期和 CPI。</p><p>衡量运行速度的其他单位：</p><p>FLOPS：每秒完成的浮点运算次数。</p><p>MFLOPS：每秒 10^6 次浮点运算。</p><p>GFLOPS：每秒 10^9 次浮点运算。</p><p>TFLOPS：每秒 10^12 次浮点运算。</p><p>PFLOPS：每秒 10^15 次浮点运算。</p><h3>3.关于性能的总结</h3><figure><img src="../../assets/notes/lecture-0/figure-01.png" alt="第 0 讲技术示意图" loading="lazy"><figcaption>量纲分析可以用于检查性能公式中的单位一致性。</figcaption></figure><p>处理器性能主要取决于：</p><p>◼ 算法：影响指令数（IC），也可能影响 CPI。</p><p>◼ 编程语言：影响指令数和 CPI。</p><p>◼ 编译器：影响指令数和 CPI。</p><p>◼ 指令集架构：影响指令数、CPI 与时钟周期。</p><h2>（三）对性能的其他认识</h2><h3>1.功耗墙</h3><figure><img src="../../assets/notes/lecture-0/figure-02.jpg" alt="第 0 讲技术示意图" loading="lazy"><figcaption>Intel 八代微处理器的时钟频率和功率的增长趋势</figcaption></figure><p>处理器频率与功耗的持续增长受到散热和能效约束，这一限制通常称为“功耗墙”。现代处理器因此更多依赖并行性与专用化来提升性能。</p><p>现代数字集成电路主要采用 CMOS。动态能耗来自节点充放电，主要与负载电容和电压平方相关：<br></p><figure><img src="../../assets/notes/lecture-0/figure-03.jpg" alt="第 0 讲技术示意图" loading="lazy"><figcaption>0-&gt;1-&gt;0/1-&gt;0-&gt;1状态转换过程消耗的能量</figcaption></figure><p>每个晶体管翻转一次的功耗是一次翻转所需要的能耗和开关频率的乘积：</p><figure><img src="../../assets/notes/lecture-0/figure-04.png" alt="第 0 讲技术示意图" loading="lazy"><figcaption>晶体管功耗</figcaption></figure><h3>2.从单处理器向多处理器转变</h3><p>在功耗与频率扩展受限的背景下，多核处理器通过线程级并行提高系统吞吐率。</p><figure><img src="../../assets/notes/lecture-0/figure-05.jpg" alt="第 0 讲技术示意图" loading="lazy"></figure><h3>3.SPEC CPU基准评测程序</h3><p>SPEC 维护一组标准化基准程序，用于在统一规则下评估和比较计算机系统性能。</p><figure><img src="../../assets/notes/lecture-0/figure-06.jpg" alt="第 0 讲技术示意图" loading="lazy"></figure><p>值得关注的是 SPEC分值=参考时间/执行时间。</p><p><b>更多背景与推导可参考《计算机组成与设计：硬件/软件接口（RISC-V 版）》。</b></p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻笔记">
+            <span></span>
+            <a href="index.html">系列目录</a>
+            <a href="lecture-1.html">第 1 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

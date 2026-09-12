@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="围绕单周期处理器的控制通路，说明不同指令所需的控制信号、ALU 控制器、组合逻辑与 ROM 控制方案，并分析指令延迟和关键路径。">
+    <title>计算机组成与体系结构 &#183; 第 7 讲 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">计算机组成与体系结构</p>
+                <h1>计算机组成与体系结构 &#183; 第 7 讲</h1>
+                <p class="article-summary">围绕单周期处理器的控制通路，说明不同指令所需的控制信号、ALU 控制器、组合逻辑与 ROM 控制方案，并分析指令延迟和关键路径。</p>
+                <div class="article-meta">
+                    <time datetime="2025-10-16">2025年10月16日</time>
+                    <span>本站整理版</span>
+                    <a href="https://zhuanlan.zhihu.com/p/1962106526660563854" target="_blank" rel="noopener noreferrer">查看知乎原文</a>
+                </div>
+            </header>
+            <div class="article-body">
+<h2>概述</h2><p>上一讲介绍了Datapath（数据通路）的设置，本讲介绍Control（控制信号）的设计，描绘出处理器的雏形。这一部分我们还是以R型指令、load/store、beq指令为例介绍。</p><h2>（一）整体设计</h2><figure><img src="../../assets/notes/lecture-7/figure-01.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>带控制信号的数据通路</figcaption></figure><p>前述指令格式中的操作码（Opcode）字段用于区分指令类型；在处理器中，它进一步成为控制信号生成的主要输入。</p><a href="lecture-2.html" class="internal">计算机组成与体系结构 25fall 第 2 讲</a><p>opcode（instruction[6:0]）通过control转换成control signal控制各个组件，根据现有的几条指令可以设计这些不同的控制信号：</p><p>（1）ALUSrc：ALU的数据来源，控制rd2/ImmGen的二路选择</p><p>（2）MemtoReg：是否从内存向寄存器写（主要控制lw）</p><p>（3）RegWrite：允许向寄存器写入</p><p>（4）MemRead：允许读内存</p><p>（5）MemWrite：允许写内存</p><p>（6）Branch：分支跳转指令标志信号</p><p>（7）ALUOp：控制不同指令下的ALU行为，load/store指令-00、branch指令-01、R-type-10</p><p>接下来我们分指令介绍这些控制信号的设置，在设置每一组指令的控制信号之前，需要了解指令的操作流程。</p><a href="lecture-6.html" class="internal">计算机组成与体系结构 25fall 第 6 讲</a><h2>（二）R-type</h2><p>R-type指令的操作码为0110011，指令汇编形式例如 <b>add x7, x5, x6</b></p><p>ALUSrc=0：第二个操作数来自rs2</p><p>MemReg=0：不从内存写入寄存器</p><p>RegWr=1：允许写寄存器</p><p>MemRd=0：不读内存</p><p>MemWr=0：不写内存</p><p>Branch=0：不是分支指令</p><p>ALUOp=10</p><p>此外，在R-type指令中需要设置ALU 控制器，来规定ALU进行add/sub/and/or计算操作，完整的ALU 控制器如下图示。</p><figure><img src="../../assets/notes/lecture-7/figure-02.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>ALU 控制器的构建</figcaption></figure><figure><img src="../../assets/notes/lecture-7/figure-03.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>ALU 控制器</figcaption></figure><p><b>R型指令的完全通路为：</b></p><figure><img src="../../assets/notes/lecture-7/figure-04.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>R 型指令数据通路</figcaption></figure><h2>（三）load指令</h2><p>lw指令操作码为0000011，指令汇编格式形如<b> lw x6, 8(x5)</b></p><p>ALUSrc=1：第二个操作数来自ImmGen</p><p>MemReg=1：从内存写入寄存器</p><p>RegWr=1：允许写寄存器</p><p>MemRd=1：读内存</p><p>MemWr=0：不写内存</p><p>Branch=0：不是分支指令</p><p>ALUOp=00</p><p><b>load指令的完全通路为：</b></p><figure><img src="../../assets/notes/lecture-7/figure-05.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>load 指令数据通路</figcaption></figure><h2>（四）store指令</h2><p>lw指令操作码为0100011，指令汇编格式形如<b> lw x6, 8(x5)</b></p><p>ALUSrc=1：第二个操作数来自ImmGen</p><p>MemReg=X：设为无效位，因为没有数据流入MemReg控制的Mux</p><p>RegWr=0：不允许写寄存器</p><p>MemRd=0：不读内存</p><p>MemWr=1：写内存</p><p>Branch=0：不是分支指令</p><p>ALUOp=00</p><figure><img src="../../assets/notes/lecture-7/figure-06.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>store 指令数据通路</figcaption></figure><h2>（五）beq指令</h2><p>beq指令操作码为1100011，指令汇编格式形如 beq x5, x6, .L1</p><p>ALUSrc=0：第二个操作数来自rs2</p><p>MemReg=X：设为无效位，因为没有数据流入MemReg控制的Mux</p><p>RegWr=0：不允许写寄存器</p><p>MemRd=0：不读内存</p><p>MemWr=0：不写内存</p><p>Branch=1：是分支指令</p><p>ALUOp=01</p><figure><img src="../../assets/notes/lecture-7/figure-07.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>beq 指令数据通路</figcaption></figure><h2>（六）控制器</h2><p>由以上几种指令我们得到下图的真值表：</p><figure><img src="../../assets/notes/lecture-7/figure-08.png" alt="第 7 讲技术示意图" loading="lazy"><figcaption>示例指令的控制信号</figcaption></figure><p>可以在vivado中使用verilog语言仿真，得到电路的设计图，这种<b>控制器</b>叫<b>组合逻辑控制器（Combinational Logic Control）。</b></p><figure><img src="../../assets/notes/lecture-7/figure-09.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>示例指令的组合逻辑控制器</figcaption></figure><p>在这里我们仅仅以几条指令为例，而如果将RISC-V的指令全部列出，会得到一张相当复杂的真值表。</p><p>所以可以使用另一种控制器——存储型控制器，它通过ROM（只读内存）来记忆不同指令的控制信号，避免了组合电路的繁重设计。</p><figure><img src="../../assets/notes/lecture-7/figure-10.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>基于 ROM 的控制器</figcaption></figure><h2>（七）指令拓展</h2><p>在后续的设计中，需要实现数十种RISC-V指令，<b>现有的控制信号不够，则考虑添加</b>。</p><p>如jal指令，汇编格式例如 jal x1, L1.</p><p>其执行的步骤为：</p><p>（1）计算PC相对地址（例如beq中的操作只不过是无条件跳转）</p><p>（2）保存PC+4到x1</p><p>（3）PC &lt;- (新地址)</p><p>（其中1,2可并行）</p><p>不难想到，这里的操作很多都可以用beq的部件完成，但是有一些问题：</p><p>1.原有的beq指令实现PC跳转的逻辑是branch&amp;zero，而这里ALU没有参与构建数据通路，zero自然没有输出，所以加入一个jal信号，<b>和原有的（branch&amp;zero）作或操作，实现操作。</b></p><p><b>2.x1 &lt;- PC+4的实现. 需要将PC+4的结果送入现有的MemReg选择器中（变为3路选择器），写入寄存器。</b></p><p>当然，以上的实现方式不是唯一的，只是举例说明实现之后的指令如何<b>拓展控制信号和数据通路</b>。</p><h2>（八）指令执行的时间评估</h2><p>假设，读取内存（指令内存和数据内存）需要200ps，ALU和adder需要200ps，读写寄存器需要100ps，评估我们现在实现的几种指令执行，具体路径可结合前述指令执行步骤分析。</p><figure><img src="../../assets/notes/lecture-7/figure-11.jpg" alt="第 7 讲技术示意图" loading="lazy"><figcaption>指令执行时间</figcaption></figure><p>其中load指令耗费的时间最长，因为它占满了所有环节；此外，需要关注指令执行的步骤中哪些是可以并行的（比如load和store中ImmGen和ALU可以并行），找出操作时间的<b>关键路径</b>，即为total time。</p><p><b>总结</b></p><p><b>本讲介绍了控制信号的设计，并描绘出处理器的雏形。</b></p><p><b>尽管单周期指令执行的设计可以正确工作，但是现代设计中，我们会使用多周期实现以及流水线设计来加快指令执行的效率，我们会在后面的课程中一起学习。</b></p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻笔记">
+            <a href="lecture-6.html">← 第 6 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="lecture-8.html">第 8 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

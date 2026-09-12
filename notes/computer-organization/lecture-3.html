@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="以递归函数为例说明 RISC-V 过程调用、寄存器保存和栈帧变化，同时介绍常见寻址模式，以及使用 LR/SC 实现同步的原子操作。">
+    <title>计算机组成与体系结构 &#183; 第 3 讲 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">计算机组成与体系结构</p>
+                <h1>计算机组成与体系结构 &#183; 第 3 讲</h1>
+                <p class="article-summary">以递归函数为例说明 RISC-V 过程调用、寄存器保存和栈帧变化，同时介绍常见寻址模式，以及使用 LR/SC 实现同步的原子操作。</p>
+                <div class="article-meta">
+                    <time datetime="2025-09-25">2025年9月26日</time>
+                    <span>本站整理版</span>
+                    <a href="https://zhuanlan.zhihu.com/p/1954553903409525308" target="_blank" rel="noopener noreferrer">查看知乎原文</a>
+                </div>
+            </header>
+            <div class="article-body">
+<h2>概述</h2><p><b>上一讲介绍了RISC-V的指令架构，并介绍了过程调用的机制：</b></p><ol><li><b>传参（默认x10~x17按传参顺序为参数寄存器）</b></li><li><b>转移控制权（PC改变，并保存原来的PC+4）</b></li><li><b>获取过程调用所需的存储资源（sp为x2寄存器）</b></li><li><b>执行过程（x5~x7,x28~x31存储临时变量，为调用者保存；x8~x9,x18~x27为被调用者保存寄存器）</b></li><li><b>返回结果（默认返回寄存器为x1）</b></li><li><b>返回PC</b></li></ol><p><b>本讲介绍过程调用中的细节，并了解RISC-V中堆栈的空间分配、寻址模式、原子操作等。</b></p><h2><b>（一）过程调用——以递归函数为例</b></h2><p><b>       RISC-V ABI 使用 x10–x17（a0–a7）传递参数，使用 x10–x11（a0–a1）返回标量值，并通常使用 x1（ra）保存返回地址。嵌套调用需要按照调用约定保存必要的寄存器，栈与栈指针用于管理这些调用状态。</b></p><h3><b>1.递归函数中栈的变化</b></h3><div class="code-block"><pre><code class="language-c"><span></span><span class="kt">int</span> <span class="nf">fact</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">f</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">fact</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>翻译成的汇编代码如下：</p><figure><img src="../../assets/notes/lecture-3/figure-01.jpg" alt="第 3 讲技术示意图" loading="lazy"></figure><p>该递归过程需要保存参数 n 与返回地址。每次进入函数时，栈指针向低地址移动 8 字节；返回前再恢复保存的值。</p><p>x2（sp）是栈指针；x8（s0）可按 ABI 约定作为可选的帧指针。帧指针在函数执行期间提供稳定的栈帧基准，超出参数寄存器容量的参数则通过栈传递。</p><p><b>2.一些过程可以不使用递归而改用迭代实现。</b></p><div class="code-block"><pre><code class="language-text"><span></span>int sum(int n,int acc){
+    if(n&gt;0)  return sum(n-1, acc+n);
+    else return acc;
+}
+</code></pre></div><p><b>考虑上面代码n=3的情况，可以转成如下的迭代版本汇编：</b></p><p>sum:  ble x10, x0, sum_exit</p><p>          add x11, x11, x10</p><p>          addi x10, x10, -1</p><p>          jal x0, sum</p><p>sum_exit:</p><p>          addi x12, x11, 0</p><p>          jalr x0, 0(x1)</p><p>这种版本的代码可以减少递归调用的部分开销。</p><h3>3. 数据存储</h3><p>并不是所有的变量都保存在栈上：</p><figure><img src="../../assets/notes/lecture-3/figure-02.jpg" alt="第 3 讲技术示意图" loading="lazy"><figcaption>内存结构总览</figcaption></figure><p>text：代码段</p><p>static data: 存储静态变量，C语言中的数组、字符串等</p><p>dynamic data: 堆，例如C中的malloc，java中的new</p><h2>（二）寻址模式</h2><p>RISC-V支持四种寻址方式：</p><p>1.立即数寻址：I型指令，操作数是指令本身的常量</p><p>2.寄存器寻址：R型指令，操作数在寄存器中</p><p>3.基址或偏移寻址：I型指令，操作数在寄存器中</p><p>4.PC相对寻址：B型指令</p><figure><img src="../../assets/notes/lecture-3/figure-03.jpg" alt="第 3 讲技术示意图" loading="lazy"><figcaption>RISC-V寻址方式</figcaption></figure><h2>（三）原子操作</h2><p>1.多处理器下的竞争</p><p>       当硬件存在多处理器时，处理器之间的读写操作容易存在竞争。因此，系统设计了加锁、解锁等同步操作，可以创建只有单处理器可以操作的区域，保证数据一致性。</p><p>2.双指令对的解决方案</p><p>RISC-V设计了一对指令，其中第二个指令返回一个值，该值表示该指令对是否被原子执行。如果任何处理器执行的其他操作发生在这对指令之前或之后，则该指令对实际上是原子的。</p><p><b>保留加载</b>： <b>lr.w x10, (x20)              将x20中的地址存到x10中</b></p><p><b>条件存储：sc.w x11, x23, (x20)     判断x11锁变量之后将尝试x23存入x20的地址</b></p><p><b>以原子交换为例，完整的指令序列如下：<br></b></p><p>again: lr.w x10, (x20)</p><p>           sc.w x11, x23, (x20)</p><p>           bne x11,  x0, again</p><p>           addi x23, x10, 0</p><p><b>每当处理器干预并修改lr.w和sc.w之间内存中的值时，sc.w就会将非0值写入x11，导致代码序列重新执行。</b></p><p><b>3.注意</b></p><p><b>（1）同步虽然是多处理器语境下的，但是原子交换对于单处理器处理多个线程也有用。如果处理器在两个指令之间对上下文进行切换，条件存储也会失败</b></p><p><b>（2）原子交换只是“同步原语”中的一种，实现更多“同步原语”需要在lr.w 和 sc.w 之间加入其他指令</b></p><p><b>（3）保证分支跳转能够执行，否则会出现死锁情况</b></p><p><b>总结：</b></p><p><b>汇编层面的原子指令是构建锁等同步原语的基础，实际实现还需结合内存模型与并发语义。</b></p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻笔记">
+            <a href="lecture-2.html">← 第 2 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="lecture-4.html">第 4 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

@@ -3,39 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="介绍处理器的基本组成和指令执行阶段，分别构建 R 型、load/store 与分支指令的数据通路，最后组合成单周期 RISC-V 完整数据通路。">
-    <title>计算机组成与体系结构 &#183; 第 6 讲 | Xingyu Qu</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta http-equiv="refresh" content="0; url=computer-organization/lecture-6.html">
+    <link rel="canonical" href="computer-organization/lecture-6.html">
+    <title>正在前往第 6 讲 | 曲星宇</title>
 </head>
 <body>
-    <header class="site-header">
-        <a class="site-name" href="../index.html">Xingyu Qu</a>
-        <nav aria-label="笔记导航">
-            <a href="index.html">全部笔记</a>
-            <a href="../index.html#service">返回主页</a>
-        </nav>
-    </header>
-    <main class="article-shell">
-        <article class="note-article">
-            <header class="article-header">
-                <p class="eyebrow">计算机组成与体系结构</p>
-                <h1>计算机组成与体系结构 &#183; 第 6 讲</h1>
-                <p class="article-summary">介绍处理器的基本组成和指令执行阶段，分别构建 R 型、load/store 与分支指令的数据通路，最后组合成单周期 RISC-V 完整数据通路。</p>
-                <div class="article-meta">
-                    <time datetime="2025-10-15">2025年10月15日</time>
-                    <span>本站整理版</span>
-                    <a href="https://zhuanlan.zhihu.com/p/1961547955493377804" target="_blank" rel="noopener noreferrer">查看知乎原文</a>
-                </div>
-            </header>
-            <div class="article-body">
-<h2>概述</h2><p><b>在完成算术部件后，本讲进入处理器设计，首先构建单周期数据通路。</b></p><p><b>本讲将分别考虑R型指令，load/store指令，分支指令在硬件层面上的实现。</b></p><h2><b>（一）认识处理器</b></h2><h3><b>1.CPU's view</b></h3><figure><img src="../assets/notes/lecture-6/figure-01.jpg" alt="第 6 讲技术示意图" loading="lazy"><figcaption>CPU的大体架构</figcaption></figure><p>如图所示，在CPU中，处理器主要的任务是读-&gt;处理-&gt;写数据，完成与内存的交互。</p><p>另外需要强调的是，Memory采用的是哈佛架构，将指令和数据的存储分开。</p><h3>2.处理器的构成</h3><p>可以将处理器抽象成Datapath（数据通路）和Control（控制通路）：</p><p><b>-&gt;Datapath</b>：执行操作</p><p><b>-&gt;Control</b>：控制Datapath进行操作</p><h3>3.处理器执行一条指令的过程</h3><p>（1）从寄存器取指令</p><p>（2）读寄存器并译码指令</p><p>（3）执行操作并计算地址</p><p>（4）访问寄存器中的操作数（if）</p><p>（5）结果写回寄存器（if）</p><h2>（二）指令的执行步骤和硬件实现</h2><p>在执行指令之前需要取出指令，处理器会执行：</p><p><b>在IM（Instruction Memory）中取IM[PC]（在周期的上升沿执行）</b></p><p><b>PC&lt;- PC+4  （在周期的下降沿执行）</b></p><p>这部分我们对三种指令（R型、load/store、beq）的执行过程进行分析，并说明其硬件实现。</p><h3>1.R型</h3><p><b>add x5, x6, x7</b></p><p>读RF-&gt;计算（ALU）-&gt;写（ALU）</p><p><b>需要硬件：ALU</b></p><figure><img src="../assets/notes/lecture-6/figure-02.jpg" alt="第 6 讲技术示意图" loading="lazy"><figcaption>R型指令硬件实现</figcaption></figure><h3>2.load/store指令</h3><p><b>load: lw x5, 3(x6)</b></p><p>（1）读RF（x6中的地址） </p><p>（2）通过ImmGen（立即数产生器）将立即数扩展到32位（原本是最多12位的立即数），计算地址</p><p>（3）读DM（Data Memory）</p><p>（4）写RF（x5）</p><p><b>store：sw x5, 3(x6)</b></p><p>（1）读RF</p><p>（2）通过ImmGen（立即数产生器）将立即数扩展到32位（原本是最多12位的立即数），计算地址</p><p>（3）写DM</p><p><b>需要硬件：ImmGen，ALU</b></p><figure><img src="../assets/notes/lecture-6/figure-03.jpg" alt="第 6 讲技术示意图" loading="lazy"><figcaption>load/store指令硬件实现</figcaption></figure><p>在这张图中，有两个控制信号（Memread, MemWrite），而上一张图中RF只有一个Write的信号，这是因为两种存储的硬件层面设计不同，读取无效地址上的数据可能会导致问题。</p><h3>3.分支指令</h3><p><b>beq x5, x6, .L1</b></p><p>（1）读RF</p><p>（2）计算（ALU-sub+zero output check）</p><p>（3）计算目标地址（符号扩展-&gt;左移一位） target</p><p>（4）根据（2）中的结果决定PC &lt;- target 或者 PC &lt;- PC+4</p><p><b>需要硬件：ImmGen，adder，ALU，shifter（移位器）</b></p><p><b>add和shift的操作不能在ALU中操作，因为会破坏ALU的结果（ALU是组合逻辑单元，不具有存储功能）</b></p><figure><img src="../assets/notes/lecture-6/figure-04.jpg" alt="第 6 讲技术示意图" loading="lazy"><figcaption>beq指令的硬件实现</figcaption></figure><h2>（三）完整的数据通路</h2><p>将以上几种指令格式的硬件合并，可以构建出完整的数据通路图。</p><figure><img src="../assets/notes/lecture-6/figure-05.jpg" alt="第 6 讲技术示意图" loading="lazy"><figcaption>完整数据通路</figcaption></figure><p>其中有很多没有涉及到的控制信号，本讲将在下节课一起学习Control（控制通路）</p>
-            </div>
-        </article>
-        <nav class="article-pagination" aria-label="相邻笔记">
-            <a href="lecture-5.html">← 第 5 讲</a>
-            <a href="index.html">系列目录</a>
-            <a href="lecture-7.html">第 7 讲 →</a>
-        </nav>
-    </main>
+    <p>这篇笔记已归入“计算机组成与体系结构”课程分支，<a href="computer-organization/lecture-6.html">点击这里继续访问</a>。</p>
 </body>
 </html>

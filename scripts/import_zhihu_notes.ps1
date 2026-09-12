@@ -7,6 +7,7 @@ $ProgressPreference = 'SilentlyContinue'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $notesRoot = Join-Path $repoRoot 'notes'
+$seriesRoot = Join-Path $notesRoot 'computer-organization'
 $assetRoot = Join-Path $repoRoot 'assets\notes'
 $apiUrl = "https://www.zhihu.com/api/v4/columns/$ColumnId/articles?limit=20&offset=0"
 
@@ -78,6 +79,7 @@ if (@($byLecture.Keys | Sort-Object) -join ',' -ne '0,1,2,3,4,5,6,7,8,9,10,11,12
 }
 
 New-Item -ItemType Directory -Force -Path $notesRoot | Out-Null
+New-Item -ItemType Directory -Force -Path $seriesRoot | Out-Null
 New-Item -ItemType Directory -Force -Path $assetRoot | Out-Null
 
 $commonReplacements = [ordered]@{
@@ -537,7 +539,7 @@ foreach ($lecture in 0..12) {
             }
         }
         $safeAlt = if ($alt) { Escape-Html $alt } else { "第 $lecture 讲技术示意图" }
-        return '<img src="../' + $relativeAsset + '" alt="' + $safeAlt + '" loading="lazy">'
+        return '<img src="../../' + $relativeAsset + '" alt="' + $safeAlt + '" loading="lazy">'
     }, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
 
     $content = [regex]::Replace($content, '\s+data-[\w-]+="[^"]*"', '', 'IgnoreCase')
@@ -580,15 +582,16 @@ foreach ($lecture in 0..12) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="$(Escape-Html $summary)">
-    <title>$(Escape-Html $canonicalTitle) | Xingyu Qu</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>$(Escape-Html $canonicalTitle) | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
     <header class="site-header">
-        <a class="site-name" href="../index.html">Xingyu Qu</a>
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
         <nav aria-label="笔记导航">
-            <a href="index.html">全部笔记</a>
-            <a href="../index.html#service">返回主页</a>
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
         </nav>
     </header>
     <main class="article-shell">
@@ -616,7 +619,25 @@ $content
 </body>
 </html>
 "@
-    Set-Content -LiteralPath (Join-Path $notesRoot "lecture-$lecture.html") -Value $page -Encoding UTF8
+    Set-Content -LiteralPath (Join-Path $seriesRoot "lecture-$lecture.html") -Value $page -Encoding UTF8
+
+    $legacyTarget = "computer-organization/lecture-$lecture.html"
+    $legacyPage = @"
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=$legacyTarget">
+    <link rel="canonical" href="$legacyTarget">
+    <title>正在前往第 $lecture 讲 | 曲星宇</title>
+</head>
+<body>
+    <p>这篇笔记已归入“计算机组成与体系结构”课程分支，<a href="$legacyTarget">点击这里继续访问</a>。</p>
+</body>
+</html>
+"@
+    Set-Content -LiteralPath (Join-Path $notesRoot "lecture-$lecture.html") -Value $legacyPage -Encoding UTF8
     $articlePages += [pscustomobject]@{
         Lecture = $lecture
         Title = $canonicalTitle
@@ -645,20 +666,21 @@ $indexPage = @"
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="曲星宇的计算机组成与体系结构笔记，涵盖 RISC-V、处理器、流水线、存储系统、总线与 I/O。">
-    <title>技术笔记 | 曲星宇</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>计算机组成与体系结构 | 课程笔记</title>
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
     <header class="site-header">
-        <a class="site-name" href="../index.html">Xingyu Qu</a>
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
         <nav aria-label="笔记导航">
-            <a aria-current="page" href="index.html">全部笔记</a>
-            <a href="../index.html#service">返回主页</a>
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
         </nav>
     </header>
     <main class="notes-shell">
         <section class="series-intro">
-            <p class="eyebrow">技术笔记</p>
+            <p class="eyebrow">武汉大学计算机学院课程笔记</p>
             <h1>计算机组成与体系结构</h1>
             <p>本系列共 13 篇，按照课程进度从 RISC-V 指令集出发，依次介绍运算部件、处理器数据通路、流水线、存储系统、总线与 I/O。本站版本在保留原有技术结构的基础上，统一了术语和书面表达。</p>
             <div class="series-meta">
@@ -667,12 +689,60 @@ $indexPage = @"
                 <a href="https://www.zhihu.com/column/$ColumnId" target="_blank" rel="noopener noreferrer">知乎原专栏</a>
             </div>
         </section>
-        <section class="note-grid" aria-label="课程笔记">
+        <section class="note-grid" aria-label="本课程笔记">
 $($cards -join "`n")
         </section>
     </main>
 </body>
 </html>
 "@
-Set-Content -LiteralPath (Join-Path $notesRoot 'index.html') -Value $indexPage -Encoding UTF8
-Write-Output 'Generated notes index.'
+Set-Content -LiteralPath (Join-Path $seriesRoot 'index.html') -Value $indexPage -Encoding UTF8
+Write-Output 'Generated computer organization series index.'
+
+$hubPage = @"
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="曲星宇的武汉大学计算机学院课程学习分享，按照课程整理中文笔记、知识总结与学习思考。">
+    <title>Lecture Notes | 曲星宇</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../index.html">Xingyu Qu</a>
+        <nav aria-label="课程笔记导航">
+            <a aria-current="page" href="index.html">课程笔记</a>
+            <a href="../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="notes-shell">
+        <section class="series-intro">
+            <p class="eyebrow">Lecture Notes</p>
+            <h1>课程学习笔记</h1>
+            <p>记录我在武汉大学计算机学院课程学习中的知识整理、课程思考与实践总结。所有内容均使用中文，并按照课程划分为独立系列。</p>
+            <div class="series-meta">
+                <span>武汉大学 · 计算机学院</span>
+                <span>中文课程分享</span>
+            </div>
+        </section>
+        <section class="note-grid course-grid" aria-label="课程系列">
+            <article class="note-card course-card">
+                <div class="note-card-meta"><span>2025 秋季</span><span>13 篇笔记</span></div>
+                <h2><a href="computer-organization/index.html">计算机组成与体系结构</a></h2>
+                <p>以 RISC-V 为主线，从指令集、运算部件和处理器数据通路出发，逐步介绍流水线、存储层次、总线与输入输出系统。</p>
+                <div class="series-meta course-tags" aria-label="课程主题">
+                    <span>RISC-V</span>
+                    <span>处理器设计</span>
+                    <span>存储系统</span>
+                </div>
+                <a class="read-link" href="computer-organization/index.html">进入课程分支 <span aria-hidden="true">→</span></a>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
+"@
+Set-Content -LiteralPath (Join-Path $notesRoot 'index.html') -Value $hubPage -Encoding UTF8
+Write-Output 'Generated Lecture Notes hub.'

@@ -3,39 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="梳理乘法器与除法器的数据通路、迭代过程和 RISC-V 指令，并介绍 IEEE 754 浮点数表示，以及浮点加法和乘法的执行步骤。">
-    <title>计算机组成与体系结构 &#183; 第 5 讲 | Xingyu Qu</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta http-equiv="refresh" content="0; url=computer-organization/lecture-5.html">
+    <link rel="canonical" href="computer-organization/lecture-5.html">
+    <title>正在前往第 5 讲 | 曲星宇</title>
 </head>
 <body>
-    <header class="site-header">
-        <a class="site-name" href="../index.html">Xingyu Qu</a>
-        <nav aria-label="笔记导航">
-            <a href="index.html">全部笔记</a>
-            <a href="../index.html#service">返回主页</a>
-        </nav>
-    </header>
-    <main class="article-shell">
-        <article class="note-article">
-            <header class="article-header">
-                <p class="eyebrow">计算机组成与体系结构</p>
-                <h1>计算机组成与体系结构 &#183; 第 5 讲</h1>
-                <p class="article-summary">梳理乘法器与除法器的数据通路、迭代过程和 RISC-V 指令，并介绍 IEEE 754 浮点数表示，以及浮点加法和乘法的执行步骤。</p>
-                <div class="article-meta">
-                    <time datetime="2025-10-14">2025年10月14日</time>
-                    <span>本站整理版</span>
-                    <a href="https://zhuanlan.zhihu.com/p/1961347805739201444" target="_blank" rel="noopener noreferrer">查看知乎原文</a>
-                </div>
-            </header>
-            <div class="article-body">
-<h2>概述</h2><p><b>上一讲讨论了 ALU 与超前进位加法器；本讲介绍乘法器、除法器，以及 RISC-V 浮点表示与浮点运算。</b></p><p><b>并行进位加法器、浮点加法器与乘法器的参考实现见配套 GitHub 仓库。</b></p><a href="http://link.zhihu.com/?target=https%3A//GitHub.com/WHU-XingyuQu/RISC-V-cpu/tree/main" class=" wrap external" target="_blank" rel="nofollow noreferrer noopener">WHU-XingyuQu/RISC-V-cpu: Realize a RISC-V-based CPU.</a><h2>（一）乘法器</h2><h3>1.范式进化</h3><p><b>（1）纯串行版</b></p><figure><img src="../assets/notes/lecture-5/figure-01.jpg" alt="第 5 讲技术示意图" loading="lazy"><figcaption>串行版的乘法器（以64位计算为例，32位同理）</figcaption></figure><p>每次需要将被乘数左移一位，乘数右移一位，结果写入寄存器中，该算法计算两个32位数相乘要花费约200个时钟周期。</p><p><b>（2）并行优化</b></p><figure><img src="../assets/notes/lecture-5/figure-02.jpg" alt="第 5 讲技术示意图" loading="lazy"><figcaption>并行优化乘法器</figcaption></figure><p>如果乘数位是1，并行执行：</p><ul><li>对乘数左移一位</li><li>对被乘数右移一位</li><li>被乘数加到积上</li></ul><p>改良后的乘法器和第一版相比被乘数和ALU都被缩减到64位，乘数放到了积寄存器的右半部分来进行右移，取消了独立的乘数寄存器。</p><p><b>（3）快速乘法</b></p><figure><img src="../assets/notes/lecture-5/figure-03.jpg" alt="第 5 讲技术示意图" loading="lazy"><figcaption>快速乘法</figcaption></figure><p>利用充足的硬件资源可以实现高度的流水线操作，将32个加法器组织成树状的结构（图中是64位），只需</p><p>log2(32)=5个32位长加法的时间</p><h3><b>2.RISC-V乘法指令</b></h3><p>mul(乘), mulh(乘法取高位), mulhu(无符号乘法取高位), mulhsu(有符号与无符号乘法取高位)</p><p>mul得到低32位；其它得到高32位</p><h2>（二）除法器</h2><h3>1.范式进化</h3><p>（1）串行</p><figure><img src="../assets/notes/lecture-5/figure-04.jpg" alt="第 5 讲技术示意图" loading="lazy"><figcaption>串行版加法器</figcaption></figure><p>与乘法相似的移位和加操作。</p><p>（2）并行优化</p><p>通过操作数移位和商与减法同时进行来加速，加法器和寄存器的宽度减半，将商寄存器和余数寄存器的右半部分拼在了一起。</p><figure><img src="../assets/notes/lecture-5/figure-05.jpg" alt="第 5 讲技术示意图" loading="lazy"><figcaption>并行优化的除法器</figcaption></figure><p>与乘法非常相似的结构。</p><p>（3）快速除法</p><p>虽然可以用许多加法器来加速乘法，但是不能对除法使用相同的方法，因为在除法运算执行下一步运算之前需要知道减法结果的符号。</p><p>但是依然有一些技术可以每步产生多于一位的商。SRT除法试图根据被除数和余数的高位来查找表，以预测每步的多个商的位数，并依靠后续步骤来纠错预测。SRT 除法涉及更复杂的商选择与纠错机制，本文不展开。</p><h3>2.RISC-V除法指令</h3><p>div(除), divu(无符号除), rem(余数), remu(无符号余数)</p><h2><b>（三）浮点数及其运算</b></h2><h3><b>1.位布局</b></h3><figure><img src="../assets/notes/lecture-5/figure-06.jpg" alt="第 5 讲技术示意图" loading="lazy"><figcaption>IEEE754</figcaption></figure><ul><li>符号位 S：0 正数，1 负数<br> </li><li> 阶码 E：8 位无符号，<b>偏置(bias)=127</b><br> </li><li> 尾数 M：23 位二进制小数，正规数隐含前导 1（即 1.xxxxxx），次正规数没有隐含 1（即 0.xxxxxx）</li></ul><h3>2.数值解释</h3><ul><li><b>正规数</b>（1 ≤ E ≤ 254）<br> <code class="inline-equation">\mathrm{value} = (-1)^S \times (1.\mathrm{fraction}) \times 2^{E-127}</code></li><li><b>次正规数</b>（E = 0, fraction ≠ 0）<br> <code class="inline-equation">\mathrm{value} = (-1)^S \times (0.\mathrm{fraction}) \times 2^{-126}</code></li><li><b>零</b>（E = 0 且 fraction = 0）：有 +0 与 −0（符号位区分）</li><li><b>无穷大</b>（E = 255 且 fraction = 0）：+∞/−∞</li><li><b>NaN</b>（E = 255 且 fraction ≠ 0）：非数。最高的 fraction 位为 1 时通常视作 <b>qNaN</b>（quiet NaN，静默 NaN），为 0 时为 <b>sNaN</b>（signaling NaN，信号 NaN）。RISC-V 规定了<b>规范 NaN</b>（canonical NaN）：单精度通常用 <code>0x7FC00000</code>。‘’</li></ul><h3>3.浮点加法</h3><p>将浮点数表示为科学计数法之后可以开始浮点加法的计算：</p><p>（1）对齐指数：小的向大的看齐（可以保留更多位数字）</p><p>（2）有效数位相加</p><p>（3）结果转为规范化，检测上溢和下溢（-126 ≤ M ≤ 127）</p><p>（4）舍入（向偶数舍入）</p><figure><img src="../assets/notes/lecture-5/figure-07.jpg" alt="第 5 讲技术示意图" loading="lazy"><figcaption>浮点数加法器</figcaption></figure><h3>4.浮点乘法</h3><p>（1）指数相加计算积的指数</p><p>（2）有效数字部分相乘</p><p>（3）结果转为规范化，检测上溢和下溢（-126 ≤ M ≤ 127）</p><p>（4）舍入（向偶数舍入）</p><p>（5）符号位单独计算</p><p><b>总结</b></p>
-            </div>
-        </article>
-        <nav class="article-pagination" aria-label="相邻笔记">
-            <a href="lecture-4.html">← 第 4 讲</a>
-            <a href="index.html">系列目录</a>
-            <a href="lecture-6.html">第 6 讲 →</a>
-        </nav>
-    </main>
+    <p>这篇笔记已归入“计算机组成与体系结构”课程分支，<a href="computer-organization/lecture-5.html">点击这里继续访问</a>。</p>
 </body>
 </html>

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="逐一讲解 RISC-V 的 R、I、S、B、U、J 型指令，说明立即数编码、访存、分支与跳转语义，并总结字段布局背后的设计原则。">
+    <title>计算机组成与体系结构 &#183; 第 2 讲 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">计算机组成与体系结构</p>
+                <h1>计算机组成与体系结构 &#183; 第 2 讲</h1>
+                <p class="article-summary">逐一讲解 RISC-V 的 R、I、S、B、U、J 型指令，说明立即数编码、访存、分支与跳转语义，并总结字段布局背后的设计原则。</p>
+                <div class="article-meta">
+                    <time datetime="2025-09-24">2025年9月24日</time>
+                    <span>本站整理版</span>
+                    <a href="https://zhuanlan.zhihu.com/p/1953976277229892504" target="_blank" rel="noopener noreferrer">查看知乎原文</a>
+                </div>
+            </header>
+            <div class="article-body">
+<h2>概述</h2><p><b>       本讲首先介绍 RISC-V 指令结构及其硬件含义，再集中讨论编码规整性、扩展性等设计原则。</b></p><h2><b>（一）RISC-V 完整指令及分类</b></h2><p>下表汇总了本讲涉及的 RISC-V 指令类型。</p><figure><img src="../../assets/notes/lecture-2/figure-01.jpg" alt="第 2 讲技术示意图" loading="lazy"><figcaption>RISC-V指令表</figcaption></figure><p>（1）R 型指令：寄存器之间的整数计算。</p><p>（2）I 型指令：立即数计算、load 与 JALR 等指令。</p><p>（3）S型指令：所有存储指令</p><p>（4）B型指令：比较跳转指令</p><p>（5）U型指令：lui和auipc指令</p><p>（6）J型指令：jal指令</p><p>rs（source）：源操作数寄存器                     rd（destination）：目的数寄存器</p><p>opcode：操作码           funct：操作码扩展</p><h2><b>（二）R型指令</b></h2><figure><img src="../../assets/notes/lecture-2/figure-02.jpg" alt="第 2 讲技术示意图" loading="lazy"></figure><p><b>1.常规计算：add, sub, and, or, xor</b></p><p><b>add rd, rs1, rs2</b></p><p>对于整数溢出，基础整数加减指令保留结果的低 XLEN 位，不产生算术溢出异常。</p><p><b>2.移位运算：sll, srl, sra</b></p><p><b>sll rd, rs1, rs2                 x(rd)=x(rs1)&lt;&lt;x(rs2)</b></p><p>sra高位保留符号位，srl高位置0</p><p><b>3.比较运算：slt，sltu</b></p><p><b>slt rd, rs1, rs2                 x(rd)=x(rs1)&lt;x(rs2)</b></p><p>rd中的数会被置为0或1</p><p>sltu是无符号数比较</p><h2>（三）I型指令</h2><p>1.立即数计算指令</p><figure><img src="../../assets/notes/lecture-2/figure-03.jpg" alt="第 2 讲技术示意图" loading="lazy"></figure><p>注意：I型指令的imm（立即数）只有12位，因此可表示的范围为-2^11~2^11-1</p><p>12 位立即数在参与运算前需要符号扩展到 XLEN 位。</p><p><b>addi rd, rs1, imm</b></p><p>2.load指令</p><figure><img src="../../assets/notes/lecture-2/figure-04.png" alt="第 2 讲技术示意图" loading="lazy"></figure><p><b>lw rd, imm(rs1) &nbsp; x(rd) = Mem[x(rs1) + sext(imm)]</b></p><p><b>lb 加载 8 位，lh 加载 16 位，并对结果进行符号扩展；</b></p><p><b>lbu 与 lhu 对结果进行零扩展；RV32I 不需要 lwu，因为目的寄存器本身只有 32 位。</b></p><p>3.jalr指令</p><figure><img src="../../assets/notes/lecture-2/figure-05.png" alt="第 2 讲技术示意图" loading="lazy"></figure><h2>（四）S型指令</h2><p><b>S型指令没有rd寄存器</b></p><figure><img src="../../assets/notes/lecture-2/figure-06.png" alt="第 2 讲技术示意图" loading="lazy"></figure><p><b>sw rs2, imm(rs1) &nbsp; Mem[x(rs1) + sext(imm)] = x(rs2)[31:0]</b></p><p><b>store 指令写入 rs2 的低位，不涉及将读出的窄数据扩展到寄存器，因此没有有符号/无符号版本之分。</b></p><h2><b>（五）B型指令</b></h2><p><b>B型指令全部是有条件跳转指令，RISC-V的设计规定只能跳转到偶数的地址，也就是地址的二进制表示最后一位只能是0，这样最后一位其实可以不做表示。</b></p><p>目标地址由当前 PC 加上符号扩展后的偏移量得到；B 型立即数最低位隐含为 0，可表示约 ±4 KiB 的偶数字节偏移。</p><figure><img src="../../assets/notes/lecture-2/figure-07.jpg" alt="第 2 讲技术示意图" loading="lazy"><figcaption>B型指令</figcaption></figure><p>这种非连续的立即数字段布局将在本讲末尾讨论。</p><p>beq rs1, rs2, imm &nbsp; if (x(rs1) == x(rs2)) pc = pc + sext(imm)</p><p>beq（=）, bne（!=），blt（&lt;），bge（&gt;=），bltu，bgeu</p><h2><b>（六）U型指令</b></h2><p><b>U型指令只有rd寄存器</b></p><figure><img src="../../assets/notes/lecture-2/figure-08.png" alt="第 2 讲技术示意图" loading="lazy"></figure><p>1.LUI</p><p><b>lui rd, imm                        x(rd)=imm&lt;&lt;12</b></p><p><b>LUI的意义是当一个立即数长度大于12位时，没法将这个数直接存进寄存器中。</b></p><p><b>LUI 可先构造高 20 位，再配合立即数指令形成更宽的常量；低 12 位的符号扩展细节通常由汇编器处理。</b></p><p>2.AUIPC</p><p><b>AUIPC rd, imm &nbsp; x(rd) = pc + (imm &lt;&lt; 12)</b></p><p>注：当前的PC可以通过将AUIPC的imm设置为0来获得。</p><h2><b>（七）J型指令</b></h2><p><b>jal rd, imm &nbsp; x(rd) = pc + 4; pc = pc + sext(imm)</b></p><p><b>jal rd, label &nbsp; x(rd) = pc + 4; pc = label</b></p><p><b>JAL 是 RV32I 中的 J 型指令，可用于过程调用或无条件跳转。它把 pc + 4 写入 rd，并跳转到 J 型立即数给出的 PC 相对目标。</b></p><p><b>过程调用的六个步骤：</b></p><ol><li><b>传参（默认x10~x17按传参顺序为参数寄存器）</b></li><li><b>转移控制权（PC改变，并保存原来的PC+4）</b></li><li><b>获取过程调用所需的存储资源（sp为x2寄存器）</b></li><li><b>执行过程（x5~x7,x28~x31存储临时变量，为调用者保存；x8~x9,x18~x27为被调用者保存寄存器）</b></li><li><b>返回结果（标量返回值通常使用 x10/a0，必要时也使用 x11/a1）</b></li><li><b>返回PC（jalr（I型指令））</b></li></ol><p>过程调用及相关细节将在下一讲介绍。</p><p>小结：</p><p>本讲介绍了 RV32I 中的常用指令，并总结其编码设计的两个特点：<br>1. <b>RISC-V的指令是高度规整化的，这为解码提供了方便，也为扩展提供可能。</b>RISC-V还推出了向量扩展（RISC-V Vector Extension, RVV），支持处理向量数据，可以有效提升数据并行计算的性能，尤其在大规模数据处理和科学计算中有着广泛的应用。</p><p>2.<b>RISC-V的不同类型指令也保持高度的相似性</b>。例如，B 型与 S 型指令保持 rs1、rs2、funct3 和 opcode 字段位置一致，只重新排列立即数字段以适配分支偏移。这种设计为硬件设计提供了极大便利。</p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻笔记">
+            <a href="lecture-1.html">← 第 1 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="lecture-3.html">第 3 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>
