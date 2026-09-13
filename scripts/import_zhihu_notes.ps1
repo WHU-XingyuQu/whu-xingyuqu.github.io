@@ -1,5 +1,6 @@
 ﻿param(
-    [string]$ColumnId = 'c_1949874045978936715'
+    [string]$ColumnId = 'c_1949874045978936715',
+    [string]$TheoryColumnId = 'c_1983138092010477035'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -8,8 +9,10 @@ $ProgressPreference = 'SilentlyContinue'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $notesRoot = Join-Path $repoRoot 'notes'
 $seriesRoot = Join-Path $notesRoot 'computer-organization'
+$theorySeriesRoot = Join-Path $notesRoot 'theory-of-computation'
 $assetRoot = Join-Path $repoRoot 'assets\notes'
 $apiUrl = "https://www.zhihu.com/api/v4/columns/$ColumnId/articles?limit=20&offset=0"
+$theoryApiUrl = "https://www.zhihu.com/api/v4/columns/$TheoryColumnId/articles?limit=20&offset=0"
 
 function Escape-Html([string]$text) {
     if ($null -eq $text) { return '' }
@@ -78,8 +81,48 @@ if (@($byLecture.Keys | Sort-Object) -join ',' -ne '0,1,2,3,4,5,6,7,8,9,10,11,12
     throw 'Lecture sequence is incomplete.'
 }
 
+$theoryStructure = @(
+    [pscustomobject]@{
+        ArticleId = '1983136182952040060'
+        Chapter = 1
+        Title = '时间复杂度基础'
+        Summary = '从多带图灵机、时间函数与通用图灵机出发，梳理停机问题、线性加速、确定性与非确定性时间复杂度类、SAT、时间层次定理和多项式时间归约。'
+        Outline = @('图灵机与问题判定', '时间函数、通用图灵机与不可判定性', '线性加速与时间复杂度类', '非确定性计算、SAT 与时间层次', '多项式时间归约')
+        SourceKind = '手写笔记'
+    }
+    [pscustomobject]@{
+        ArticleId = '1988379857600673044'
+        Chapter = 2
+        Title = '经典定理与证明工具'
+        Summary = '集中整理停机问题不可判定性、线性加速与时间层次定理，并进一步介绍可达性的 NL 完全性、对数空间归约的传递性和 NP 的验证器定义。'
+        Outline = @('停机问题不可判定性', '线性加速定理', '确定性时间层次定理', '可达性的 NL 完全性', '对数空间归约的传递性', 'NP 的验证器定义')
+        SourceKind = '证明整理稿'
+    }
+    [pscustomobject]@{
+        ArticleId = '1988420388674364064'
+        Chapter = 3
+        Title = 'NP 完全性问题的归约证明'
+        Summary = '以 3-SAT 为起点，按“属于 NP”和“构造多项式时间归约”两步，整理 0-1 线性规划、Set Packing、Exact Cover、3-Dimensional Matching、Feedback Node Set 与 Clique 的证明。'
+        Outline = @('0-1 线性规划', 'Set Packing', 'Exact Cover', '3-Dimensional Matching', 'Feedback Node Set', 'Clique')
+        SourceKind = '归约证明'
+    }
+)
+
+$theoryRaw = Invoke-CurlText $theoryApiUrl
+$theoryPayload = $theoryRaw | ConvertFrom-Json
+$theoryArticles = @($theoryPayload.data | Sort-Object created)
+if ($theoryArticles.Count -ne $theoryStructure.Count) {
+    throw "Expected $($theoryStructure.Count) theory articles, found $($theoryArticles.Count)"
+}
+$expectedTheoryIds = @($theoryStructure.ArticleId | Sort-Object)
+$actualTheoryIds = @($theoryArticles.id | ForEach-Object { [string]$_ } | Sort-Object)
+if (($expectedTheoryIds -join ',') -ne ($actualTheoryIds -join ',')) {
+    throw 'Theory article set does not match the configured course structure.'
+}
+
 New-Item -ItemType Directory -Force -Path $notesRoot | Out-Null
 New-Item -ItemType Directory -Force -Path $seriesRoot | Out-Null
+New-Item -ItemType Directory -Force -Path $theorySeriesRoot | Out-Null
 New-Item -ItemType Directory -Force -Path $assetRoot | Out-Null
 
 $commonReplacements = [ordered]@{
@@ -274,6 +317,8 @@ foreach ($lecture in 0..12) {
 
     switch ($lecture) {
         0 {
+            $content = $content.Replace('<br/>', '<br>')
+            $content = $content.Replace('0-&amp;gt;1-&amp;gt;0/1-&amp;gt;0-&amp;gt;1状态转换过程消耗的能量', '0-&gt;1-&gt;0/1-&gt;0-&gt;1状态转换过程消耗的能量')
             $content = [regex]::Replace($content, '<h3>1 Moore[^<]*</h3>', '<h3>1 Moore''s Law</h3>')
             $content = $content.Replace('<h3>2 Abstraction design</h3>', '<h3>2 Design for Abstraction</h3>')
             $content = $content.Replace('<h3>4 Parallel</h3>', '<h3>4 Parallelism</h3>')
@@ -330,6 +375,8 @@ foreach ($lecture in 0..12) {
         }
         5 {
             $content = $content.Replace('上节课我们主要讨论了ALU和并行进位加法器的实现，本讲介绍乘法器、除法器的原理和实现，还有RISC-V浮点表示和浮点计算的内容。', '上一讲讨论了 ALU 与超前进位加法器；本讲介绍乘法器、除法器，以及 RISC-V 浮点表示与浮点运算。')
+            $content = $content.Replace('https://link.zhihu.com/?target=https%3A//GitHub.com/WHU-XingyuQu/RISC-V-cpu/tree/main', 'http://link.zhihu.com/?target=https%3A//GitHub.com/WHU-XingyuQu/RISC-V-cpu/tree/main')
+            $content = $content.Replace('<br/>', '<br>')
         }
         6 {
             $content = $content.Replace('上节课我们完成了所有运算部分的学习，这节课我们开始学习课程的核心章节之一——处理器。', '在完成算术部件后，本讲进入处理器设计，首先构建单周期数据通路。')
@@ -699,6 +746,261 @@ $($cards -join "`n")
 Set-Content -LiteralPath (Join-Path $seriesRoot 'index.html') -Value $indexPage -Encoding UTF8
 Write-Output 'Generated computer organization series index.'
 
+$theoryPages = @()
+foreach ($chapterDefinition in $theoryStructure) {
+    $chapter = [int]$chapterDefinition.Chapter
+    $article = $theoryArticles | Where-Object { [string]$_.id -eq $chapterDefinition.ArticleId } | Select-Object -First 1
+    if ($null -eq $article) { throw "Missing theory article $($chapterDefinition.ArticleId)" }
+
+    $content = [string]$article.content
+    if ($chapter -eq 1) {
+        $content = Remove-ParagraphContaining $content '傅老师大家风采'
+    }
+    if ($chapter -eq 2) {
+        $content = Remove-ParagraphContaining $content '个人整理，转载请注明出处'
+    }
+    if ($chapter -eq 3) {
+        $content = [regex]::Replace($content, '<p\b[^>]*>\s*<b>前言</b>\s*</p>', '<h2>概述</h2>', 'IgnoreCase')
+        $content = $content.Replace('这部分我们学习Karp（1972）文章中提出的21个NPC的证明，由于篇幅所限，我们只证明能直接规约到SAT（3SAT）的问题。', '本章整理 Karp（1972）提出的 21 个 NP 完全问题，并选取以 SAT 或 3-SAT 为规约起点的典型问题展开。')
+        $content = $content.Replace('在接下来的证明中我们将看到这些思想的运用。', '下文依次展示这些构造思想在不同问题中的运用。')
+        $content = [regex]::Replace($content, '<p\b[^>]*>\s*<b>一步规约3SAT NPC问题的证明</b>\s*</p>', '<h2>由 3-SAT 出发的 NP 完全性证明</h2>', 'IgnoreCase')
+        $content = $content.Replace('<h3>1.0-1线性规划</h3>', '<h3>1. 0-1 线性规划</h3>')
+        $content = $content.Replace('<h3>2.Set Packing</h3>', '<h3>2. Set Packing</h3>')
+        $content = $content.Replace('<h3>3.Exact Cover</h3>', '<h3>3. Exact Cover</h3>')
+        $content = $content.Replace('<h3>4.<b>3-Dimensional Matching</b></h3>', '<h3>4. 3-Dimensional Matching</h3>')
+        $content = $content.Replace('<h3>5.Feedback Node Set</h3>', '<h3>5. Feedback Node Set</h3>')
+        $content = $content.Replace('<h3><b>5.Feedback Node Set</b></h3>', '<h3>5. Feedback Node Set</h3>')
+        $content = $content.Replace('<h3>6.Clique</h3>', '<h3>6. Clique</h3>')
+        $content = [regex]::Replace($content, '<p\b[^>]*>\s*[（(]1[）)]\s*NP的证明\s*</p>', '<h4>属于 NP</h4>', 'IgnoreCase')
+        $content = [regex]::Replace($content, '<p\b[^>]*>\s*[（(]2[）)]\s*规约\s*</p>', '<h4>多项式时间归约</h4>', 'IgnoreCase')
+        $content = $content.Replace('01整数规划问题', '0-1 整数规划问题')
+        $content = $content.Replace('赋值01选择', '0/1 赋值选择')
+        $content = $content.Replace('变量0-1的边', '表示变量 0/1 取值的边')
+        $content = $content.Replace('NDTM猜测分团覆盖问题', '非确定性图灵机猜测精确覆盖问题')
+        $content = $content.Replace('NDTM猜测', '非确定性图灵机猜测')
+        $content = $content.Replace('NPC问题', 'NP 完全问题')
+        $content = $content.Replace('NPC', 'NP 完全')
+        $content = $content.Replace('且检查两个集合的交集是否为空集是一个常数时间操作。', '且检查集合交集可在多项式时间内完成。')
+    }
+    $content = [regex]::Replace($content, '<p\b[^>]*>\s*<br\s*/?>\s*</p>', '', 'IgnoreCase')
+
+    $figureCounter = [ref]0
+    $equationCounter = [ref]0
+    $content = [regex]::Replace($content, '<img\b[^>]*>', {
+        param($match)
+        $tag = $match.Value
+        $altMatch = [regex]::Match($tag, 'alt="([^"]*)"', 'IgnoreCase')
+        $alt = if ($altMatch.Success) { [System.Net.WebUtility]::HtmlDecode($altMatch.Groups[1].Value).Trim() } else { '' }
+        $sourceMatch = [regex]::Match($tag, 'data-original="([^"]+)"', 'IgnoreCase')
+        if (-not $sourceMatch.Success) { $sourceMatch = [regex]::Match($tag, 'src="([^"]+)"', 'IgnoreCase') }
+        if (-not $sourceMatch.Success) { return '' }
+        $source = [System.Net.WebUtility]::HtmlDecode($sourceMatch.Groups[1].Value)
+        if ($source -notmatch '^https://') { return '' }
+
+        if ($tag -match 'eeimg="1"' -or $source -match 'www\.zhihu\.com/equation') {
+            $equationCounter.Value++
+            $baseName = ('equation-{0:D2}' -f $equationCounter.Value)
+            $relativeAsset = "assets/notes/theory-of-computation/chapter-$chapter/$baseName.svg"
+            $destination = Join-Path $repoRoot ($relativeAsset -replace '/', '\')
+            Download-Image $source $destination
+            $safeAlt = if ($alt) { Escape-Html $alt } else { '数学公式' }
+            return '<img class="equation-image" src="../../' + $relativeAsset + '" alt="' + $safeAlt + '">'
+        }
+
+        $figureCounter.Value++
+        $baseName = ('figure-{0:D2}' -f $figureCounter.Value)
+        $jpgRelative = "assets/notes/theory-of-computation/chapter-$chapter/$baseName.jpg"
+        $pngRelative = "assets/notes/theory-of-computation/chapter-$chapter/$baseName.png"
+        $webpRelative = "assets/notes/theory-of-computation/chapter-$chapter/$baseName.webp"
+        $jpgDestination = Join-Path $repoRoot ($jpgRelative -replace '/', '\')
+        $pngDestination = Join-Path $repoRoot ($pngRelative -replace '/', '\')
+        $webpDestination = Join-Path $repoRoot ($webpRelative -replace '/', '\')
+
+        if (Test-Path -LiteralPath $pngDestination) {
+            $relativeAsset = $pngRelative
+        } elseif (Test-Path -LiteralPath $webpDestination) {
+            $relativeAsset = $webpRelative
+        } else {
+            Download-Image $source $jpgDestination
+            $signature = [IO.File]::ReadAllBytes($jpgDestination)
+            if ($signature.Length -ge 8 -and $signature[0] -eq 0x89 -and $signature[1] -eq 0x50 -and $signature[2] -eq 0x4e -and $signature[3] -eq 0x47) {
+                Move-Item -LiteralPath $jpgDestination -Destination $pngDestination -Force
+                $relativeAsset = $pngRelative
+            } elseif ($signature.Length -ge 12 -and [Text.Encoding]::ASCII.GetString($signature, 0, 4) -eq 'RIFF' -and [Text.Encoding]::ASCII.GetString($signature, 8, 4) -eq 'WEBP') {
+                Move-Item -LiteralPath $jpgDestination -Destination $webpDestination -Force
+                $relativeAsset = $webpRelative
+            } else {
+                $relativeAsset = $jpgRelative
+            }
+        }
+        $safeAlt = if ($alt) { Escape-Html $alt } else { "第 $chapter 章$($chapterDefinition.SourceKind)，第 $($figureCounter.Value) 页" }
+        return '<img src="../../' + $relativeAsset + '" alt="' + $safeAlt + '" loading="lazy">'
+    }, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+
+    $content = [regex]::Replace($content, '\s+data-[\w-]+="[^"]*"', '', 'IgnoreCase')
+    $content = [regex]::Replace($content, '\s+(?:width|height)="[^"]*"', '', 'IgnoreCase')
+    $content = [regex]::Replace($content, ' class="(?:origin_image|content_image|zh-lightbox-thumb)[^"]*"', '', 'IgnoreCase')
+
+    foreach ($linkedDefinition in $theoryStructure) {
+        $content = $content.Replace("https://zhuanlan.zhihu.com/p/$($linkedDefinition.ArticleId)", "chapter-$($linkedDefinition.Chapter).html")
+    }
+    $content = [regex]::Replace($content, '<a\b[^>]*href="https?://[^"]+"[^>]*>', {
+        param($match)
+        $tag = $match.Value
+        if ($tag -notmatch '\btarget="_blank"') {
+            $tag = $tag.Substring(0, $tag.Length - 1) + ' target="_blank">'
+        }
+        if ($tag -match '\brel="([^"]*)"') {
+            $relations = @($Matches[1] -split '\s+' | Where-Object { $_ })
+            if ($relations -notcontains 'noopener') { $relations += 'noopener' }
+            if ($relations -notcontains 'noreferrer') { $relations += 'noreferrer' }
+            $normalizedRel = ($relations | Select-Object -Unique) -join ' '
+            return [regex]::Replace($tag, '\brel="[^"]*"', 'rel="' + $normalizedRel + '"', 'IgnoreCase')
+        }
+        return $tag.Substring(0, $tag.Length - 1) + ' rel="noopener noreferrer">'
+    }, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+
+    if ($figureCounter.Value -gt 0) {
+        $figurePage = [ref]0
+        $content = [regex]::Replace($content, '<figure\b[^>]*>\s*(<img\b[^>]*>)\s*</figure>', {
+            param($match)
+            $figurePage.Value++
+            return '<figure>' + $match.Groups[1].Value + '<figcaption>' + (Escape-Html "$($chapterDefinition.SourceKind)，第 $($figurePage.Value) 页") + '</figcaption></figure>'
+        }, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    }
+    $content = [regex]::Replace($content, '[ \t]+(?=\r?\n)', '')
+
+    $outlineItems = foreach ($item in $chapterDefinition.Outline) { '                        <li>' + (Escape-Html $item) + '</li>' }
+    $outline = @"
+                <aside class="chapter-outline" aria-labelledby="chapter-outline-$chapter">
+                    <h2 id="chapter-outline-$chapter">本章结构</h2>
+                    <ol>
+$($outlineItems -join "`n")
+                    </ol>
+                </aside>
+"@
+    $sourceIntro = switch ($chapter) {
+        1 { '<h2>原始手写笔记</h2><p>以下内容按原始页序保留，便于连续阅读图灵机、时间复杂度类与归约等主题。</p>' }
+        2 { '<h2>原始证明整理稿</h2><p>以下内容按原始页序保留，集中呈现六项经典结论及其证明。</p>' }
+        default { '' }
+    }
+
+    $createdOffset = [DateTimeOffset]::FromUnixTimeSeconds([int64]$article.created)
+    $created = $createdOffset.ToOffset([TimeSpan]::FromHours(8)).ToString('yyyy年M月d日')
+    $canonicalTitle = "计算理论导引 · 第 $chapter 章：$($chapterDefinition.Title)"
+    $previous = if ($chapter -gt 1) { '<a href="chapter-' + ($chapter - 1) + '.html">← 第 ' + ($chapter - 1) + ' 章</a>' } else { '<span></span>' }
+    $next = if ($chapter -lt $theoryStructure.Count) { '<a href="chapter-' + ($chapter + 1) + '.html">第 ' + ($chapter + 1) + ' 章 →</a>' } else { '<span></span>' }
+    $originalUrl = [string]$article.url
+
+    $theoryPage = @"
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="$(Escape-Html $chapterDefinition.Summary)">
+    <title>$(Escape-Html $canonicalTitle) | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">计算理论导引 · 计算复杂性理论专题</p>
+                <h1>$(Escape-Html $chapterDefinition.Title)</h1>
+                <p class="article-summary">$(Escape-Html $chapterDefinition.Summary)</p>
+                <div class="article-meta">
+                    <span>第 $chapter 章</span>
+                    <time datetime="$($createdOffset.ToString('yyyy-MM-dd'))">$created</time>
+                    <span>本站结构化整理版</span>
+                    <a href="$originalUrl" target="_blank" rel="noopener noreferrer">查看知乎原文</a>
+                </div>
+            </header>
+            <div class="article-body">
+$outline
+$sourceIntro
+$content
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            $previous
+            <a href="index.html">系列目录</a>
+            $next
+        </nav>
+    </main>
+</body>
+</html>
+"@
+    Set-Content -LiteralPath (Join-Path $theorySeriesRoot "chapter-$chapter.html") -Value $theoryPage -Encoding UTF8
+    $theoryPages += [pscustomobject]@{
+        Chapter = $chapter
+        Title = $chapterDefinition.Title
+        Created = $created
+        Summary = $chapterDefinition.Summary
+        Url = "chapter-$chapter.html"
+    }
+    Write-Output "Generated theory chapter $chapter ($($figureCounter.Value) page images, $($equationCounter.Value) equation images)"
+}
+
+$theoryCards = foreach ($page in ($theoryPages | Sort-Object Chapter)) {
+@"
+            <article class="note-card">
+                <div class="note-card-meta"><span>第 $($page.Chapter) 章</span><time>$($page.Created)</time></div>
+                <h2><a href="$($page.Url)">$(Escape-Html $page.Title)</a></h2>
+                <p>$(Escape-Html $page.Summary)</p>
+                <a class="read-link" href="$($page.Url)">阅读笔记 <span aria-hidden="true">→</span></a>
+            </article>
+"@
+}
+
+$theoryIndexPage = @"
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="曲星宇的计算理论导引笔记，涵盖图灵机、时间复杂度、层次定理、归约与 NP 完全性证明。">
+    <title>计算理论导引 | 课程笔记</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="notes-shell">
+        <section class="series-intro">
+            <p class="eyebrow">武汉大学计算机学院课程笔记</p>
+            <h1>计算理论导引</h1>
+            <p>本系列以计算复杂性理论为专题，按照“复杂度基础—证明工具—NP 完全性归约”的顺序组织为 3 章。本站版本保留原有手写页、证明整理稿与公式图片，并统一章节导航和内容层级。</p>
+            <div class="series-meta">
+                <span>3 篇笔记</span>
+                <span>2025 年 12 月</span>
+                <a href="https://www.zhihu.com/column/$TheoryColumnId" target="_blank" rel="noopener noreferrer">知乎原专栏</a>
+            </div>
+        </section>
+        <section class="note-grid" aria-label="本课程笔记">
+$($theoryCards -join "`n")
+        </section>
+    </main>
+</body>
+</html>
+"@
+Set-Content -LiteralPath (Join-Path $theorySeriesRoot 'index.html') -Value $theoryIndexPage -Encoding UTF8
+Write-Output 'Generated theory of computation series index.'
+
 $hubPage = @"
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -738,6 +1040,17 @@ $hubPage = @"
                     <span>存储系统</span>
                 </div>
                 <a class="read-link" href="computer-organization/index.html">进入课程分支 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card course-card">
+                <div class="note-card-meta"><span>2025 秋季</span><span>3 篇笔记</span></div>
+                <h2><a href="theory-of-computation/index.html">计算理论导引</a></h2>
+                <p>以计算复杂性理论为专题，从图灵机和时间复杂度出发，整理经典定理、证明工具以及从 3-SAT 出发的 NP 完全性归约。</p>
+                <div class="series-meta course-tags" aria-label="课程主题">
+                    <span>图灵机</span>
+                    <span>时间复杂度</span>
+                    <span>NP 完全性</span>
+                </div>
+                <a class="read-link" href="theory-of-computation/index.html">进入课程分支 <span aria-hidden="true">→</span></a>
             </article>
         </section>
     </main>
