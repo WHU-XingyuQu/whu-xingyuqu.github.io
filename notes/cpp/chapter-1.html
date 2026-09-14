@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="整理构造、复制、移动与析构函数，以及默认函数和删除函数。">
+    <title>C++ 程序设计 &#183; 第 1 章：类与对象初步 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">C++ 程序设计 · 期末复习</p>
+                <h1>类与对象初步</h1>
+                <p class="article-summary">整理构造、复制、移动与析构函数，以及默认函数和删除函数。</p>
+                <div class="article-meta">
+                    <span>第 1 章</span>
+                    <span>2024 秋季</span>
+                    <span>PDF 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>1. 构造函数：</h2>
+<h3>（1）成员初始化顺序</h3>
+<p>成员初始化顺序必须与他们在类定义中的出现顺序一致，而不是在初始值中出现的顺序</p>
+<h3>（2）必须初始化的情况：</h3>
+<p>const成员和引用成员必须初始化</p>
+<h2>2. 默认构造函数</h2>
+<h3>（1）编译器帮助</h3>
+<p>不定义构造函数时，编译器自动产生默认构造函数</p>
+<h3>（2）重定义警告</h3>
+<p>不可以同时定义有参和无参的默认构造函数</p>
+<h2>3. 复制构造函数</h2>
+<p>调用复制构造函数的三种情况</p>
+<p class="numbered-point"><strong>1）</strong> 定义新对象以老对象作为复制</p>
+<p class="numbered-point"><strong>2）</strong> 以函数形式参数传入类的对象</p>
+<p class="numbered-point"><strong>3）</strong> 函数的返回值是类的对象</p>
+<h2>4. 析构函数</h2>
+<h3>（1）功能</h3>
+<p>自动调用完成清理工作 调用后对象消失 内存释放</p>
+<h3>（2）特性</h3>
+<p>无函数类型 无参数 不能重载</p>
+<h2>5. 移动构造函数</h2>
+<h3>（1）左值与右值引用</h3>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    float n = 6;
+    float &amp;lr_n = n; //  左值引用
+
+    float &amp;&amp;rr_n = n * n; //    右值表达式绑定到右值引用
+
+    //float &amp;&amp;rr_n2 = n;    错误，右值引用不能绑定到左值
+//
+    float &amp;&amp;rr_n2 = std::move(n); //将n转化为右值
+
+    return 0;
+}</code></pre>
+<h3>（2）定义移动构造函数</h3>
+<h4>a. 函数签名</h4>
+<p>移动构造函数的参数是右值引用</p>
+<h4>b. 函数体实现</h4>
+<p>在函数体中将资源从被引用的对象转向引用的对象；如果类中有指针成员，需将指针置空，避免被释放两次</p>
+<h4>c. 注意事项</h4>
+<p>要确保移动后的源对象处于有效但可能未定义的状态，这样源对象的析构函数能正确执行且不会发生错误</p>
+<pre><code>class Myclass{
+    int *data;
+    int size;
+  public:
+     Myclass(Myclass&amp;&amp; other){
+            data=other.data;
+            size=other.size;
+            other.data=nullptr;
+            other.size=0;
+            }
+  };</code></pre>
+<h3>（3）调用移动构造函数</h3>
+<h4>a. 返回值优化场景</h4>
+<p>当函数返回一个局部对象时，编译器可能会利用移动构造函数来避免不必要的复制</p>
+<pre><code>Myclass createObject(){
+       Myclass temp;
+        初始化temp
+//
+       return temp;
+}
+
+int main()
+{
+       Myclass newObj=createObject();
+       //这里会调用移动构造函数将createObject函数中的临时对象temp的资源移动到newObj
+       return 0；
+}</code></pre>
+<h4>b. 使用std::move显示调用</h4>
+<p>若有一个左值（可以取地址的对象），但想将其当做右值来使用，从而调用移动构造函数，可以使用std::move函数。调用std::move后，原来的对象可能处于一种被移动后的不确定状态</p>
+<pre><code>Myclass Obj1;//  初始化Obj1
+Myclass Obj2=std::move(Obj1);
+// 移动构造函数将Obj1的资源移动到Obj2，Obj1的状态可能不符合预期，在使用Obj1之前可能需要重
+新初始化</code></pre>
+<h2>6. default、delete函数</h2>
+<p>=default:要求编译器生成默认或复制构造函数=delete:要求编译器删除指定函数，除析构函数之外均可以删除</p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <span></span>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-2.html">第 2 章 →</a>
+        </nav>
+    </main>
+</body>
+</html>

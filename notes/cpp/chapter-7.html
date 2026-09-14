@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="介绍标准模板库的基本组件、迭代器，以及顺序容器和关联容器接口。">
+    <title>C++ 程序设计 &#183; 第 7 章：STL | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">C++ 程序设计 · 期末复习</p>
+                <h1>STL</h1>
+                <p class="article-summary">介绍标准模板库的基本组件、迭代器，以及顺序容器和关联容器接口。</p>
+                <div class="article-meta">
+                    <span>第 7 章</span>
+                    <span>2024 秋季</span>
+                    <span>PDF 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>1. 基本认识</h2>
+<p>标准模板库（Standard Template Library，简称STL）定义了一套概念体系，为泛型程序设计提供了逻辑基础STL中的各个类模板、函数模板的参数都是用这个体系中的概念来规定的。使用STL的模板时，类型参数既可以是C++标准库中已有的类型，也可以是自定义的类型——只要这些类型是所要求概念的模型。</p>
+<ul>
+<li>概念：用来界定具备一定功能的数据类型。例如：</li>
+</ul>
+<p>将“可以比大小的所有数据类型（有比较运算符）”这一概念记为Comparable将“具有公有的复制构造函数并可以用‘=’赋值的数据类型”这一概念记为Assignable将“可以比大小、具有公有的复制构造函数并可以用‘=’赋值的所有数据类型”这个概念记作Sortable。</p>
+<ul>
+<li>子概念：对于两个不同的概念A和B，如果概念A所需求的所有功能也是概念B所需求的功能，那么就</li>
+</ul>
+<p>说概念B是概念A的子概念。例如：Sortable既是Comparable的子概念，也是Assignable的子概念</p>
+<ul>
+<li>模版：符合一个概念的数据类型称为该概念的模型，例如：</li>
+</ul>
+<p>int型是Comparable概念的模型。静态数组类型不是Assignable概念的模型（无法用“=”给整个静态数组赋值）v模型：符合一个概念的数据类型称为该概念的模型，例如：int型是Comparable概念的模型。静态数组类型不是Assignable概念的模型（无法用“=”给整个静态数组赋值）</p>
+<h2>2. 基本组件</h2>
+<p>STL的基本组件包括容器、迭代器、函数对象、算法</p>
+<h3>（1）容器</h3>
+<p>容纳、包含一组元素的对象。</p>
+<h4>a. 基本容器类模板</h4>
+<p>顺序容器array（数组）、vector（向量）、deque（双端队列）、forward_list（单链表）、list（列表）(有序)关联容器set（集合）、multiset（多重集合）、map（映射）、multimap（多重映射）无序关联容器unordered_set （无序集合）、unordered_multiset（无序多重集合）unordered_map（无序映射）、unorder_multimap（无序多重映射）容器适配器stack（栈）、queue（队列）、priority_queue（优先队列）</p>
+<p>//按照与容器所关联的迭代器类型划分：可逆容器随机访问容器</p>
+<h4>b. 容器的功能（语法）</h4>
+<ul>
+<li>通用功能</li>
+</ul>
+<p class="numbered-point"><strong>1)</strong> 默认构造函数构造空容器</p>
+<p class="numbered-point"><strong>2)</strong> 支持关系运算符：==、!=、&lt;、&lt;=、&gt;、&gt;=</p>
+<p class="numbered-point"><strong>3)</strong> begin()、end()：获得容器首、尾迭代器</p>
+<p class="numbered-point"><strong>4)</strong> clear()：将容器清空</p>
+<p class="numbered-point"><strong>5)</strong> empty()：判断容器是否为空</p>
+<p class="numbered-point"><strong>6)</strong> size()：得到容器元素个数</p>
+<p class="numbered-point"><strong>7)</strong> s1.swap(s2)：将s1和s2两容器内容交换</p>
+<ul>
+<li>可逆容器的特性</li>
+</ul>
+<p>S::reverse_iterator：逆向迭代器类型S::const_reverse_iterator：逆向常迭代器类型rbegin() ：指向容器尾的逆向迭代器rend()：指向容器首的逆向迭代器</p>
+<ul>
+<li>随机访问容器的特性</li>
+</ul>
+<p>[]《个人经验》在没有特殊数据结构的情况下只常用 vector和map vector用于存储，功能强大；map键值访问使用</p>
+<h3>（2）迭代器</h3>
+<h4>a. 迭代器的功能</h4>
+<p>迭代器本身是泛化的指针Iterators（迭代器）是算法和容器的桥梁。将迭代器作为算法的参数、通过迭代器来访问容器而不是把容器直接作为算法的参数。</p>
+<h4>b. 迭代器的分类关系</h4>
+<p>随机访问迭代器-&gt;双向迭代器-&gt;前向迭代器-&gt;输入迭代器</p>
+<ul>
+<li>输出迭代器</li>
+</ul>
+<p>输入：从序列读取数据； 输出：向序列写入数据前向迭代器既是输入迭代器又是输出迭代器，允许单向遍历；双向迭代器在前向的基础上允许反向遍历；</p>
+<h4>c. 迭代器的区间</h4>
+<p>两个迭代器表示一个区间：[p1, p2)，包含p1，但不包含p2合法的区间：当且仅当p1经过n次(n ≥0)自增(++)操作后满足p1 == p2</p>
+<h4>d. 迭代器的辅助函数</h4>
+<pre><code>advance(p, n)</code></pre>
+<p>对p执行n次自增操作</p>
+<pre><code>distance(first, last)</code></pre>
+<p>计算两个迭代器first和last的距离，即对first执行多少次“++”操作后能够使得first == last</p>
+<h2>3. 顺序容器的接口</h2>
+<p>以vector为例，记忆熟练为主</p>
+<h3>（1）初始化操作</h3>
+<p>构造函数默认构造/有参构造/拷贝构造列表初始化</p>
+<pre><code>vector&lt;int&gt; arr = {1,4,5,7};</code></pre>
+<h3>（2）通用性</h3>
+<p>、</p>
+<pre><code>begin() end()//获得容器首、尾迭代器
+clear()//将容器清空
+empty()//判断容器是否为空
+size()//得到容器元素个数
+s1.swap(s2)//将s1和s2两容器内容交换</code></pre>
+<h3>（3）双向访问性</h3>
+<pre><code>S::reverse_iterator //逆向迭代器类型
+S::const_reverse_iterator //逆向常迭代器类型
+rbegin() //指向容器尾的逆向迭代器
+rend() //指向容器首的逆向迭代器</code></pre>
+<h3>（4）随机访问性</h3>
+<pre><code>s[n]</code></pre>
+<h3>（5）读写特性</h3>
+<pre><code>//插入函数
+insert(iterator pos, const T&amp; v),   在pos位置插入后，返回新插入元素的迭代器
+push_front()（只对list和deque)          push_back()
+emplace_front()   emplace()   emplace_back()
+//这些操作构造而不是拷贝元素到容器中，分别对应push_front、insert 和push_back</code></pre>
+<p>其他：vector:</p>
+<pre><code>s.capacity() //返回当前容量
+s.reserve(n) //若容量小于n，则对s进行扩展，使其容量至少为n</code></pre>
+<p>list:将 中</p>
+<pre><code>s1.splice(p, s2, q1, q2) // s2 [q1, q2)    移动到s1中p所指向元素之前</code></pre>
+<p>forward_list:</p>
+<p class="numbered-point"><strong>1)</strong> 单向链表每个结点只有指向下个结点的指针，没有简单的方法来获取一个结点的前驱</p>
+<p class="numbered-point"><strong>2)</strong> 未定义insert、emplace和erase操作，而定义了insert_after、emplace_after和erase_after操作，</p>
+<p>其参数与list的insert、emplace和erase相同，但并不是插入或删除迭代器p1所指的元素，而是对p1所指元素之后的结点进行操作</p>
+<p class="numbered-point"><strong>3)</strong> 不支持size操作</p>
+<p>array:</p>
+<p class="numbered-point"><strong>1)</strong> array是对内置数组的封装，提供了更安全，更方便的使用数组的方式</p>
+<p class="numbered-point"><strong>2)</strong> array的对象的大小是固定的，定义时除了需要指定元素类型，还需要指定容器大小。</p>
+<p class="numbered-point"><strong>3)</strong> 不能动态地改变容器大小</p>
+<h2>4. 关联容器的接口</h2>
+<p>插入</p>
+<pre><code>insert() //
+erase() //删除
+find()  //查找
+返回第一个指向不大于x的迭代器
+lower_bound(x) //
+upper_bound() //返回第一个指向不小于x的迭代器
+equal_range(iterator first,iterator second,val)
+//equal_range() 适用于已排序的范围。如果范围未排序，结果将是不确定的。
+//返回找到的val的迭代器范围；如果范围内没有找到等于 val 的元素，first 和 second 都会指
+向 last。
+count(iterator first,iterator second,val) //计数：范围内等于val的元素个数</code></pre>
+<p>多重(multi_)：允许有多个相同元素无序(unordered_)：不排序</p>
+<p>//函数模版和算法部分见教材即可</p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-6.html">← 第 6 章</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-8.html">第 8 章 →</a>
+        </nav>
+    </main>
+</body>
+</html>

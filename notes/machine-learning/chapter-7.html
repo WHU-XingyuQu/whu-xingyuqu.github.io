@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="介绍 AdaBoost、梯度提升树、Bagging、随机森林与学习器多样性。">
+    <title>机器学习 &#183; 第 7 讲：集成学习 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>集成学习</h1>
+                <p class="article-summary">介绍 AdaBoost、梯度提升树、Bagging、随机森林与学习器多样性。</p>
+                <div class="article-meta">
+                    <span>第 7 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>集成学习通过组合多个学习器获得更稳定或更强的模型。重点包括个体学习器、多样性、投票与平均、Boosting、AdaBoost、梯度提升树、Bagging、随机森林、Stacking、误差-分歧分解。</p>
+<h2>个体与集成</h2>
+<p>集成有效通常需要两个条件：</p>
+<ul>
+<li>个体学习器不能太差，应有一定准确性。</li>
+<li>个体学习器之间应有差异，即多样性。</li>
+</ul>
+<p>常见组合方式：</p>
+<ul>
+<li>分类：多数投票、加权投票、概率平均。</li>
+<li>回归：简单平均、加权平均。</li>
+<li>Stacking：把初级学习器输出作为新特征，训练次级学习器。</li>
+</ul>
+<h2>AdaBoost</h2>
+<p>初始化样本权重：</p>
+<div class="formula-block">\[
+  D_1(i)=\frac{1}{m}.
+\]</div>
+<p>第 $t$ 轮训练弱分类器 $h_t$，错误率</p>
+<div class="formula-block">\[
+  \epsilon_t=\sum_{i=1}^{m}D_t(i)\mathbb{I}(h_t(\mathbf{x}_i)\ne y_i).
+\]</div>
+<p>弱分类器权重：</p>
+<div class="formula-block">\[
+  \alpha_t=\frac{1}{2}\ln\frac{1-\epsilon_t}{\epsilon_t}.
+\]</div>
+<p>样本权重更新：</p>
+<div class="formula-block">\[
+  D_{t+1}(i)=
+  \frac{D_t(i)\exp(-\alpha_t y_i h_t(\mathbf{x}_i))}{Z_t}.
+\]</div>
+<p>最终分类器：</p>
+<div class="formula-block">\[
+  H(\mathbf{x})=\operatorname{sign}\left(\sum_{t=1}^{T}\alpha_t h_t(\mathbf{x})\right).
+\]</div>
+<p>被错分样本满足 $y_i h_t(\mathbf{x}_i)=-1$，其权重会上升；下一轮学习更关注这些样本。</p>
+<h2>梯度提升树</h2>
+<p>Boosting 是串行集成，后一轮试图修正前一轮不足。平方损失下，提升树拟合残差；一般损失下，拟合损失函数对当前模型输出的负梯度：</p>
+<div class="formula-block">\[
+  r_{ti}=-\left[
+  \frac{\partial \ell(y_i,F(\mathbf{x}_i))}
+  {\partial F(\mathbf{x}_i)}
+  \right]_{F=F_{t-1}}.
+\]</div>
+<p>GBDT、XGBoost、LightGBM 都属于梯度提升树家族的工程化实现。</p>
+<h2>Bagging 与随机森林</h2>
+<p>Bagging 对训练集进行自助采样，训练多个基学习器，再投票或平均。其主要作用是降低方差。</p>
+<p>若每个基学习器方差为 $\sigma^2$，两两相关系数为 $\rho$，$T$ 个学习器平均后的方差为</p>
+<div class="formula-block">\[
+  \operatorname{Var}(\bar h)
+  =\rho\sigma^2+\frac{1-\rho}{T}\sigma^2.
+\]</div>
+<p>因此 $T$ 越大、$\rho$ 越低，方差降低越明显。</p>
+<p>随机森林在 Bagging 基础上进一步引入特征随机性：每个结点只在随机子特征集合中选择最优划分，从而降低树之间相关性。</p>
+<h2>多样性</h2>
+<p>多样性来源包括：</p>
+<ul>
+<li>数据扰动：自助采样、重采样。</li>
+<li>特征扰动：随机子空间、随机森林。</li>
+<li>算法扰动：不同模型、不同超参数。</li>
+<li>输出扰动：不同阈值或不同组合策略。</li>
+</ul>
+<p>误差-分歧分解体现了集成性能来自个体准确性和个体差异性的平衡。</p>
+<h2>Boosting 与 Bagging 对比</h2>
+<ul>
+<li>Boosting 串行训练，强调纠错，常降低偏差，也可能降低方差。</li>
+<li>Bagging 并行训练，强调扰动平均，主要降低方差。</li>
+<li>AdaBoost 对噪声和异常值较敏感；随机森林通常更稳健。</li>
+<li>Boosting 中弱学习器常较浅；Bagging/随机森林中基学习器可用深树。</li>
+</ul>
+<h2>常见问法</h2>
+<ol>
+<li>给 AdaBoost 第一轮预测结果，计算错误率、弱学习器权重和新样本分布。</li>
+<li>说明 AdaBoost 的自适应体现在哪里。</li>
+<li>给 $\sigma^2,\rho,T$，计算 Bagging 集成方差，并解释学习器数量和相关性影响。</li>
+<li>比较 Bagging、Boosting、随机森林和 Stacking。</li>
+<li>从偏差-方差角度分析逻辑回归、SVM、随机森林等模型。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-6.html">← 第 6 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-8.html">第 8 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

@@ -318,6 +318,40 @@ h1 {
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
+.text-note-body dl {
+    display: grid;
+    grid-template-columns: minmax(6rem, auto) 1fr;
+    gap: 0.55rem 1rem;
+    margin: 1rem 0;
+}
+
+.text-note-body dt {
+    color: #213249;
+    font-weight: 750;
+}
+
+.text-note-body dd {
+    margin: 0;
+}
+
+.text-note-body .formula-block {
+    overflow-x: auto;
+    margin: 1rem 0;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #f8fbfe;
+    text-align: center;
+}
+
+.text-note-body .formula-block mjx-container {
+    margin: 0 !important;
+}
+
+.text-note-body .numbered-point {
+    padding-left: 0.2rem;
+}
+
 .inline-equation {
     display: inline-block;
     max-width: 100%;
@@ -386,5 +420,10 @@ h1 {
     .article-meta {
         flex-direction: column;
         gap: 0.25rem;
+    }
+
+    .text-note-body dl {
+        grid-template-columns: 1fr;
+        gap: 0.15rem;
     }
 }

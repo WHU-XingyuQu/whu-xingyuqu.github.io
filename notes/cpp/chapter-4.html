@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="介绍作用域、生存期、类的静态成员，以及共享数据的访问保护。">
+    <title>C++ 程序设计 &#183; 第 4 章：数据的共享和保护 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">C++ 程序设计 · 期末复习</p>
+                <h1>数据的共享和保护</h1>
+                <p class="article-summary">介绍作用域、生存期、类的静态成员，以及共享数据的访问保护。</p>
+                <div class="article-meta">
+                    <span>第 4 章</span>
+                    <span>2024 秋季</span>
+                    <span>PDF 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>1. 作用域</h2>
+<h3>（1）函数原型作用域</h3>
+<p>函数原型声明时形式参数的作用范围</p>
+<h3>（2）局部作用域</h3>
+<p>局部变量的作用域为其所在的最小范围的大括号内部</p>
+<h3>（3）类作用域</h3>
+<p>在类的外部访问类内部的成员时，如果没有同名覆盖可以直接访问</p>
+<h2>2. 静态生存期</h2>
+<h3>（1）涵义</h3>
+<p>全局变量具有这种生存期，该生存期与程序的运行期相同</p>
+<h3>（2）定义方式</h3>
+<p>在函数内部中定义，用static，具有全局寿命和局部可见性</p>
+<h3>（3）未初始化的情况</h3>
+<p>静态生存期的未初始化时会以0初始化</p>
+<h2>3. 动态生存期</h2>
+<h3>（1）涵义</h3>
+<p>具有动态生存期的变量诞生于声明的位置，结束于该块执行完毕之时</p>
+<h3>（2）未初始化的情况</h3>
+<p>不指定初值，初值就不确定</p>
+<h2>4. 类的静态成员</h2>
+<h3>（1）静态数据成员</h3>
+<h4>a. 定义</h4>
+<p>static关键字；必须在类外定义和初始化（作用域限定符指明）</p>
+<h4>b. 性质</h4>
+<p>具有单一存储空间，为该类的所有对象共享</p>
+<h3>（2）静态函数成员</h3>
+<h4>a. 调用成员</h4>
+<p>类的静态函数只能调用静态成员变量和静态函数变量</p>
+<h4>b. 性质</h4>
+<p>属于整个类，不属于类中某个对象，能在类的范围内共享</p>
+<h2>5. 共享数据的保护</h2>
+<h3>（1）常对象</h3>
+<p>const 类型 对象名 必须进行初始化，不能更新</p>
+<h3>（2）常成员</h3>
+<p>const修饰的类成员 同上</p>
+<h3>（3）常引用</h3>
+<p>const 类型 &amp;引用名 被引用的对象不能更新</p>
+<h3>（4）常数组</h3>
+<p>const 类型 数组名[] 数组元素不能更新</p>
+<h3>（5）常指针</h3>
+<p>const 类型 引用名[] 指向的值不能变</p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-3.html">← 第 3 章</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-5.html">第 5 章 →</a>
+        </nav>
+    </main>
+</body>
+</html>

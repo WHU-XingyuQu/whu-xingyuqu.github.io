@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="覆盖数组、指针变量、指针运算、函数指针与 this 指针。">
+    <title>C++ 程序设计 &#183; 第 6 章：数组、指针、字符串 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">C++ 程序设计 · 期末复习</p>
+                <h1>数组、指针、字符串</h1>
+                <p class="article-summary">覆盖数组、指针变量、指针运算、函数指针与 this 指针。</p>
+                <div class="article-meta">
+                    <span>第 6 章</span>
+                    <span>2024 秋季</span>
+                    <span>PDF 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>1. 数组的声明和使用</h2>
+<h3>（1）数组名的含义</h3>
+<p>数组名是地址常量</p>
+<h3>（2）调用规则</h3>
+<h4>a. 数组必须先声明后调用</h4>
+<h4>b. 只能逐个访问 不能整体调用</h4>
+<h3>（3）数组名作参数</h3>
+<p>数组名作参数，形参被转换为指针，实参也是数组名</p>
+<h3>（4）对象数组</h3>
+<p>声明：类名 数组名[元素个数]访问：数组名[下标].成员名注意：只能引用单个数组元素，每个数组都是一个对象，初始化过程即调用构造函数对每个元素进行初始化</p>
+<h2>2. 指针与指针变量</h2>
+<h3>（1）指针与指针变量的定义</h3>
+<p>指针：一个变量的地址指针变量：专门存放变量地址的变量，具有一定作用域的特征</p>
+<h3>（2）*与&amp;</h3>
+<p>&amp;：若int a，&amp;a表示存储a空间的地址*：若int *p，p表示int刑指针</p>
+<h2>3. 静态指针变量</h2>
+<h3>（1）定义</h3>
+<p>以static关键字修饰的指针变量</p>
+<h3>（2）存储特性</h3>
+<h4>a. 静态存储期</h4>
+<p>在整个程序运行期间都存在，内存空间在程序开始时就被分配，直到程序结束才被释放。而自动指针变量在其所在的代码块执行结束后就会被销毁</p>
+<h4>b. 默认初始化为NULL</h4>
+<p>若在定义静态指针变量时未显式初始化，则会被自动初始化为NULL，有助于避免野指针问题</p>
+<h3>（3）作用域</h3>
+<h4>a. 文件作用域</h4>
+<p>在函数外部定义的静态指针变量具有文件作用域，其可见性仅限于定义它的源文件，在其他源文件中无法直接访问该变量，可有效防止变量名冲突</p>
+<h4>b. 局部作用域</h4>
+<p>在函数内部定义的静态指针变量具有局部作用域，但其生命周期贯穿整个程序运行中间</p>
+<h2>4. 指针的赋值</h2>
+<h3>（1）指针名=地址</h3>
+<p>如&amp;p=a，则p=*a</p>
+<h3>（2）赋值原则</h3>
+<p>向指针赋的值必须是地址常量或变量，不能是普通整数。但可以赋值为0，表示空指针</p>
+<h3>（3）void指针</h3>
+<p>允许声明指向void类型指针，该指针可以被赋予任何类型对象的地址</p>
+<h3>（4）常指针</h3>
+<p>指向常量的指针，可以改变指向的对象，但不能通过指针修改指向对象的值</p>
+<pre><code>const int *p=a;</code></pre>
+<h3>（5）指针常量</h3>
+<p>不能改变指针指向的对象</p>
+<pre><code>int *const p=&amp;a;</code></pre>
+<h2>5. 指针运算</h2>
+<h3>（1）指针与整数的加减运算</h3>
+<p>指针加减n，指加减n个步长，具体由其存储的数据类型决定</p>
+<h3>（2）运算符优先级细节</h3>
+<pre><code>        int a[2] = { 1,5 };
+        int *p =&amp;a[0];
+        std::cout &lt;&lt; (*p++)&lt;&lt;&quot; &quot;&lt;&lt;a[0]&lt;&lt;&quot; &quot;&lt;&lt;a[1];</code></pre>
+<p>*与++优先级相同 *p++ 先解引用再将指针后移一位++*p先解引用p再将值+1*(++p)先将指针后移一位再解引用</p>
+<h3>（3）指针之间的运算</h3>
+<p>p1-p2--两个指针必须类型相同，结果为整数（p1与p2之间相隔的元素个数），他们通常指向同一个数组空间</p>
+<h3>（4）关系运算</h3>
+<p>一般是同类型指针之间的运算，也可以与NULL之间做关系运算</p>
+<h2>6. 用指针作为函数参数</h2>
+<h3>（1）传入地址数据</h3>
+<p>传入地址数据可以返回函数处理结果</p>
+<h3>（2）实参是数组名</h3>
+<p>实参是数组名形参可以是指针或数组名</p>
+<h3>（3）形参是数组名</h3>
+<p>形参是数组名编译器自动转化为对应的指针类型</p>
+<h2>7. 函数指针</h2>
+<p>存放函数首地址的变量重要应用：回调函数</p>
+<ul>
+<li>回调函数</li>
+</ul>
+<pre><code>#include &lt;iostream&gt;
+//   定义回调函数类型
+typedef void (*CallbackFunctionType)(int);
+//   实现回调函数
+void myCallbackFunction(int value)
+{
+     std::cout &lt;&lt; &quot;Callback function called with value: &quot; &lt;&lt; value &lt;&lt; std::endl;
+}
+//   需要回调函数的函数
+void registerAndCallCallback(CallbackFunctionType callback, int value)
+{
+     //   调用回调函数
+     callback(value);
+}
+int main()
+{
+     //   注册回调函数
+     registerAndCallCallback(myCallbackFunction, 42);
+     return 0;
+}</code></pre>
+<p>在这个例子中，我们首先定义了一个名为 CallbackFunctionType 的函数指针类型，它指向一个接受 int 参数并返回 void 的函数。然后，我们实现了一个名为 myCallbackFunction 的回调函数，它符合这个签名。在 main 函数中，我们将 myCallbackFunction 的地址作为参数传递给registerAndCallCallback 函数，后者随后调用了这个回调函数。</p>
+<p>注意事项</p>
+<ul>
+<li>类型安全：确保回调函数和函数指针的类型完全匹配是非常重要的，否则会导致未定义行为。</li>
+<li>内存管理：如果回调函数或函数指针涉及到动态内存分配，需要小心管理内存，以避免内存泄漏或</li>
+</ul>
+<p>野指针问题。</p>
+<h2>8. this指针</h2>
+<h3>（1）定义</h3>
+<p>隐含于类的对象内部的特殊指针</p>
+<h3>（2）调用</h3>
+<p>当通过一个对象调用成员函数时，系统先将对象的地址赋值给this指针，然后调用成员函数，成员函数对对象的数据成员进行操作时，就隐含使用了this指针</p>
+<h3>（3）必须使用this的情况</h3>
+<h4>a. 成员变量和局部变量同名</h4>
+<h4>b. 返回当前对象的引用或指针</h4>
+<p>在需要返回当前对象本身（或其引用/指针）的场合， this 指针非常有用。这通常用于实现链式调用。例如</p>
+<pre><code>class MyClass {
+public:
+     MyClass&amp; add(int value) {
+          // 假设有一个成员变量用于累加
+          // 返回当前对象的引用，支持链式调用
+          return *this;
+     }
+};
+
+MyClass obj;
+obj.add(10).add(20); //   链式调用</code></pre>
+<h4>c. 作为参数传递给其他成员函数</h4>
+<p>在类的某个成员函数中，需要将当前对象（或部分成员变量）传递给其他成员函数时，可以使用this 指针作为参数传递。</p>
+<pre><code>class Demo {
+public:
+     void func1() {
+         this-&gt;func2(this-&gt;value);
+     }
+     void func2(int num) {
+         // do something with num
+     }
+private:
+     int value;
+};</code></pre>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-5.html">← 第 5 章</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-7.html">第 7 章 →</a>
+        </nav>
+    </main>
+</body>
+</html>

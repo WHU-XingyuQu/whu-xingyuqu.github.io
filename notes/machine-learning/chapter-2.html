@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="覆盖 VC 维、偏差与方差、交叉验证，以及分类、回归和不平衡数据的评价指标。">
+    <title>机器学习 &#183; 第 2 讲：模型选择与评估 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>模型选择与评估</h1>
+                <p class="article-summary">覆盖 VC 维、偏差与方差、交叉验证，以及分类、回归和不平衡数据的评价指标。</p>
+                <div class="article-meta">
+                    <span>第 2 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>本章围绕两个问题：模型是否能学到规律，以及如何可靠地评估模型。重点包括 VC 维、偏差-方差分解、欠拟合与过拟合、训练/验证/测试划分、交叉验证、自助采样、分类与回归性能指标。</p>
+<h2>监督学习的计算理论</h2>
+<h3>有效假设与 VC 维</h3>
+<ul>
+<li>假设空间 $\mathcal{H}$ 在 $m$ 个样本上能产生的不同标记划分数称为增长函数 $\Pi_{\mathcal{H}}(m)$。</li>
+<li>若 $\mathcal{H}$ 能对 $m$ 个样本实现全部 $2^m$ 种二分，则称 $\mathcal{H}$ 能散列这组样本。</li>
+<li>VC 维是 $\mathcal{H}$ 能散列的最大样本数。VC 维越大，模型容量越强，通常需要更多训练数据。</li>
+<li>中断点是使 $\Pi_{\mathcal{H}}(m)&lt;2^m$ 首次出现的样本规模。</li>
+</ul>
+<h2>偏差、方差与过拟合</h2>
+<p>平方损失下常用分解为</p>
+<div class="formula-block">\[
+  \mathbb{E}_D\!\left[(y-\hat f_D(\mathbf{x}))^2\right]
+  = \operatorname{Bias}^2(\mathbf{x})+\operatorname{Var}(\mathbf{x})+\epsilon^2.
+\]</div>
+<ul>
+<li>偏差高：模型表达能力不足，容易欠拟合。</li>
+<li>方差高：模型对训练数据扰动敏感，容易过拟合。</li>
+<li>模型复杂度增大时，训练误差通常下降；测试误差常先降后升。</li>
+<li>kNN 中 $k$ 小表示模型复杂、低偏差高方差；$k$ 大表示模型更平滑、高偏差低方差。</li>
+</ul>
+<h3>欠拟合与过拟合</h3>
+<dl>
+<dt>欠拟合</dt><dd>训练误差和测试误差都高，模型没有抓住数据结构。</dd>
+<dt>过拟合</dt><dd>训练误差低而测试误差高，模型把噪声或偶然模式也学进去了。</dd>
+<dt>缓解过拟合</dt><dd>增加数据、降低模型复杂度、正则化、剪枝、早停、交叉验证、数据增强、集成学习。</dd>
+</dl>
+<h2>模型验证与测试</h2>
+<ul>
+<li>训练集用于拟合参数；验证集用于选模型和调超参数；测试集只用于最终评估。</li>
+<li>留出法简单直接，但一次划分可能带来偶然性；类别不平衡时应采用分层采样。</li>
+<li>$k$ 折交叉验证：把数据分成 $k$ 份，每次用 $k-1$ 份训练、1份验证，取平均指标。</li>
+<li>留一法是 $k=m$ 的交叉验证，数据利用充分但计算量大。</li>
+<li>自助采样从 $m$ 个样本中有放回抽取 $m$ 次，未被抽中的样本可作包外估计。</li>
+</ul>
+<h2>分类性能指标</h2>
+<p>二分类混淆矩阵记为 TP、FP、TN、FN：</p>
+<div class="formula-block">\[
+  \operatorname{Accuracy}=\frac{TP+TN}{TP+FP+TN+FN},
+\]</div>
+<div class="formula-block">\[
+  \operatorname{Precision}=\frac{TP}{TP+FP},\qquad
+  \operatorname{Recall}=\frac{TP}{TP+FN},
+\]</div>
+<div class="formula-block">\[
+  F_1=\frac{2PR}{P+R}.
+\]</div>
+<p>ROC 曲线横轴为假正例率</p>
+<div class="formula-block">\[
+  FPR=\frac{FP}{FP+TN},
+\]</div>
+<p>纵轴为真正例率</p>
+<div class="formula-block">\[
+  TPR=\frac{TP}{TP+FN}.
+\]</div>
+<p>PR 曲线更关注正类识别，在类别极不平衡时通常比 Accuracy 更有参考价值。</p>
+<h2>回归性能指标</h2>
+<div class="formula-block">\[
+  MSE=\frac{1}{m}\sum_{i=1}^m(y_i-\hat y_i)^2,\qquad
+  RMSE=\sqrt{MSE},
+\]</div>
+<div class="formula-block">\[
+  MAE=\frac{1}{m}\sum_{i=1}^m |y_i-\hat y_i|,
+\]</div>
+<div class="formula-block">\[
+  R^2=1-\frac{\sum_i(y_i-\hat y_i)^2}{\sum_i(y_i-\bar y)^2}.
+\]</div>
+<p>$MSE$ 对大误差更敏感，$MAE$ 更稳健，$R^2$ 越接近 $1$ 通常表示拟合越好。</p>
+<h2>类别不平衡</h2>
+<p>极端不平衡数据中，Accuracy 可能虚高。常见处理包括：</p>
+<ul>
+<li>重采样：少数类过采样、多数类欠采样、SMOTE 等。</li>
+<li>代价敏感学习：给少数类或错分少数类更大权重。</li>
+<li>调整分类阈值，配合 Precision、Recall、$F_1$、AUC-PR 评估。</li>
+<li>异常检测思路：把稀有类别视作异常样本。</li>
+</ul>
+<h2>常见问法</h2>
+<ol>
+<li>画出模型复杂度与训练误差、测试误差的关系，并标出欠拟合与过拟合区域。</li>
+<li>给混淆矩阵，计算 Accuracy、Precision、Recall、$F_1$。</li>
+<li>给 $k$ 折交叉验证结果，计算平均指标并选择模型。</li>
+<li>解释交叉验证的作用：降低偶然划分影响，用于模型选择和超参数调节。</li>
+<li>给类别极不平衡场景，说明问题、评价指标和三种处理方法。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-1.html">← 第 1 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-3.html">第 3 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="覆盖聚类度量、距离计算、k-means、LVQ、GMM、DBSCAN 与层次聚类。">
+    <title>机器学习 &#183; 第 9 讲：聚类 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>聚类</h1>
+                <p class="article-summary">覆盖聚类度量、距离计算、k-means、LVQ、GMM、DBSCAN 与层次聚类。</p>
+                <div class="article-meta">
+                    <span>第 9 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>聚类是无监督学习任务，目标是在无类别标记时按相似性把样本划分为簇。本章重点包括聚类性能度量、距离计算、k-means、LVQ、高斯混合聚类、DBSCAN 和层次聚类。</p>
+<h2>聚类任务与度量</h2>
+<p>给定无标记样本集</p>
+<div class="formula-block">\[
+  D=\{\mathbf{x}_1,\mathbf{x}_2,\ldots,\mathbf{x}_m\},
+\]</div>
+<p>聚类算法将其划分为 $k$ 个不相交簇</p>
+<div class="formula-block">\[
+  \mathcal{C}=\{C_1,C_2,\ldots,C_k\}.
+\]</div>
+<p>分类使用已知标记训练模型；聚类没有标记，依赖距离、密度或分布假设发现结构。</p>
+<h3>外部指标</h3>
+<p>若有参考划分，可统计样本对关系：同簇同类 $a$、同簇异类 $b$、异簇同类 $c$、异簇异类 $d$。</p>
+<div class="formula-block">\[
+  JC=\frac{a}{a+b+c},
+\]</div>
+<div class="formula-block">\[
+  FMI=\sqrt{\frac{a}{a+b}\cdot\frac{a}{a+c}},
+\]</div>
+<div class="formula-block">\[
+  RI=\frac{2(a+d)}{m(m-1)}.
+\]</div>
+<h3>内部指标</h3>
+<p>内部指标只使用样本和聚类结果。常见思想：簇内距离小、簇间距离大。DB 指数越小越好，Dunn 指数越大越好。</p>
+<h2>距离计算</h2>
+<p>闵可夫斯基距离：</p>
+<div class="formula-block">\[
+  d_p(\mathbf{x},\mathbf{z})=
+  \left(\sum_{j=1}^{d}|x_j-z_j|^p\right)^{1/p}.
+\]</div>
+<p>特殊情形：</p>
+<div class="formula-block">\[
+  p=1 \text{ 为曼哈顿距离},\qquad p=2 \text{ 为欧氏距离}.
+\]</div>
+<p>马氏距离：</p>
+<div class="formula-block">\[
+  d_{\mathbf{\Sigma}^{-1}}(\mathbf{x},\mathbf{z})=
+  \sqrt{(\mathbf{x}-\mathbf{z})^\top\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{z})}.
+\]</div>
+<p>无序离散属性可用 VDM，属性重要性不同可用加权距离。</p>
+<h2>k-means</h2>
+<p>k-means 最小化簇内平方误差：</p>
+<div class="formula-block">\[
+  E=\sum_{\ell=1}^{k}\sum_{\mathbf{x}\in C_\ell}
+  \|\mathbf{x}-\mathbf{\mu}_\ell\|_2^2.
+\]</div>
+<p>算法步骤：</p>
+<ol>
+<li>初始化 $k$ 个中心。</li>
+<li>分配：把每个样本分到最近中心。</li>
+<li>更新：令每个中心为对应簇样本均值。</li>
+<li>重复直到中心或分配不再变化。</li>
+</ol>
+<p>局限：需预设 $k$，对初始中心和异常点敏感，偏好球形、规模相近、密度相近的簇。</p>
+<h2>LVQ 与高斯混合聚类</h2>
+<p>LVQ 使用带类别标记的原型向量，按样本与原型的关系移动原型。</p>
+<p>高斯混合模型假设数据由多个高斯成分混合生成：</p>
+<div class="formula-block">\[
+  p(\mathbf{x})=\sum_{i=1}^{k}\alpha_i
+  \mathcal{N}(\mathbf{x}\mid \mathbf{\mu}_i,\mathbf{\Sigma}_i),
+\qquad
+  \sum_i \alpha_i=1.
+\]</div>
+<p>责任度：</p>
+<div class="formula-block">\[
+  \gamma_{ji}=
+  \frac{\alpha_i\mathcal{N}(\mathbf{x}_j\mid \mathbf{\mu}_i,\mathbf{\Sigma}_i)}
+  {\sum_{\ell=1}^{k}\alpha_\ell\mathcal{N}(\mathbf{x}_j\mid \mathbf{\mu}_\ell,\mathbf{\Sigma}_\ell)}.
+\]</div>
+<p>EM 更新：</p>
+<div class="formula-block">\[
+  \mathbf{\mu}_i=\frac{\sum_j\gamma_{ji}\mathbf{x}_j}{\sum_j\gamma_{ji}},
+\]</div>
+<div class="formula-block">\[
+  \mathbf{\Sigma}_i=
+  \frac{\sum_j\gamma_{ji}(\mathbf{x}_j-\mathbf{\mu}_i)(\mathbf{x}_j-\mathbf{\mu}_i)^\top}
+  {\sum_j\gamma_{ji}},
+\]</div>
+<div class="formula-block">\[
+  \alpha_i=\frac{1}{m}\sum_j\gamma_{ji}.
+\]</div>
+<h2>DBSCAN</h2>
+<p>核心概念：</p>
+<ul>
+<li>$\epsilon$ 邻域：距离样本不超过 $\epsilon$ 的样本集合。</li>
+<li>核心对象：$\epsilon$ 邻域内样本数不少于 MinPts。</li>
+<li>密度直达、密度可达、密度相连：描述由核心对象扩展出的连通关系。</li>
+</ul>
+<p>DBSCAN 从核心对象出发扩展簇，并把不能归入任何簇的点视为噪声。$\epsilon$ 太小会产生过多噪声，太大会合并簇；MinPts 太大也会使簇更难形成。</p>
+<h2>层次聚类</h2>
+<p>AGNES 是自底向上的凝聚层次聚类：</p>
+<ol>
+<li>初始每个样本为一簇。</li>
+<li>计算簇间距离。</li>
+<li>合并距离最近的两簇。</li>
+<li>更新距离矩阵，直到满足停止条件。</li>
+</ol>
+<p>簇间距离可用最短距离、最长距离、平均距离。不同距离定义会影响合并顺序和聚类形状。</p>
+<h2>常见问法</h2>
+<ol>
+<li>给一维或二维数据和初始中心，手算 k-means 两轮迭代。</li>
+<li>比较不同初始化方案，说明 k-means 对初始化敏感的原因。</li>
+<li>给 GMM 参数和样本，计算各成分责任度和责任度比值。</li>
+<li>解释高斯方差变大时责任度变化与重叠问题。</li>
+<li>给 $\epsilon$ 和 MinPts，判断 DBSCAN 中核心点、边界点和噪声点。</li>
+<li>根据距离矩阵执行层次聚类前几步。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-8.html">← 第 8 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-10.html">第 10 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

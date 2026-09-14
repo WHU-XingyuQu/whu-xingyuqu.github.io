@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="梳理机器学习的核心概念、学习范式、建模流程、常见任务与易错点。">
+    <title>机器学习 &#183; 第 1 讲：概论 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>概论</h1>
+                <p class="article-summary">梳理机器学习的核心概念、学习范式、建模流程、常见任务与易错点。</p>
+                <div class="article-meta">
+                    <span>第 1 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<ul>
+<li>机器学习关注从经验数据中获得规律，并把学到的模型用于新样本预测、分类、聚类、特征提取或数据生成。</li>
+<li>模式识别强调从样本中提取模式并判定类别；机器学习强调通过训练数据自动得到处理任务的规则；人工智能是更大的目标系统。</li>
+<li>典型任务包括分类、回归、聚类、降维、异常检测、生成建模和强化学习。</li>
+<li>机器学习三要素：模型、策略、算法。模型给出假设空间，策略定义好坏，算法负责求解。</li>
+</ul>
+<h2>核心概念</h2>
+<h3>样本、标记与数据集</h3>
+<p>样本通常写作特征向量</p>
+<div class="formula-block">\[
+  \mathbf{x}_i=(x_{i1},x_{i2},\ldots,x_{id})^\top,\qquad y_i\in \mathcal{Y}.
+\]</div>
+<p>数据集写作</p>
+<div class="formula-block">\[
+  D=\{(\mathbf{x}_1,y_1),(\mathbf{x}_2,y_2),\ldots,(\mathbf{x}_m,y_m)\}.
+\]</div>
+<p>样本空间为 $\mathcal{X}$，标记空间为 $\mathcal{Y}$。多分类标记常用 one-hot 编码，例如三分类第2类可写成 $(0,1,0)$。</p>
+<h3>假设空间与学习器</h3>
+<p>学习算法 $A$ 在假设空间 $\mathcal{H}$ 中搜索模型 $g$，希望 $g$ 接近真实目标 $f$。训练集误差小不等于泛化能力强，最终关心的是新样本上的表现。</p>
+<h3>损失函数、代价函数与泛化</h3>
+<ul>
+<li>单样本损失：$\ell(y,\hat y)$，度量某个样本预测错误程度。</li>
+<li>数据集代价：$J(g)=\frac{1}{m}\sum_{i=1}^{m}\ell(y_i,g(\mathbf{x}_i))$。</li>
+<li>常见损失：$0$-$1$ 损失、平方损失、绝对损失、交叉熵损失。</li>
+<li>泛化能力：模型对未见样本的适应能力。</li>
+</ul>
+<h2>学习范式</h2>
+<dl>
+<dt>监督学习</dt><dd>训练数据含标记，目标是学习 $\mathbf{x}\mapsto y$。分类和回归都属于监督学习。</dd>
+<dt>无监督学习</dt><dd>训练数据无标记，目标是发现数据结构，如聚类、降维、异常检测。</dd>
+<dt>半监督学习</dt><dd>少量标记样本结合大量未标记样本，依赖平滑假设、聚类假设或流形假设。</dd>
+<dt>强化学习</dt><dd>智能体与环境交互，通过奖赏信号学习策略，关注长期累计收益。</dd>
+<dt>基于实例的学习</dt><dd>训练阶段主要存储样本，预测时比较新样本与已有样本，如 kNN。</dd>
+<dt>基于模型的学习</dt><dd>训练阶段显式拟合参数化或非参数模型，如线性回归、SVM、神经网络。</dd>
+<dt>生成式模型</dt><dd>学习 $P(\mathbf{x},y)$ 或 $P(\mathbf{x}\mid y)P(y)$，再由贝叶斯公式分类。</dd>
+<dt>判别式模型</dt><dd>直接学习 $P(y\mid \mathbf{x})$ 或决策边界。</dd>
+</dl>
+<h2>建模流程</h2>
+<ol>
+<li>明确任务：分类、回归、聚类、排序、生成或决策。</li>
+<li>收集并理解数据：样本量、特征类型、标记质量、类别分布。</li>
+<li>数据预处理：缺失值、异常值、归一化、编码、去噪。</li>
+<li>特征工程或表示学习：选择、构造、降维或学习特征。</li>
+<li>划分训练集、验证集、测试集，必要时采用交叉验证。</li>
+<li>选择模型与损失函数，训练参数，调节超参数。</li>
+<li>用合适指标评估模型，并分析欠拟合、过拟合、数据偏差。</li>
+<li>部署后监测数据分布漂移与性能变化。</li>
+</ol>
+<h2>常见问法</h2>
+<ol>
+<li>比较监督学习、无监督学习、半监督学习和强化学习，并各举一个例子。</li>
+<li>给定一个业务场景，写出机器学习建模主要步骤。</li>
+<li>区分分类、回归、聚类、异常检测和生成任务。</li>
+<li>解释模型、策略、算法三要素，以及损失函数和泛化能力的关系。</li>
+<li>比较生成式模型与判别式模型：生成式先建模数据产生机制，判别式直接建模决策边界。</li>
+</ol>
+<h2>易错点</h2>
+<ul>
+<li>分类输出离散类别，回归输出连续数值；二者都可以是监督学习。</li>
+<li>聚类不是分类：聚类没有真实类别标记参与训练。</li>
+<li>训练误差低只能说明模型适合训练数据，不必然说明泛化能力强。</li>
+<li>特征质量对模型上限影响很大，“Garbage in, garbage out” 是建模中的基本警示。</li>
+</ul>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <span></span>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-2.html">第 2 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

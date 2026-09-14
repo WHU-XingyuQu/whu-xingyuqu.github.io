@@ -385,6 +385,8 @@ foreach ($lecture in 0..12) {
             $content = $content.Replace('依稀记得在前面的Lecture中，我们在指令架构的学习中，就有操作码（Opcode）的字段，这些操作码在这里就成为了处理器的分流依据。', '前述指令格式中的操作码（Opcode）字段用于区分指令类型；在处理器中，它进一步成为控制信号生成的主要输入。')
         }
         8 {
+            $content = $content.Replace('<br/>', '<br>')
+            $content = $content.Replace('Compiler&amp;#39;s Optimization', 'Compiler''s Optimization')
             $content = $content.Replace('细忖度之，可以看到，', '进一步观察可知，')
             $content = $content.Replace('细忖度之，可以看到，add指令在 EX阶段结束之后 x19就不会再动了，可以直接被后面的指令使用，不需要在寄存器中再存取一次了。', '进一步观察可知，add 指令在 EX 阶段结束后已经产生 x19 的新值，可以直接转发给后续指令，无需等待寄存器写回。')
         }
@@ -1051,6 +1053,28 @@ $hubPage = @"
                     <span>NP 完全性</span>
                 </div>
                 <a class="read-link" href="theory-of-computation/index.html">进入课程分支 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card course-card">
+                <div class="note-card-meta"><span>2026 春季</span><span>12 篇笔记</span></div>
+                <h2><a href="machine-learning/index.html">机器学习</a></h2>
+                <p>从基本概念和模型评估出发，整理线性模型、贝叶斯分类器、支持向量机、决策树、集成学习、聚类与强化学习。</p>
+                <div class="series-meta course-tags" aria-label="课程主题">
+                    <span>模型评估</span>
+                    <span>经典算法</span>
+                    <span>强化学习</span>
+                </div>
+                <a class="read-link" href="machine-learning/index.html">进入课程分支 <span aria-hidden="true">→</span></a>
+            </article>
+            <article class="note-card course-card">
+                <div class="note-card-meta"><span>2024 秋季</span><span>11 篇笔记</span></div>
+                <h2><a href="cpp/index.html">C++ 程序设计</a></h2>
+                <p>围绕类与对象、继承、多态、指针、STL、模板、输入输出和异常处理，整理期末复习知识体系。</p>
+                <div class="series-meta course-tags" aria-label="课程主题">
+                    <span>面向对象</span>
+                    <span>STL</span>
+                    <span>模板与异常</span>
+                </div>
+                <a class="read-link" href="cpp/index.html">进入课程分支 <span aria-hidden="true">→</span></a>
             </article>
         </section>
     </main>

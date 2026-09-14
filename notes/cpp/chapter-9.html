@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="介绍标准 I/O 流、格式控制、文件读写和字符串流。">
+    <title>C++ 程序设计 &#183; 第 9 章：流类库与输入输出 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">C++ 程序设计 · 期末复习</p>
+                <h1>流类库与输入输出</h1>
+                <p class="article-summary">介绍标准 I/O 流、格式控制、文件读写和字符串流。</p>
+                <div class="article-meta">
+                    <span>第 9 章</span>
+                    <span>2024 秋季</span>
+                    <span>PDF 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>1. I/O标准流类库</h2>
+<h2>2. 输出流</h2>
+<h3>（1）不需要手动构造的输出流对象</h3>
+<ul>
+<li>cout:标准输出流</li>
+<li>cerr:标准错误输出流，没有缓冲，直接输出，常用于输出错误提示语句</li>
+<li>clog:类似cerr，但有缓冲，缓冲区溢出时溢出</li>
+</ul>
+<h3>（2）构造输出流对象</h3>
+<h4>a. 调用输出流对象时指定对象名</h4>
+<pre><code>ofstream myFile(&quot;filename&quot;);</code></pre>
+<h4>b. 使用默认构造函数，然后调用open成员函数</h4>
+<pre><code>ofstream myFile;
+myFile.open();</code></pre>
+<p>（打开多个文件时，只有一个是打开的）</p>
+<pre><code>ofstream file;
+file.open(&quot;FILE1&quot;);
+//...
+file.close();
+file.open(&quot;FILE2&quot;);
+//...
+file.close();</code></pre>
+<p>（open函数可以直接传入字符串）</p>
+<pre><code>ofstream file;
+std::string filename;
+file.open(filename);</code></pre>
+<h3>（3）控制输出格式</h3>
+<h4>a. 输出宽度</h4>
+<p>width(): 设置输出宽度，在输出内容前默认加入空格占位（即右对齐）---fill():自定义填充字符</p>
+<pre><code>double values[]={1,10,100};
+cout.fill(&quot;*&quot;);
+for(int i=0;i&lt;3;i++)
+{
+    cout.width();// 调用时是用成员调用
+    cout&lt;&lt;values[i]&lt;&lt;endl;
+}</code></pre>
+<p>setw():为同一行的不同项设置指定宽度，也可以使用set()运算符 #include&lt;iomanip&gt;</p>
+<pre><code>cout&lt;&lt;setw(6)&lt;&lt;arr[0]&lt;&lt;setw(4)&lt;&lt;arr[1]&lt;&lt;endl;</code></pre>
+<p>width()和setw()只影响下一个输出的对象（下一个域），但其他流格式选项保持有效直到发生改变，例如fill width()和setw()不截断数值，溢出的部分也会显示</p>
+<h4>b. 对齐方式</h4>
+<p>输出流默认为右对齐文本，可用setiosflags #include&lt;iomanip&gt;</p>
+<pre><code>for(int i=0;i&lt;4;i++)
+{
+    cout&lt;&lt;setiosflags(ios_base::left)&lt;&lt;setw(6)&lt;&lt;arr[i]&lt;&lt;endl;
+}</code></pre>
+<p>ios_base::left是ios_base的静态常量setiosflags的影响持久，可用resetiosflags还原取消设置左对齐</p>
+<pre><code>cout&lt;&lt;resetiosflags(ios_base::left)&lt;&lt;setw(6)&lt;&lt;arr[i]&lt;&lt;endl;//</code></pre>
+<p>（此外若要避免之前设置的格式影响，还可使用put语句）</p>
+<pre><code>cout.put(&#39;A&#39;);</code></pre>
+<h4>c. 精度</h4>
+<p>setprecision() #include&lt;iomanip&gt;</p>
+<pre><code>cout&lt;&lt;setiosflags(ios_base::fixed);//固定格式，不使用科学计数法
+cout&lt;&lt;setiosflags(ios_base::scientific);//科学计数法形式</code></pre>
+<h4>d. 进制</h4>
+<pre><code>setiosflags(ios_base::oct);//八进制
+setiosflags(ios_base::hex);//十六进制
+setiosflags(ios_base::dec);//默认的十进制</code></pre>
+<h2>3. 文件读写操作</h2>
+<h3>（1）流程</h3>
+<p>包含头文件#include&lt;fstream&gt; --&gt; 创建流对象 ofstream/ifstream --&gt;打开文件 对象.open(&quot;文件路径&quot;,打开方式)--&gt;读/写数据 对象&lt;&lt;&quot;写/读入的数据&quot; --&gt; 关闭文件 对象.close()</p>
+<h3>（2）打开文件的方式</h3>
+<h3>（3）在读文件过程中四种方式接收读取数据</h3>
+<pre><code>char buf[1024]={0};
+while(ifs&gt;&gt;buf)
+{
+    cout&lt;&lt;buf;
+}
+char buf[1024]={0};
+while(ifs.getline(buf))
+{
+    cout&lt;&lt;buf;
+}</code></pre>
+<pre><code>string buf;
+while(ifs&gt;&gt;buf)
+{
+    cout&lt;&lt;buf;
+}</code></pre>
+<pre><code>char c;
+while((c=ifs.gets())!=EOF)
+{
+    cout&lt;&lt;c;
+}</code></pre>
+<h2>4. 字符串输出流</h2>
+<p>#include&lt;sstream&gt;输出流除了可以向屏幕和文件输出信息外，还可以生成字符串ostringstream类与ofstream类同为ostream的派生类，与ofstream相比只缺少open和close函数ostringstream类还有一个特殊的函数成员str，返回一个string对象，表示生成字符串的内容osstringstream类有两个构造函数</p>
+<pre><code>ostringstream os(流的打开模式);//当为默认的ios_base::out时可省略为缺省
+ostringstream os(对象，流的打开模式);</code></pre>
+<p>&lt;典例&gt;将数值转为字符串</p>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;sstream&gt;
+#include&lt;string&gt;
+using namespace std;
+
+template&lt;class T&gt;
+inline string toString(const T&amp;v)
+{
+     ostringstream os;
+     os&lt;&lt;v;
+     return os.str();
+}
+//  该模版可以将任意支持&quot;&lt;&lt;&quot;插入符的类型转换为字符串</code></pre>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-8.html">← 第 8 章</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-10.html">第 10 章 →</a>
+        </nav>
+    </main>
+</body>
+</html>

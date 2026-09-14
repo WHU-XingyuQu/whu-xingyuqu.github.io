@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="整理 k 近邻、维数灾难、MDS、PCA、核化降维、流形学习和度量学习。">
+    <title>机器学习 &#183; 第 8 讲：降维与度量学习 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>降维与度量学习</h1>
+                <p class="article-summary">整理 k 近邻、维数灾难、MDS、PCA、核化降维、流形学习和度量学习。</p>
+                <div class="article-meta">
+                    <span>第 8 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>本章从 kNN 引出距离、维数灾难和降维问题。重点包括 k 近邻、多维缩放、PCA、核 PCA、Isomap、LLE、度量学习、马氏距离和近邻成分分析。</p>
+<h2>k 近邻学习</h2>
+<p>kNN 是典型懒惰学习：训练阶段主要存储样本，预测阶段找最近邻。</p>
+<ul>
+<li>分类：取 $k$ 个近邻的多数类。</li>
+<li>回归：取 $k$ 个近邻标记均值或加权均值。</li>
+<li>$k$ 小：模型复杂，低偏差高方差。</li>
+<li>$k$ 大：模型平滑，高偏差低方差。</li>
+</ul>
+<p>kNN 强依赖距离度量和特征尺度，使用前通常需要标准化。</p>
+<h2>维数灾难</h2>
+<p>高维空间中样本会变得稀疏，距离差异可能失去区分性，局部邻域难以可靠估计。降维希望保留主要结构，减少噪声和冗余，提高计算效率与泛化能力。</p>
+<h2>多维缩放 MDS</h2>
+<p>MDS 目标是在低维空间中尽量保持样本间距离。设距离矩阵平方为 $\mathbf{D}^{(2)}$，中心化矩阵</p>
+<div class="formula-block">\[
+  \mathbf{J}=\mathbf{I}-\frac{1}{m}\mathbf{1}\mathbf{1}^\top.
+\]</div>
+<p>内积矩阵可由双中心化得到：</p>
+<div class="formula-block">\[
+  \mathbf{B}=-\frac{1}{2}\mathbf{J}\mathbf{D}^{(2)}\mathbf{J}.
+\]</div>
+<p>对 $\mathbf{B}$ 特征分解，取最大 $d&#39;$ 个特征值及对应特征向量构造低维坐标。</p>
+<h2>主成分分析 PCA</h2>
+<p>PCA 有两种等价理解：</p>
+<ul>
+<li>最近重构性：低维表示重构回原空间的误差最小。</li>
+<li>最大可分性：投影后样本方差最大。</li>
+</ul>
+<p>计算步骤：</p>
+<ol>
+<li>中心化：$\tilde{\mathbf{x}}_i=\mathbf{x}_i-\mathbf{\mu}$。</li>
+<li>求协方差矩阵：$\mathbf{\Sigma}=\frac{1}{m}\tilde{\mathbf{X}}^\top\tilde{\mathbf{X}}$。</li>
+<li>求特征值和单位特征向量。</li>
+<li>按特征值从大到小选主成分。</li>
+<li>投影：$\mathbf{z}_i=\mathbf{W}^\top(\mathbf{x}_i-\mathbf{\mu})$。</li>
+</ol>
+<p>方差贡献率：</p>
+<div class="formula-block">\[
+  \frac{\lambda_j}{\sum_{\ell}\lambda_\ell}.
+\]</div>
+<p>只保留前 $r$ 个主成分的信息损失比例为</p>
+<div class="formula-block">\[
+  1-\frac{\sum_{j=1}^{r}\lambda_j}{\sum_{\ell}\lambda_\ell}.
+\]</div>
+<h2>核化降维与流形学习</h2>
+<dl>
+<dt>核 PCA</dt><dd>通过核函数在高维特征空间执行 PCA，可处理非线性结构。</dd>
+<dt>Isomap</dt><dd>构造近邻图，用图上最短路径近似测地线距离，再做 MDS。</dd>
+<dt>LLE</dt><dd>对每个样本用近邻线性重构，并在低维空间保持重构权重不变。</dd>
+</dl>
+<p>PCA 假设全局线性子空间，Isomap 和 LLE 更强调低维流形结构。</p>
+<h2>度量学习</h2>
+<p>马氏距离：</p>
+<div class="formula-block">\[
+  d_{\mathbf{M}}(\mathbf{x}_i,\mathbf{x}_j)=
+  \sqrt{(\mathbf{x}_i-\mathbf{x}_j)^\top\mathbf{M}(\mathbf{x}_i-\mathbf{x}_j)}.
+\]</div>
+<p>为保证距离非负，$\mathbf{M}$ 应为半正定矩阵。若 $\mathbf{M}=\mathbf{I}$，退化为欧氏距离。度量学习的目标是根据任务学习一个更合适的 $\mathbf{M}$，使相似样本更近、不相似样本更远。</p>
+<h2>常见问法</h2>
+<ol>
+<li>给二维或三维样本，中心化、求协方差矩阵、特征值和特征向量。</li>
+<li>指出第一主成分方向，计算投影和方差贡献率。</li>
+<li>解释只保留部分主成分时的信息损失。</li>
+<li>比较 PCA、MDS、Isomap、LLE 的保持对象。</li>
+<li>分析 kNN 中 $k$ 和距离度量对分类边界的影响。</li>
+<li>写出马氏距离并说明半正定约束的意义。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-7.html">← 第 7 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-9.html">第 9 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

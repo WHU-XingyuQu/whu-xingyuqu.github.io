@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="整理过滤式、包裹式和嵌入式选择，以及稀疏表示、压缩感知和矩阵补全。">
+    <title>机器学习 &#183; 第 10 讲：特征选择与稀疏学习 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>特征选择与稀疏学习</h1>
+                <p class="article-summary">整理过滤式、包裹式和嵌入式选择，以及稀疏表示、压缩感知和矩阵补全。</p>
+                <div class="article-meta">
+                    <span>第 10 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>特征选择希望从原始属性中选出有用子集，降低维度、减少过拟合并提高可解释性。重点包括子集搜索、子集评价、过滤式选择、包裹式选择、嵌入式选择、$L_1$ 正则、稀疏表示、字典学习、压缩感知和矩阵补全。</p>
+<h2>子集搜索与评价</h2>
+<p>给定特征集合 $A=\{a_1,a_2,\ldots,a_d\}$，直接遍历所有子集需要 $2^d$ 次，通常不可行。常见搜索策略：</p>
+<ul>
+<li>前向搜索：从空集开始，每轮加入最有用特征。</li>
+<li>后向搜索：从全集开始，每轮删除最无用特征。</li>
+<li>双向搜索：同时考虑加入和删除。</li>
+</ul>
+<p>子集评价可使用信息增益、相关性、交叉验证性能等指标。若用信息增益，子集包含的类别信息越多，评价越高。</p>
+<h2>三类特征选择方法</h2>
+<dl>
+<dt>过滤式</dt><dd>先独立于学习器筛选特征，再训练模型。速度快，泛化性好，但未必最适合最终模型。</dd>
+<dt>包裹式</dt><dd>把学习器性能作为特征子集评价标准，如 LVW。效果常较好，但计算开销大。</dd>
+<dt>嵌入式</dt><dd>特征选择与模型训练同时进行，如 $L_1$ 正则化、决策树特征选择。</dd>
+</dl>
+<h2>Relief 方法</h2>
+<p>Relief 给每个特征一个相关统计量。对样本 $\mathbf{x}_i$，找到同类最近邻 near-hit 和异类最近邻 near-miss：</p>
+<div class="formula-block">\[
+  \delta^j \leftarrow \delta^j
+  -\operatorname{diff}(x_i^j,\operatorname{hit}^j)
+  +\operatorname{diff}(x_i^j,\operatorname{miss}^j).
+\]</div>
+<p>若某特征在同类样本间差异小、异类样本间差异大，则该特征更重要。Relief-F 可扩展到多分类和更复杂情形。</p>
+<h2>LVW 包裹式选择</h2>
+<p>LVW 随机产生特征子集，使用交叉验证估计学习器性能；若性能不下降且特征数更少，则接受该子集。它属于 Las Vegas Wrapper，强调在随机搜索中寻找小而有效的特征集合。</p>
+<h2>$L_1$ 正则化与稀疏解</h2>
+<p>嵌入式选择常写为</p>
+<div class="formula-block">\[
+  \min_{\mathbf{w}} J(\mathbf{w})+\lambda\|\mathbf{w}\|_1.
+\]</div>
+<p>$L_1$ 正则容易产生精确为 $0$ 的权重，因此可直接完成特征选择。相比之下，$L_2$ 正则通常把权重压小但不置零。</p>
+<p>近端梯度中的软阈值形式：</p>
+<div class="formula-block">\[
+  w_j \leftarrow \operatorname{sign}(z_j)
+  \max(|z_j|-\eta\lambda,0).
+\]</div>
+<p>当 $|z_j|\le \eta\lambda$ 时，权重被压为 $0$。</p>
+<h2>稀疏表示与字典学习</h2>
+<p>稀疏表示认为样本可由少量基向量线性组合：</p>
+<div class="formula-block">\[
+  \mathbf{x}\approx \mathbf{D}\mathbf{\alpha},\qquad \mathbf{\alpha}\ \text{稀疏}.
+\]</div>
+<p>字典学习可写为</p>
+<div class="formula-block">\[
+  \min_{\mathbf{D},\mathbf{A}}\|\mathbf{X}-\mathbf{D}\mathbf{A}\|_F^2
+  +\lambda\sum_i\|\mathbf{\alpha}_i\|_1.
+\]</div>
+<p>通常交替优化：固定字典求稀疏编码，固定编码更新字典。</p>
+<h2>压缩感知与矩阵补全</h2>
+<p>压缩感知研究如何从少量线性测量恢复稀疏信号：</p>
+<div class="formula-block">\[
+  \mathbf{y}=\mathbf{\Phi}\mathbf{x},\qquad \mathbf{x}=\mathbf{\Psi}\mathbf{s},
+\]</div>
+<p>恢复问题常松弛为</p>
+<div class="formula-block">\[
+  \min_{\mathbf{s}}\|\mathbf{s}\|_1
+  \quad \text{s.t.}\quad
+  \mathbf{y}=\mathbf{\Phi}\mathbf{\Psi}\mathbf{s}.
+\]</div>
+<p>RIP 条件保证测量矩阵近似保持稀疏向量距离。矩阵补全则利用低秩结构，从部分观测恢复完整矩阵，常用核范数作为秩的凸替代。</p>
+<h2>常见问法</h2>
+<ol>
+<li>比较过滤式、包裹式、嵌入式特征选择。</li>
+<li>解释 Relief 如何判断特征重要性。</li>
+<li>说明 $L_1$ 为什么能产生稀疏解，$L_1$ 与 $L_2$ 有何差别。</li>
+<li>给高维小样本场景，选择合适的特征选择方法并说明理由。</li>
+<li>写出字典学习或压缩感知的优化目标，解释稀疏性的作用。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-9.html">← 第 9 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-11.html">第 11 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="从贝叶斯决策与极大似然出发，介绍朴素贝叶斯、贝叶斯网和 EM 算法。">
+    <title>机器学习 &#183; 第 4 讲：贝叶斯分类器 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>贝叶斯分类器</h1>
+                <p class="article-summary">从贝叶斯决策与极大似然出发，介绍朴素贝叶斯、贝叶斯网和 EM 算法。</p>
+                <div class="article-meta">
+                    <span>第 4 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>贝叶斯分类器从概率角度处理分类问题：先估计先验概率和类条件概率，再由贝叶斯公式得到后验概率。重点包括贝叶斯决策论、极大似然估计、朴素贝叶斯、拉普拉斯修正、半朴素贝叶斯、贝叶斯网和 EM 算法。</p>
+<h2>贝叶斯决策论</h2>
+<p>对类别 $c_i$，把样本 $\mathbf{x}$ 判为 $c_i$ 的条件风险为</p>
+<div class="formula-block">\[
+  R(c_i\mid \mathbf{x})=\sum_{j=1}^{N}\lambda_{ij}P(c_j\mid \mathbf{x}),
+\]</div>
+<p>其中 $\lambda_{ij}$ 是把真实类别 $c_j$ 判为 $c_i$ 的损失。最优决策为</p>
+<div class="formula-block">\[
+  h^{*}(\mathbf{x})=\arg\min_{c_i}R(c_i\mid \mathbf{x}).
+\]</div>
+<p>在 $0$-$1$ 损失下，等价于最大后验概率：</p>
+<div class="formula-block">\[
+  h^{*}(\mathbf{x})=\arg\max_c P(c\mid \mathbf{x}).
+\]</div>
+<p>贝叶斯公式：</p>
+<div class="formula-block">\[
+  P(c\mid \mathbf{x})=\frac{P(\mathbf{x}\mid c)P(c)}{P(\mathbf{x})}.
+\]</div>
+<p>分类时 $P(\mathbf{x})$ 对所有类别相同，通常比较 $P(\mathbf{x}\mid c)P(c)$。</p>
+<h2>极大似然估计</h2>
+<p>假设样本独立同分布，似然函数为</p>
+<div class="formula-block">\[
+  L(\theta)=\prod_{i=1}^{m}p(\mathbf{x}_i\mid \theta),
+\]</div>
+<p>常用对数似然</p>
+<div class="formula-block">\[
+  \ell(\theta)=\sum_{i=1}^{m}\log p(\mathbf{x}_i\mid \theta).
+\]</div>
+<p>对高斯分布，极大似然估计下均值为样本均值，协方差为样本协方差的相应估计。贝叶斯分类中常先对每个类别估计 $P(\mathbf{x}\mid c)$ 的参数。</p>
+<h2>朴素贝叶斯</h2>
+<p>朴素贝叶斯作条件独立假设：</p>
+<div class="formula-block">\[
+  P(\mathbf{x}\mid c)=\prod_{j=1}^{d}P(x_j\mid c).
+\]</div>
+<p>因此</p>
+<div class="formula-block">\[
+  P(c\mid \mathbf{x})\propto P(c)\prod_{j=1}^{d}P(x_j\mid c).
+\]</div>
+<p>实际计算时常用对数形式避免下溢：</p>
+<div class="formula-block">\[
+  \log P(c\mid \mathbf{x})=\log P(c)+\sum_{j=1}^{d}\log P(x_j\mid c)+\text{常数}.
+\]</div>
+<h3>拉普拉斯修正</h3>
+<p>若某属性值在某类别中从未出现，未修正概率会变为 $0$，导致整类后验被置零。设类别数为 $N$，属性 $a_j$ 可能取值数为 $N_j$：</p>
+<div class="formula-block">\[
+  \hat P(c)=\frac{|D_c|+1}{|D|+N},
+\]</div>
+<div class="formula-block">\[
+  \hat P(x_j=a\mid c)=\frac{|D_{c,x_j=a}|+1}{|D_c|+N_j}.
+\]</div>
+<h2>半朴素贝叶斯</h2>
+<p>朴素贝叶斯假设过强，半朴素贝叶斯放松为独依赖假设：每个属性最多依赖一个其他属性。</p>
+<ul>
+<li>SPODE：所有属性依赖同一个超父属性。</li>
+<li>TAN：用最大带权生成树学习属性依赖结构。</li>
+<li>AODE：对多个 SPODE 结果进行平均。</li>
+</ul>
+<h2>贝叶斯网</h2>
+<p>贝叶斯网用有向无环图表达变量依赖关系，联合分布分解为</p>
+<div class="formula-block">\[
+  P(x_1,x_2,\ldots,x_d)=\prod_{i=1}^{d}P(x_i\mid \operatorname{Pa}(x_i)),
+\]</div>
+<p>其中 $\operatorname{Pa}(x_i)$ 是 $x_i$ 的父结点。结构学习常结合评分函数和搜索，推断可用精确推断或采样近似，如吉布斯采样。</p>
+<h2>EM 算法</h2>
+<p>当数据含隐变量 $Z$ 时，直接最大化 $P(X\mid \theta)$ 往往困难。EM 交替执行：</p>
+<dl>
+<dt>E 步</dt><dd>在当前参数 $\theta^{(t)}$ 下计算隐变量后验或期望充分统计量。</dd>
+<dt>M 步</dt><dd>最大化期望完整数据对数似然，更新 $\theta^{(t+1)}$。</dd>
+</dl>
+<p>高斯混合模型中的责任度：</p>
+<div class="formula-block">\[
+  \gamma_{ji}=
+  \frac{\alpha_i\mathcal{N}(\mathbf{x}_j\mid \mathbf{\mu}_i,\mathbf{\Sigma}_i)}
+  {\sum_{\ell=1}^{k}\alpha_\ell\mathcal{N}(\mathbf{x}_j\mid \mathbf{\mu}_\ell,\mathbf{\Sigma}_\ell)}.
+\]</div>
+<h2>常见问法</h2>
+<ol>
+<li>给先验概率和条件概率，代入贝叶斯公式计算后验概率并分类。</li>
+<li>给离散训练表，数频次求 $P(c)$、$P(x_j\mid c)$，再做朴素贝叶斯预测。</li>
+<li>说明朴素贝叶斯条件独立假设的优点和缺点。</li>
+<li>解释拉普拉斯修正为什么能避免零概率问题。</li>
+<li>比较朴素贝叶斯、半朴素贝叶斯和贝叶斯网。</li>
+<li>写出 EM 的 E 步与 M 步，并解释其适用场景。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-3.html">← 第 3 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-5.html">第 5 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

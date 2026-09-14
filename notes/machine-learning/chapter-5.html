@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="围绕间隔、对偶问题、KKT 条件、软间隔和核方法整理 SVM 的完整推导链。">
+    <title>机器学习 &#183; 第 5 讲：支持向量机 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>支持向量机</h1>
+                <p class="article-summary">围绕间隔、对偶问题、KKT 条件、软间隔和核方法整理 SVM 的完整推导链。</p>
+                <div class="article-meta">
+                    <span>第 5 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>支持向量机的核心是最大间隔分类。重点包括函数间隔、几何间隔、硬间隔 SVM 原问题、拉格朗日对偶、KKT 条件、软间隔、惩罚系数 $C$、核技巧和常用核函数。</p>
+<h2>间隔与支持向量</h2>
+<p>二分类数据 $y_i\in\{-1,+1\}$，超平面为</p>
+<div class="formula-block">\[
+  \mathbf{w}^\top\mathbf{x}+b=0.
+\]</div>
+<p>函数间隔：</p>
+<div class="formula-block">\[
+  \hat\gamma_i=y_i(\mathbf{w}^\top\mathbf{x}_i+b).
+\]</div>
+<p>几何间隔：</p>
+<div class="formula-block">\[
+  \gamma_i=\frac{y_i(\mathbf{w}^\top\mathbf{x}_i+b)}{\|\mathbf{w}\|}.
+\]</div>
+<p>支持向量是离分离超平面最近、决定间隔的样本点。规范化约束 $y_i(\mathbf{w}^\top\mathbf{x}_i+b)\ge 1$ 后，间隔宽度为</p>
+<div class="formula-block">\[
+  \frac{2}{\|\mathbf{w}\|}.
+\]</div>
+<h2>硬间隔 SVM</h2>
+<p>线性可分时，最大化间隔等价于</p>
+<div class="formula-block">\[
+  \min_{\mathbf{w},b}\frac{1}{2}\|\mathbf{w}\|^2
+  \quad
+  \text{s.t.}\quad
+  y_i(\mathbf{w}^\top\mathbf{x}_i+b)\ge 1,\ i=1,\ldots,m.
+\]</div>
+<p>拉格朗日函数：</p>
+<div class="formula-block">\[
+  L(\mathbf{w},b,\mathbf{\alpha})=
+  \frac{1}{2}\|\mathbf{w}\|^2
+  -\sum_{i=1}^{m}\alpha_i\left[y_i(\mathbf{w}^\top\mathbf{x}_i+b)-1\right].
+\]</div>
+<p>对偶问题：</p>
+<div class="formula-block">\[
+  \max_{\mathbf{\alpha}}\sum_{i=1}^{m}\alpha_i
+  -\frac{1}{2}\sum_{i=1}^{m}\sum_{j=1}^{m}
+  \alpha_i\alpha_j y_i y_j \mathbf{x}_i^\top\mathbf{x}_j,
+\]</div>
+<div class="formula-block">\[
+  \text{s.t.}\quad \alpha_i\ge 0,\qquad \sum_{i=1}^{m}\alpha_i y_i=0.
+\]</div>
+<p>解得</p>
+<div class="formula-block">\[
+  \mathbf{w}^{*}=\sum_{i=1}^{m}\alpha_i^{*}y_i\mathbf{x}_i.
+\]</div>
+<p>只有 $\alpha_i&gt;0$ 的样本影响 $\mathbf{w}^{*}$，它们就是支持向量。</p>
+<h2>KKT 条件</h2>
+<p>硬间隔中互补松弛条件：</p>
+<div class="formula-block">\[
+  \alpha_i\left[y_i(\mathbf{w}^\top\mathbf{x}_i+b)-1\right]=0.
+\]</div>
+<p>若 $\alpha_i&gt;0$，则样本恰在支持面上；若样本远离间隔边界，则 $\alpha_i=0$。</p>
+<h2>软间隔 SVM</h2>
+<p>线性不可分时引入松弛变量：</p>
+<div class="formula-block">\[
+  \min_{\mathbf{w},b,\mathbf{\xi}}\frac{1}{2}\|\mathbf{w}\|^2+C\sum_{i=1}^{m}\xi_i
+\]</div>
+<div class="formula-block">\[
+  \text{s.t.}\quad y_i(\mathbf{w}^\top\mathbf{x}_i+b)\ge 1-\xi_i,\qquad \xi_i\ge 0.
+\]</div>
+<p>其对偶约束变为</p>
+<div class="formula-block">\[
+  0\le \alpha_i\le C,\qquad \sum_i \alpha_i y_i=0.
+\]</div>
+<ul>
+<li>$C$ 大：对误分类惩罚重，间隔较小，训练误差低，可能过拟合。</li>
+<li>$C$ 小：允许更多间隔违例，间隔较大，可能欠拟合。</li>
+</ul>
+<p>若使用平方松弛惩罚 $\frac{C}{2}\sum_i\xi_i^2$，对偶目标常出现额外的 $-\frac{1}{2C}\sum_i\alpha_i^2$ 项。</p>
+<h2>核方法</h2>
+<p>若存在映射 $\phi(\mathbf{x})$，核函数定义为</p>
+<div class="formula-block">\[
+  K(\mathbf{x},\mathbf{z})=\phi(\mathbf{x})^\top\phi(\mathbf{z}).
+\]</div>
+<p>把对偶问题中的内积替换为核函数即可得到非线性 SVM：</p>
+<div class="formula-block">\[
+  f(\mathbf{x})=\operatorname{sign}\left(
+  \sum_{i=1}^{m}\alpha_i y_i K(\mathbf{x}_i,\mathbf{x})+b\right).
+\]</div>
+<p>核函数必须至少满足对称性和正半定性，即任意有限样本上的核矩阵为半正定矩阵。</p>
+<h3>常用核函数</h3>
+<div class="formula-block">\[
+  K(\mathbf{x},\mathbf{z})=\mathbf{x}^\top\mathbf{z}
+\]</div>
+<div class="formula-block">\[
+  K(\mathbf{x},\mathbf{z})=(\mathbf{x}^\top\mathbf{z}+c)^d
+\]</div>
+<div class="formula-block">\[
+  K(\mathbf{x},\mathbf{z})=\exp(-\gamma\|\mathbf{x}-\mathbf{z}\|^2).
+\]</div>
+<p>高斯核对应无限维特征映射，$\gamma$ 越大，单个样本影响范围越小，决策边界越容易复杂。</p>
+<h2>常见问法</h2>
+<ol>
+<li>写出硬间隔 SVM 原始问题，并解释最大间隔含义。</li>
+<li>给简单二维样本，找支持向量、分离超平面和间隔宽度。</li>
+<li>推导硬间隔或软间隔 SVM 的拉格朗日对偶。</li>
+<li>解释 KKT 条件中支持向量对应的非零 $\alpha_i$。</li>
+<li>比较硬间隔和软间隔几何差别。</li>
+<li>说明 $C$ 过大或过小时对间隔、误分类和泛化的影响。</li>
+<li>判断一个函数是否可作为核函数，或说明高斯核的非线性映射作用。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-4.html">← 第 4 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-6.html">第 6 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

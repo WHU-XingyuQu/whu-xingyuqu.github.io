@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="整理函数模板、类模板与动态数组类模板示例。">
+    <title>C++ 程序设计 &#183; 第 8 章：函数与类的模板 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">C++ 程序设计 · 期末复习</p>
+                <h1>函数与类的模板</h1>
+                <p class="article-summary">整理函数模板、类模板与动态数组类模板示例。</p>
+                <div class="article-meta">
+                    <span>第 8 章</span>
+                    <span>2024 秋季</span>
+                    <span>PDF 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>1. 函数与类模版的定义</h2>
+<h3>（1）函数模版</h3>
+<p>如果重载的函数，其解决问题的逻辑是一致的、函数体语句相同，只是处理的数据类型不同，那么写多个相同的函数体，是重复劳动，而且还可能因为代码的冗余造成不一致性。这时就可以用使用函数模版来解决。（例：求绝对值函数的模版）</p>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+template&lt;typename T&gt;
+T abs(T x) {
+        return x &lt; 0? -x : x;
+}
+int main() {
+        int n = -5;
+        double d = -5.5;
+        cout &lt;&lt; abs(n) &lt;&lt; endl;
+        cout &lt;&lt; abs(d) &lt;&lt; endl;
+          return 0;</code></pre>
+<h3>（2）类模板</h3>
+<p>使用类模板使用户可以为类声明一种模式，使得类中的某些数据成员、某些成员函数的参数、某些成员函数的返回值，能取任意类型（包括基本类型的和用户自定义类型）。</p>
+<pre><code>//类似于函数形参可有默认实参，函数/类模板可有默认模板实参：
+template &lt;typename T = double&gt;//设置默认实参
+class Point{
+public:
+          Point(T _x = 0, T _y = 0): x(_x), y(_y){}
+private:
+             T x;
+             T y;
+};
+//使用模板：
+Point&lt;int&gt; point();          给定模板参数int，定义整数点对象(0, 0)
+//
+Point&lt;&gt; point();         //模板参数列表&lt;&gt;为空，默认double类型初始化</code></pre>
+<h2>2. 动态数组类模版程序</h2>
+<pre><code>#ifndef ARRAY_H
+#define ARRAY_H
+#include &lt;cassert&gt;
+template &lt;class T&gt;           // 数组类模板定义
+class Array {
+private:
+          T* list;                //  用于存放动态分配的数组内存首地址
+          int size;                            //数组大小（元素个数）
+public:
+          Array(int sz = 50);                构造函数
+//
+          Array(const Array&lt;T&gt; &amp;a);       //拷贝构造函数
+          ~Array();                       //析构函数
+          Array&lt;T&gt; &amp; operator = (const Array&lt;T&gt; &amp;rhs);           重载&quot;=“
+//
+          T &amp; operator [] (int i);                //  重载&quot;[]”
+          const T &amp; operator [] (int i) const;
+          operator T * ();                       //   重载到T*类型的转换
+          operator const T * () const;
+        int getSize() const;                    //取数组的大小
+        void resize(int sz);                    //修改数组的大小
+};
+template &lt;class T&gt;
+Array&lt;T&gt;::Array(int sz) {// 构造函数
+        assert(sz &gt;= 0);         为数组大小（元素个数），应当非负
+//sz
+        size = sz;        // 将元素个数赋值给变量size
+        list = new T [size];          //动态分配size个T类型的元素空间
+}
+template &lt;class T&gt;
+Array&lt;T&gt;::~Array() { //  析构函数
+        delete [] list;
+}
+//  复制构造函数
+template &lt;class T&gt;
+Array&lt;T&gt;::Array(const Array&lt;T&gt; &amp;a) {
+        size = a.size;           从对象x取得数组大小，并赋值给当前对象的成员
+//
+        //为对象申请内存并进行出错检查
+        list = new T[size];            // 动态分配n个T类型的元素空间
+        for (int i = 0; i &lt; size; i++)     //从对象X复制数组元素到本对象
+                list[i] = a.list[i];
+}
+//  重载&quot;=&quot;运算符，将对象rhs赋值给本对象。实现对象之间的整体赋值
+template &lt;class T&gt;
+Array&lt;T&gt; &amp;Array&lt;T&gt;::operator = (const Array&lt;T&gt;&amp; rhs) {
+        if (&amp;rhs != this) {
+//  如果本对象中数组大小与rhs不同，则删除数组原有内存，然后重新分配
+                if (size != rhs.size) {
+                          delete [] list;             删除数组原有内存
+//
+                          size = rhs.size;           //设置本对象的数组大小
+                          list = new T[size];           //重新分配n个元素的内存
+                }
+                //  从对象X复制数组元素到本对象
+                for (int i = 0; i &lt; size; i++)
+                          list[i] = rhs.list[i];
+        }
+        return *this;           返回当前对象的引用
+//
+}
+//重载下标运算符，实现与普通数组一样通过下标访问元素
+//并且具有越界检查功能
+template &lt;class T&gt;
+T &amp;Array&lt;T&gt;::operator[] (int n) {
+        assert(n &gt;= 0 &amp;&amp; n &lt; size);          // 检查下标是否越界
+        return list[n];                          //返回下标为n的数组元素
+}
+template &lt;class T&gt;
+const T &amp;Array&lt;T&gt;::operator[] (int n) const {
+         assert(n &gt;= 0 &amp;&amp; n &lt; size);           // 检查下标是否越界
+         return list[n];                           //返回下标为n的数组元素
+}
+//  重载指针转换运算符，将Array类的对象名转换为T类型的指针
+template &lt;class T&gt;
+Array&lt;T&gt;::operator T * () {
+         return list;                           //  返回当前对象中私有数组的首地址
+}
+template &lt;class T&gt;
+Array&lt;T&gt;::operator const T * () const {
+         return list;          返回当前对象中私有数组的首地址
+//
+}
+//  取当前数组的大小
+template &lt;class T&gt;
+int Array&lt;T&gt;::getSize() const {
+         return size;
+}
+//   将数组大小修改为sz
+template &lt;class T&gt;
+void Array&lt;T&gt;::resize(int sz) {
+         assert(sz &gt;= 0);          // 检查sz是否非负
+         if (sz == size)           //如果指定的大小与原有大小一样，什么也不做
+                return;
+         T* newList = new T [sz];                    //申请新的数组内存
+         int n = (sz &lt; size) ? sz : size;            //将sz与size中较小的一个赋值给n
+          将原有数组中前n个元素复制到新数组中
+//
+         for (int i = 0; i &lt; n; i++)
+                newList[i] = list[i]            delete[] list;         //删除
+原数组
+         list = newList;                  //   使list指向新数组
+         size = sz;                 //  更新size
+}
+#endif   //ARRAY_H</code></pre>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-7.html">← 第 7 章</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-9.html">第 9 章 →</a>
+        </nav>
+    </main>
+</body>
+</html>

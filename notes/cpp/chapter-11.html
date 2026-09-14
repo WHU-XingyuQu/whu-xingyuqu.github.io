@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="汇总标识符、整型与实型常量、字符和字符串常量等语言细节。">
+    <title>C++ 程序设计 &#183; 第 11 章：其他细节知识点 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">C++ 程序设计 · 期末复习</p>
+                <h1>其他细节知识点</h1>
+                <p class="article-summary">汇总标识符、整型与实型常量、字符和字符串常量等语言细节。</p>
+                <div class="article-meta">
+                    <span>第 11 章</span>
+                    <span>2024 秋季</span>
+                    <span>PDF 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>1. 标识符命名规则</h2>
+<h3>（1）可以由大写字母，小写字母，数字，下划线组成，但是数字不能开头</h3>
+<h3>（2）不能包括C++语言关键字和操作符</h3>
+<h3>（3）final、override这类标识符在上下文有特殊含义，将被看作语法标志而非普通标识符，应尽量避</h3>
+<p>免使用</p>
+<h3>（4）操作符的替代名：and andeq bitand bitor compl not not_eq or or_eq xor xor_eq</h3>
+<h2>2. 常量</h2>
+<h3>（1）整形常量</h3>
+<p>默认情况下十进制整形常量是带符号数，八进制和十六进制的整形常量可能是有/无符号的十进制整形常量不能以0开头；八进制整常量以0开头（所有位0~7）；十六进制0x开头（0~9或A到F的字母，大小写不敏感）整形常量可以用后缀指定它是否带符号和分配多少空间，LL(ll)表示long long；L(l)表示long；U(u)表示unsigned无符号</p>
+<h3>（2）实型常量</h3>
+<p>默认为double型，加入F或f后缀可使其转为float型指数形式：3.254E+2表示科学计数法形式；当指数形式表示一个实数时，整数部分和小数部分可以省略其一，但不能都省略</p>
+<h3>（3）字符常量</h3>
+<p>可显示字符：用单引号表示不可显示字符：ASCII码表：实现文本数据的电子交换特殊记忆：空字符--- 0 0----------48 A----------65 a----------97同类型字符可通过加减类推，注意&#39;A&#39;-&#39;a&#39;=32!</p>
+<h3>（4）字符串常量</h3>
+<p>转移序列：字符串中包含双引号的情况例如要表示PILAJ“AAA”则在字符串中每个双引号前面加上反斜杠</p>
+<pre><code>“PILAJ\&quot;AAA\””</code></pre>
+<p>当字符串只有一个字符时，不能认为其与对应的字符相同，因为字符串在存储的时候有超尾元素‘\0’通过添加前缀可使字符串常量类型改变</p>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-10.html">← 第 10 章</a>
+            <a href="index.html">系列目录</a>
+            <span></span>
+        </nav>
+    </main>
+</body>
+</html>

@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="介绍半监督假设、生成式方法、半监督 SVM、图方法、协同训练与半监督聚类。">
+    <title>机器学习 &#183; 第 11 讲：半监督学习 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>半监督学习</h1>
+                <p class="article-summary">介绍半监督假设、生成式方法、半监督 SVM、图方法、协同训练与半监督聚类。</p>
+                <div class="article-meta">
+                    <span>第 11 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>半监督学习利用少量有标记样本和大量未标记样本提升模型。本章重点包括未标记样本的假设、纯半监督与直推学习、生成式方法、半监督 SVM、图半监督学习、基于分歧的方法、半监督聚类。</p>
+<h2>未标记样本与基本假设</h2>
+<p>未标记样本本身没有类别信息，但能揭示数据分布结构。常见假设：</p>
+<dl>
+<dt>平滑假设</dt><dd>相近样本应有相近输出。</dd>
+<dt>聚类假设</dt><dd>同一簇内样本倾向于同类，决策边界应穿过低密度区域。</dd>
+<dt>流形假设</dt><dd>高维数据分布在低维流形上，流形上相近样本输出相似。</dd>
+</dl>
+<p>纯半监督学习关注对未来样本泛化；直推学习重点预测给定未标记样本的标记。</p>
+<h2>生成式半监督方法</h2>
+<p>生成式方法假定数据由某个概率模型生成，例如每个类别对应一个混合成分。设有标记集 $L$ 和未标记集 $U$，目标函数通常包含：</p>
+<div class="formula-block">\[
+  \log P(L,U\mid \theta)
+  =
+  \log P(L\mid \theta)+\log P(U\mid \theta).
+\]</div>
+<p>未标记样本类别可视为隐变量，用 EM 迭代：</p>
+<ol>
+<li>E 步：用当前参数估计未标记样本属于各类别的后验概率。</li>
+<li>M 步：结合有标记样本和未标记样本软标记更新模型参数。</li>
+</ol>
+<h2>半监督 SVM</h2>
+<p>TSVM 希望分类超平面穿过低密度区域。形式上，未标记样本的类别也参与优化：</p>
+<div class="formula-block">\[
+  \min_{\mathbf{w},b,\mathbf{\xi},\hat{\mathbf{y}}}
+  \frac{1}{2}\|\mathbf{w}\|^2
+  +C_l\sum_{i\in L}\xi_i
+  +C_u\sum_{j\in U}\xi_j.
+\]</div>
+<p>其中 $\hat y_j$ 是未标记样本的预测标记。由于标记组合离散且复杂，实际常用局部搜索和标签交换近似求解。</p>
+<h2>图半监督学习</h2>
+<p>把样本看成图中结点，边权 $w_{ij}$ 表示相似度。图上的平滑正则项为</p>
+<div class="formula-block">\[
+  \frac{1}{2}\sum_{i,j}w_{ij}(f_i-f_j)^2
+  =\mathbf{f}^\top\mathbf{L}\mathbf{f},
+\]</div>
+<p>其中 $\mathbf{L}$ 是图拉普拉斯矩阵。标记传播的直观思想：有标记结点把标记信息沿高相似度边传播给未标记结点。</p>
+<p>常见迭代形式：</p>
+<div class="formula-block">\[
+  \mathbf{F}^{(t+1)}=\alpha \mathbf{S}\mathbf{F}^{(t)}+(1-\alpha)\mathbf{Y},
+\]</div>
+<p>其中 $\mathbf{S}$ 是归一化相似矩阵，$\mathbf{Y}$ 是初始标记矩阵。</p>
+<h2>基于分歧的方法</h2>
+<p>协同训练要求数据有两个充分且条件独立的视图。流程：</p>
+<ol>
+<li>用两个视图分别训练两个分类器。</li>
+<li>每个分类器从未标记样本中挑选高置信预测。</li>
+<li>把这些伪标记样本加入另一个分类器的训练集。</li>
+<li>重复迭代。</li>
+</ol>
+<p>核心是让不同学习器互相提供信息，同时保持一定分歧。</p>
+<h2>半监督聚类</h2>
+<p>监督信息可以是：</p>
+<ul>
+<li>成对约束：must-link 表示两个样本必须同簇，cannot-link 表示不能同簇。</li>
+<li>少量有标记样本：作为种子引导聚类。</li>
+</ul>
+<p>约束 k-means 在分配样本时必须满足约束；种子 k-means 用有标记样本初始化或约束簇中心。</p>
+<h2>常见问法</h2>
+<ol>
+<li>解释半监督学习为什么能利用未标记样本。</li>
+<li>比较纯半监督学习、直推学习和主动学习。</li>
+<li>写出生成式半监督方法的 EM 思路。</li>
+<li>说明 TSVM 为什么倾向于把边界放在低密度区域。</li>
+<li>给图结构，解释标签传播或图正则化的目标。</li>
+<li>比较协同训练、图半监督学习和半监督聚类的适用条件。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-10.html">← 第 10 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-12.html">第 12 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

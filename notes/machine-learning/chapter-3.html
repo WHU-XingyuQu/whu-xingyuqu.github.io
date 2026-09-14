@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="整理线性回归、岭回归、对数几率回归、LDA 与 Softmax 多分类。">
+    <title>机器学习 &#183; 第 3 讲：线性模型 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>线性模型</h1>
+                <p class="article-summary">整理线性回归、岭回归、对数几率回归、LDA 与 Softmax 多分类。</p>
+                <div class="article-meta">
+                    <span>第 3 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>线性模型用参数的线性组合表达预测函数，是回归、分类和降维方法的基础。本章重点包括线性回归、岭回归、广义线性模型、多项式回归、线性判别函数、对数几率回归、交叉熵、LDA、多分类策略与 Softmax。</p>
+<h2>线性回归</h2>
+<p>对增广向量 $\tilde{\mathbf{x}}=(1,\mathbf{x}^\top)^\top$，线性模型可写为</p>
+<div class="formula-block">\[
+  \hat y=\mathbf{w}^\top \tilde{\mathbf{x}}.
+\]</div>
+<p>最小二乘准则：</p>
+<div class="formula-block">\[
+  J(\mathbf{w})=\frac{1}{2}\|\mathbf{X}\mathbf{w}-\mathbf{y}\|_2^2.
+\]</div>
+<p>若 $\mathbf{X}^\top\mathbf{X}$ 可逆，</p>
+<div class="formula-block">\[
+  \mathbf{w}^{*}=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}.
+\]</div>
+<p>梯度下降更新：</p>
+<div class="formula-block">\[
+  \mathbf{w}^{(t+1)}=\mathbf{w}^{(t)}-\eta \mathbf{X}^\top(\mathbf{X}\mathbf{w}^{(t)}-\mathbf{y}).
+\]</div>
+<h3>一元线性回归手算</h3>
+<p>模型 $y=\beta_0+\beta_1 x+\epsilon$，最小二乘解：</p>
+<div class="formula-block">\[
+  \hat\beta_1=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}{\sum_i(x_i-\bar x)^2},
+  \qquad
+  \hat\beta_0=\bar y-\hat\beta_1\bar x.
+\]</div>
+<p>手算题按四步：求均值、求分子协方差项、求分母方差项、代入截距。</p>
+<h2>正则化与岭回归</h2>
+<p>岭回归加入 $L_2$ 正则项：</p>
+<div class="formula-block">\[
+  J_\lambda(\mathbf{w})=\frac{1}{2}\|\mathbf{X}\mathbf{w}-\mathbf{y}\|_2^2+\frac{\lambda}{2}\|\mathbf{w}\|_2^2.
+\]</div>
+<p>闭式解为</p>
+<div class="formula-block">\[
+  \mathbf{w}^{*}=(\mathbf{X}^\top\mathbf{X}+\lambda \mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}.
+\]</div>
+<ul>
+<li>多重共线性会使普通最小二乘参数方差变大、估计不稳定。</li>
+<li>$\lambda=0$ 时退化为普通线性回归。</li>
+<li>$\lambda$ 过大时参数被压得很小，模型可能欠拟合。</li>
+<li>岭回归可理解为高斯先验下的最大后验估计。</li>
+</ul>
+<h2>广义线性与多项式回归</h2>
+<p>广义线性模型使用联系函数把输出期望与线性预测值连接：</p>
+<div class="formula-block">\[
+  g(\mathbb{E}[y\mid \mathbf{x}])=\mathbf{w}^\top\mathbf{x}+b.
+\]</div>
+<p>多项式回归把原始特征映射为 $\phi(\mathbf{x})$ 后再做线性回归：</p>
+<div class="formula-block">\[
+  \hat y=\mathbf{w}^\top\phi(\mathbf{x}).
+\]</div>
+<p>它对参数仍是线性的，但对原始输入可以表达非线性关系；阶数过高时容易过拟合。</p>
+<h2>线性判别函数</h2>
+<p>二分类判别函数：</p>
+<div class="formula-block">\[
+  d(\mathbf{x})=\mathbf{w}^\top\mathbf{x}+b,\qquad
+  \hat y=\operatorname{sign}(d(\mathbf{x})).
+\]</div>
+<p>多类分类可为每类设置判别函数 $d_k(\mathbf{x})$，选择最大者：</p>
+<div class="formula-block">\[
+  \hat y=\arg\max_k d_k(\mathbf{x}).
+\]</div>
+<p>也可用 OvR 或 OvO 把多分类拆成多个二分类问题。</p>
+<h2>对数几率回归</h2>
+<p>Sigmoid 函数：</p>
+<div class="formula-block">\[
+  \sigma(z)=\frac{1}{1+\exp(-z)},\qquad
+  p(y=1\mid \mathbf{x})=\sigma(\mathbf{w}^\top\mathbf{x}+b).
+\]</div>
+<p>二分类交叉熵：</p>
+<div class="formula-block">\[
+  J(\mathbf{w})=-\sum_{i=1}^{m}\left[
+  y_i\log p_i+(1-y_i)\log(1-p_i)\right].
+\]</div>
+<p>它可由伯努利分布极大似然推导得到。预测时通常以 $p_i\ge 0.5$ 判为正类，也可根据任务调整阈值。</p>
+<h2>线性判别分析 LDA</h2>
+<p>LDA 希望投影后同类样本尽量紧凑、异类均值尽量分开。二分类中</p>
+<div class="formula-block">\[
+  \mathbf{S}_w=\mathbf{S}_0+\mathbf{S}_1,
+\]</div>
+<div class="formula-block">\[
+  \mathbf{w}^{*}\propto \mathbf{S}_w^{-1}(\mathbf{\mu}_1-\mathbf{\mu}_0).
+\]</div>
+<p>其中 $\mathbf{S}_w$ 是类内散度矩阵，$\mathbf{\mu}_0,\mathbf{\mu}_1$ 是两类均值。LDA 既可用于分类，也可作为监督降维方法。</p>
+<h2>Softmax 多分类</h2>
+<p>多分类概率：</p>
+<div class="formula-block">\[
+  p(y=k\mid \mathbf{x})=
+  \frac{\exp(z_k)}{\sum_{j=1}^{K}\exp(z_j)},\qquad z_k=\mathbf{w}_k^\top \mathbf{x}+b_k.
+\]</div>
+<p>多分类交叉熵：</p>
+<div class="formula-block">\[
+  J=-\sum_{i=1}^{m}\sum_{k=1}^{K} y_{ik}\log p_{ik}.
+\]</div>
+<h2>常见问法</h2>
+<ol>
+<li>给一组 $(x,y)$，用最小二乘法求截距和斜率。</li>
+<li>解释岭回归如何缓解多重共线性，以及 $\lambda$ 取值对参数和泛化的影响。</li>
+<li>写出线性回归的闭式解和梯度下降更新。</li>
+<li>从极大似然角度解释线性回归或对数几率回归。</li>
+<li>给判别函数，判断样本所属类别或画出二维决策边界。</li>
+<li>给 Softmax 输出或神经网络前向计算，代入 Sigmoid/Softmax 得到概率。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-2.html">← 第 2 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-4.html">第 4 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="比较信息增益、增益率与基尼指数，并整理连续属性、缺失值、剪枝和回归树。">
+    <title>机器学习 &#183; 第 6 讲：决策树 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">机器学习 · 期末复习</p>
+                <h1>决策树</h1>
+                <p class="article-summary">比较信息增益、增益率与基尼指数，并整理连续属性、缺失值、剪枝和回归树。</p>
+                <div class="article-meta">
+                    <span>第 6 讲</span>
+                    <span>2026 春季</span>
+                    <span>LaTeX 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>知识框架</h2>
+<p>决策树把分类或回归过程表示为一组层次化规则。重点包括递归生成流程、信息熵、信息增益、增益率、基尼指数、ID3、C4.5、CART、连续属性处理、缺失值处理、剪枝和回归树。</p>
+<h2>基本流程</h2>
+<p>决策树通常自顶向下递归生成：</p>
+<ol>
+<li>若当前结点样本全属同一类，设为叶结点。</li>
+<li>若属性集为空或样本在剩余属性上取值相同，设为叶结点，类别取多数类。</li>
+<li>否则选择最优划分属性，根据属性取值生成分支。</li>
+<li>对每个分支递归处理子数据集。</li>
+</ol>
+<p>这种生成过程是贪心的，每一步只选择当前看来最优的划分。</p>
+<h2>信息熵与信息增益</h2>
+<p>数据集 $D$ 中第 $k$ 类比例为 $p_k$，信息熵为</p>
+<div class="formula-block">\[
+  \operatorname{Ent}(D)=-\sum_{k=1}^{K}p_k\log_2 p_k.
+\]</div>
+<p>属性 $a$ 有 $V$ 个取值，划分后的条件熵为</p>
+<div class="formula-block">\[
+  \sum_{v=1}^{V}\frac{|D^v|}{|D|}\operatorname{Ent}(D^v).
+\]</div>
+<p>信息增益：</p>
+<div class="formula-block">\[
+  \operatorname{Gain}(D,a)=
+  \operatorname{Ent}(D)-
+  \sum_{v=1}^{V}\frac{|D^v|}{|D|}\operatorname{Ent}(D^v).
+\]</div>
+<p>ID3 选择信息增益最大的属性。</p>
+<h2>C4.5 与增益率</h2>
+<p>信息增益偏好取值数多的属性。C4.5 使用增益率：</p>
+<div class="formula-block">\[
+  \operatorname{Gain\_ratio}(D,a)=
+  \frac{\operatorname{Gain}(D,a)}{\operatorname{IV}(a)},
+\]</div>
+<div class="formula-block">\[
+  \operatorname{IV}(a)=
+  -\sum_{v=1}^{V}\frac{|D^v|}{|D|}
+  \log_2\frac{|D^v|}{|D|}.
+\]</div>
+<h2>CART 与基尼指数</h2>
+<p>基尼值：</p>
+<div class="formula-block">\[
+  \operatorname{Gini}(D)=1-\sum_{k=1}^{K}p_k^2.
+\]</div>
+<p>按属性 $a$ 划分后的基尼指数：</p>
+<div class="formula-block">\[
+  \operatorname{Gini\_index}(D,a)=
+  \sum_{v=1}^{V}\frac{|D^v|}{|D|}\operatorname{Gini}(D^v).
+\]</div>
+<p>CART 选择基尼指数最小的划分，并通常生成二叉树。</p>
+<h2>连续属性与缺失值</h2>
+<p>连续属性常将相邻排序取值的中点作为候选划分点：</p>
+<div class="formula-block">\[
+  T_a=\left\{\frac{a^{(i)}+a^{(i+1)}}{2}\right\}.
+\]</div>
+<p>对每个候选阈值 $t$，把样本分为 $a\le t$ 和 $a&gt;t$ 两支，选择指标最优者。缺失值可用样本权重、按已知样本比例分配或用替代划分处理。</p>
+<h2>剪枝</h2>
+<dl>
+<dt>预剪枝</dt><dd>在划分前估计继续划分是否能提升验证集性能，若不能则停止。</dd>
+<dt>后剪枝</dt><dd>先生成完整树，再自底向上考察把子树替换为叶结点是否更好。</dd>
+</dl>
+<p>代价复杂度剪枝可写为</p>
+<div class="formula-block">\[
+  C_\alpha(T)=C(T)+\alpha |T|,
+\]</div>
+<p>其中 $C(T)$ 是经验误差或损失，$|T|$ 表示叶结点数，$\alpha$ 控制复杂度惩罚。</p>
+<h2>回归树</h2>
+<p>回归树叶结点输出连续值，常取该叶结点样本均值。对特征 $j$ 和切分点 $s$，选择使平方误差最小的划分：</p>
+<div class="formula-block">\[
+  \min_{j,s}\left[
+  \sum_{\mathbf{x}_i\in R_1(j,s)}(y_i-c_1)^2+
+  \sum_{\mathbf{x}_i\in R_2(j,s)}(y_i-c_2)^2
+  \right],
+\]</div>
+<p>其中 $c_1,c_2$ 是两个区域内的均值。</p>
+<h2>常见问法</h2>
+<ol>
+<li>给离散数据表，计算 $H(D)$、$H(D\mid a)$、信息增益并选择根结点。</li>
+<li>用基尼指数重新计算划分，比较与信息增益是否一致。</li>
+<li>用文字层次结构画出决策树。</li>
+<li>解释决策树为什么容易过拟合，并说明预剪枝和后剪枝。</li>
+<li>给连续特征，列出候选划分点并选择最优阈值。</li>
+<li>给回归数据，按平方误差选择切分点和叶结点输出。</li>
+</ol>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-5.html">← 第 5 讲</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-7.html">第 7 讲 →</a>
+        </nav>
+    </main>
+</body>
+</html>

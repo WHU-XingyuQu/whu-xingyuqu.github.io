@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="梳理异常抛出与捕获、匹配规则、栈展开和异常再抛出。">
+    <title>C++ 程序设计 &#183; 第 10 章：异常处理 | 曲星宇</title>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <header class="site-header">
+        <a class="site-name" href="../../index.html">Xingyu Qu</a>
+        <nav aria-label="笔记导航">
+            <a href="../index.html">课程笔记</a>
+            <a aria-current="page" href="index.html">本课程</a>
+            <a href="../../index.html#service">返回主页</a>
+        </nav>
+    </header>
+    <main class="article-shell">
+        <article class="note-article">
+            <header class="article-header">
+                <p class="eyebrow">C++ 程序设计 · 期末复习</p>
+                <h1>异常处理</h1>
+                <p class="article-summary">梳理异常抛出与捕获、匹配规则、栈展开和异常再抛出。</p>
+                <div class="article-meta">
+                    <span>第 10 章</span>
+                    <span>2024 秋季</span>
+                    <span>PDF 文本整理版</span>
+                </div>
+            </header>
+            <div class="article-body text-note-body">
+<h2>1. 异常处理的思想</h2>
+<h3>（1）异常处理原理</h3>
+<p>大程序中函数之间有着复杂的分工和调用关系，发现错误的函数并不一定具备解决函数的能力，此时则引发异常，希望他的调用者能够捕获这个异常。若调用者不能解决这个错误，还可继续向上级汇报，直到异常被处理为止。若始终没有处理异常，最终会被C++运行系统处理掉。</p>
+<h3>（2）异常的传播方向</h3>
+<h3>（3）异常处理机制的优势</h3>
+<p>C++的异常处理机制使得异常的处理和引发不必在同一个函数上，这样的底层函数可以更加实际地解决问题，而不必过多考虑对异常的处理，设计程序可以在上层调用者中的恰当位置设计对不同类型异常的处理。</p>
+<h2>2. 异常处理的语法</h2>
+<h3>（1）案例：处理除0异常</h3>
+<p>被调用函数</p>
+<pre><code>int divide(int x,int y)//
+{
+    if(y==0)
+        throw x;
+    return x/y;
+}
+
+int mian()//调用者
+{
+    try{
+        cout&lt;&lt;&quot;5/2=&quot;&lt;&lt;divide(5,2)&lt;&lt;endl;
+        cout&lt;&lt;&quot;3/0=&quot;&lt;&lt;divide(3,0)&lt;&lt;endl;
+    }catch(int e){//e接收到函数中的x
+        cout&lt;&lt;e&lt;&lt;&quot;is divide by zero&quot;&lt;&lt;endl;
+    }
+    cout&lt;&lt;&quot;That is OK.&quot;&lt;&lt;endl;
+    return 0;
+}</code></pre>
+<p>当divide函数进行过程中，遇到了异常时（throw前的if语句）,本身没有处理这个异常，所以调用终止，回到main函数的调用点，当catch子句恰好与抛出的异常类型匹配，异常将在这里被捕获，并执行catch中的内容。</p>
+<h3>（2）原理</h3>
+<p>运行到达try语句-&gt;引起异常-&gt;抛出点在try字句内-&gt;catch语句依次查找是否匹配</p>
+<ul>
+<li>抛出点不在try字句内/抛出的异常与各catch子句类型皆不匹配-&gt;结束当前函数</li>
+</ul>
+<p>执行，回到当前函数的调用点，把调用点当成异常的抛出点，然后重复这一过程</p>
+<ul>
+<li>如果始终没有找到匹配的catch子句，main函数结束执行，调用库中的terminate函数</li>
+</ul>
+<p>（terminate的默认功能是终止程序）</p>
+<ul>
+<li>如果找到了匹配的catch子句，catch中的语句执行，try块也执行完毕</li>
+</ul>
+<h3>（3）细节</h3>
+<p>throw与catch匹配的三种情况</p>
+<h4>a. catch子句中声明的异常类型就是抛出异常对象的类型或引用</h4>
+<h4>b. catch子句中声明的异常类型就是抛出异常对象的类型的公共基类或其引用</h4>
+<h4>c. 抛出的异常类型和catch子句中声明的异常类型皆为指针类型，且前者到后者可隐含转换</h4>
+<h3>（4）异常接口说明</h3>
+<p>可以在函数的声明中列出它可能抛掷出的所有错误类型</p>
+<pre><code>void fun() throw(A,B,C,D);</code></pre>
+<p>也可以不抛出任何的异常</p>
+<pre><code>void fun() throw();//等价于void fun()</code></pre>
+<p>这时遇到异常会调用unexpected函数，该函数的缺省行为是调用terminate函数中止程序。也可以自定义unexpected函数（已成为历史）</p>
+<h2>3. 异常处理的构造和析构</h2>
+<h3>（1）构造与析构的过程</h3>
+<p>在程序中找到一个匹配的catch异常语句匹配时，如果catch子句的异常声明是一个值参数，初始化方式是复制被抛出的异常对象；如果是引用，则初始化方式是使该引用指向异常对象。异常抛出后栈的展开过程开始，从进入try块到异常被抛出前，这期间在栈上构造（且未被析构）的对象会被自动析构，顺序与构造相反，这一过程称为栈的解旋。</p>
+<h3>（2）异常声明中的参数</h3>
+<p>很多情况下可以省略参数，在catch语句中只声明特定类型的异常，但是如果要在catch中访问某个对象则需要传入参数</p>
+<h2>4. 不带操作数的throw</h2>
+<p>用一个不带操作数的表达式可以使当前正在被处理的异常被再次抛出，这样一个表达式只能出现在一个catch的子句或catch子句内部调用的函数中。再次抛出的异常对象是源异常对象（不是副本）</p>
+<pre><code>try{
+    throw MyExpectation(&quot;some expresion&quot;);
+}catch
+{
+    //...
+    throw;
+}</code></pre>
+            </div>
+        </article>
+        <nav class="article-pagination" aria-label="相邻章节">
+            <a href="chapter-9.html">← 第 9 章</a>
+            <a href="index.html">系列目录</a>
+            <a href="chapter-11.html">第 11 章 →</a>
+        </nav>
+    </main>
+</body>
+</html>
