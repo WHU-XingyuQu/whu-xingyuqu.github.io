@@ -50,6 +50,7 @@ function Convert-RunToHtml($run, $namespaceManager) {
     $tabCount = @($run.SelectNodes('.//w:tab', $namespaceManager)).Count
     if ($breakCount -gt 0) { $text += '<br>' * $breakCount }
     if ($tabCount -gt 0) { $text += '    ' * $tabCount }
+    $text = $text.Replace('坚守一些压力和麻烦', '减少一些压力和麻烦')
     if ([string]::IsNullOrEmpty($text)) { return '' }
 
     $runProperties = $run.SelectSingleNode('./w:rPr', $namespaceManager)
