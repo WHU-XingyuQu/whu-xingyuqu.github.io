@@ -1,0 +1,76 @@
+% Compile with XeLaTeX. Published PDF: /20260915_Xingyu_Qu_CV.pdf
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=18.5mm,right=18.5mm,top=14mm,bottom=16mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Xingyu Qu - Curriculum Vitae},pdfauthor={Xingyu Qu}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\pagestyle{plain}
+\newcommand{\cvsection}[1]{\par\vspace{8pt}{\large\bfseries #1}\par\vspace{1pt}\hrule\vspace{4pt}}
+\newcommand{\entry}[2]{\textbf{#1}\hfill #2\par}
+\newcommand{\cvbullet}[1]{\begingroup\leftskip=13pt\parindent=-13pt\textbullet\hspace{7pt}#1\par\endgroup}
+\newcommand{\paper}[2]{\begingroup\leftskip=17pt\parindent=-17pt[#1]\hspace{4pt}#2\par\endgroup}
+\begin{document}
+\begin{center}
+{\fontsize{16}{19}\selectfont XINGYU QU}\\[2pt]
+Undergraduate Student\\
+Wuhan University\\
+Last Update: September 2026
+\end{center}
+\vspace{1pt}
+Room B701, School of Computer Science\hfill\href{mailto:whu-quxy@whu.edu.cn}{whu-quxy@whu.edu.cn}\\
+Wuhan University, Wuhan, China\hfill +86-18600400007\\
+\mbox{}\hfill\href{https://whu-xingyuqu.github.io/}{https://whu-xingyuqu.github.io/}
+
+\cvsection{Education}
+\entry{Wuhan University}{Sept. 2024 - Present}
+B.Eng. in Computer Science (Hongyi Honor Class), School of Computer Science
+
+\cvsection{Research Experience}
+\entry{\sffamily\href{http://totemdb.whu.edu.cn/}{TOTEM Database Laboratory of WHU}}{Jan. 2025 - Present}
+\textit{Research Assistant}\hfill\textit{Wuhan, China}\par
+Advisor: Prof. Sheng Wang; with guidance from Dr. Zhiyu Chen.\par
+\cvbullet{Conduct research on LLM systems, agent systems and so on, aiming for intelligent data management.}
+\cvbullet{Developed PRISM, an online LLM serving system with outstanding efficiency.}
+\vspace{3pt}
+\entry{\sffamily\href{https://lins-lab.github.io/}{LINs Lab, Westlake University}}{May 2026 - Sep. 2026}
+\textit{Visiting Student}\hfill\textit{Hangzhou, China}\par
+Advisor: Prof. Tao Lin.\par
+\cvbullet{Work on AI infrastructure and systems topics.}
+
+\cvsection{Awards and Honors}
+Outstanding Student, Wuhan University\hfill Apr. 2026\par
+Scholarship for Excellent Academic Performance, Tianyuan Dic\hfill Nov. 2025\par
+Scholarship for Excellent Academic Performance, WHU\hfill Sept. 2025\par
+Outstanding Student, Wuhan University\hfill Sept. 2025\par
+Tencent Open Source Core Contributor / Award\hfill Sept. 2025\par
+Outstanding Freshman Award, Wuhan University\hfill Sept. 2024
+
+\cvsection{Papers}
+\paper{1}{\textbf{Xingyu Qu}, Siyuan Lu, Zhiyu Chen, Sheng Wang, and Tao Lin,
+``\href{https://arxiv.org/abs/2609.00891}{CacheBridge: Efficient Cross-Model KV Cache Transfer}.''
+\textit{arXiv preprint \href{https://arxiv.org/abs/2609.00891}{arXiv:2609.00891}}, 2026.}
+\vspace{4pt}
+\paper{2}{\textbf{Xingyu Qu}, Tianhao Lin, Yiqi Li, Zhiyu Chen, and Sheng Wang,
+``\href{https://arxiv.org/abs/2605.08581}{PRISM: Fast Online LLM Serving via Scheduling-Memory Co-design}.''
+\textit{arXiv preprint \href{https://arxiv.org/abs/2605.08581}{arXiv:2605.08581}}, 2026.}
+
+\cvsection{Projects}
+\entry{\href{https://github.com/WHU-XingyuQu/opentenbase-migrate-v2.6tov5.0}{OpenTenBase Migration \& Optimization}}{2025}
+\cvbullet{Selected for the Tencent Rhino Bird Open Source Program and recognized as a Tencent Open Source Core Contributor.}
+\vspace{3pt}
+\entry{\href{https://github.com/WHU-XingyuQu/XRDB}{XRDB: A SQL Database Engine in Rust}}{2026}
+\cvbullet{Built a minimalist relational database engine in Rust to teach database internals and systems programming.}
+
+\cvsection{Service}
+\entry{Table Tennis Team, WHU School of Computer Science}{Sept. 2025 - Jun. 2026}
+Captain. Coordinated team training and campus activities.
+
+\cvsection{Technology}
+\textbf{Programming Languages:} C/C++, Python, Rust\par
+\textbf{Systems:} SGLang, PostgreSQL, Slime\par
+\textbf{Languages:} English (CET-6)
+\end{document}
