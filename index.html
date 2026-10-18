@@ -144,9 +144,33 @@
             fill: currentColor;
         }
 
+        .link-banner.email {
+            color: #2563eb;
+        }
+
+        .link-banner.github {
+            color: #181717;
+        }
+
+        .link-banner.scholar {
+            color: #4285f4;
+        }
+
+        .link-banner.zhihu {
+            color: #0084ff;
+        }
+
+        .link-banner.xiaohongshu {
+            color: #ff2442;
+        }
+
         .link-banner.xiaohongshu svg {
             width: 1.25rem;
             height: 1.25rem;
+        }
+
+        .link-banner.cv {
+            color: #dc2626;
         }
 
         .link-name {
@@ -415,7 +439,7 @@
             padding: 0.2rem 0.58rem 0.2rem 0.46rem;
             border-radius: 999px;
             font-size: 0.74rem;
-            font-weight: 600;
+            font-weight: 800;
             letter-spacing: 0;
             line-height: 1.2;
             white-space: nowrap;
@@ -436,8 +460,8 @@
 
         .medal-category {
             min-width: 4.8rem;
-            color: var(--muted-color);
-            font-weight: 600;
+            color: #334155;
+            font-weight: 800;
         }
 
         .medal-badge i {
@@ -446,26 +470,43 @@
             justify-content: center;
             width: 1rem;
             height: 1rem;
-            color: currentColor;
+            border-radius: 50%;
+            color: #ffffff;
             font-size: 0.55rem;
+            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.14);
         }
 
         .gold-medal {
             border: 1px solid rgba(180, 83, 9, 0.24);
-            background: #fffbf2;
+            background: linear-gradient(135deg, #fffaf0 0%, #fef3c7 100%);
             color: #92400e;
+            box-shadow: 0 6px 14px rgba(180, 83, 9, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .gold-medal i {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
         }
 
         .silver-medal {
             border: 1px solid rgba(100, 116, 139, 0.25);
-            background: #f6f7f9;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             color: #475569;
+            box-shadow: 0 6px 14px rgba(100, 116, 139, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .silver-medal i {
+            background: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
         }
 
         .bronze-medal {
             border: 1px solid rgba(146, 64, 14, 0.24);
-            background: #fff8f3;
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
             color: #7c2d12;
+            box-shadow: 0 6px 14px rgba(146, 64, 14, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .bronze-medal i {
+            background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
         }
 
         .project-desc {
