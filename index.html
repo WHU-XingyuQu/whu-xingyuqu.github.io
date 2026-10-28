@@ -410,165 +410,35 @@
             font-weight: 600;
         }
 
-        .project-card {
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--line-color);
-            background: var(--surface-color);
-            border-radius: 6px;
-            padding: 1.25rem;
-            scroll-margin-top: 1.5rem;
+        .service-overview {
+            max-width: 72ch;
         }
 
-        .project-header {
+        .service-entry + .service-entry {
+            margin-top: 1.4rem;
+        }
+
+        .service-entry h3 {
+            margin: 0 0 0.3rem;
+            font-size: 1rem;
             font-weight: 600;
-            font-size: 1.06rem;
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
+            line-height: 1.5;
         }
 
-        .project-title {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            flex: 1 1 auto;
-            min-width: 0;
-            line-height: 1.35;
+        .service-entry h3 a {
+            text-decoration: underline;
+            text-decoration-color: #c5d6e9;
+            text-underline-offset: 0.2em;
         }
 
-        .project-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.36rem;
-            position: relative;
-            flex: 0 0 auto;
-            padding: 0.2rem 0.58rem 0.2rem 0.46rem;
-            border-radius: 999px;
-            font-size: 0.74rem;
-            font-weight: 800;
-            letter-spacing: 0;
-            line-height: 1.2;
-            white-space: nowrap;
+        .service-entry h3 a:hover {
+            text-decoration-color: currentColor;
         }
 
-        .medal-board {
-            display: grid;
-            gap: 0.55rem;
-            margin-top: 0.7rem;
-        }
-
-        .medal-row {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.45rem 0.5rem;
-        }
-
-        .medal-category {
-            min-width: 4.8rem;
-            color: #334155;
-            font-weight: 800;
-        }
-
-        .medal-badge i {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-            color: #ffffff;
-            font-size: 0.55rem;
-            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.14);
-        }
-
-        .gold-medal {
-            border: 1px solid rgba(180, 83, 9, 0.24);
-            background: linear-gradient(135deg, #fffaf0 0%, #fef3c7 100%);
-            color: #92400e;
-            box-shadow: 0 6px 14px rgba(180, 83, 9, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        }
-
-        .gold-medal i {
-            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-        }
-
-        .silver-medal {
-            border: 1px solid rgba(100, 116, 139, 0.25);
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            color: #475569;
-            box-shadow: 0 6px 14px rgba(100, 116, 139, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        }
-
-        .silver-medal i {
-            background: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
-        }
-
-        .bronze-medal {
-            border: 1px solid rgba(146, 64, 14, 0.24);
-            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
-            color: #7c2d12;
-            box-shadow: 0 6px 14px rgba(146, 64, 14, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        }
-
-        .bronze-medal i {
-            background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
-        }
-
-        .project-desc {
-            margin-top: 0.5rem;
-            color: #4b5563;
+        .service-entry p {
+            margin: 0;
             font-size: 0.95rem;
-        }
-
-        .project-desc ul {
-            margin: 0.55rem 0 0 1.2rem;
-            padding: 0;
-        }
-
-        .service-gallery {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.8rem;
-            max-width: 760px;
-            margin-top: 0.9rem;
-        }
-
-        .service-img {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            object-position: center 62%;
-            border-radius: 4px;
-            border: 1px solid var(--line-color);
-            background: #f8fafc;
-        }
-
-        .service-note-card {
-            margin-top: 1.2rem;
-        }
-
-        .service-note-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.45rem;
-            margin-top: 0.8rem;
-        }
-
-        .service-note-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 0.9rem;
-            font-size: 0.92rem;
-            font-weight: 600;
-        }
-
-        .service-note-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
+            overflow-wrap: break-word;
         }
 
         footer {
@@ -689,13 +559,6 @@
                 gap: 0.35rem;
             }
 
-            .project-header {
-                flex-wrap: wrap;
-            }
-
-            .service-gallery {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 480px) {
@@ -710,10 +573,6 @@
 
             .top-tab {
                 font-size: 0.85rem;
-            }
-
-            .project-card {
-                padding: 1rem;
             }
 
             .item-date {
@@ -938,76 +797,26 @@
         <div id="tab-service" class="tab-page">
             <section id="service">
                 <h2>Service</h2>
-                <div class="project-card">
-                    <div class="project-header">
-                        <span class="project-title"><a href="https://cloud.tencent.com/" target="_blank" rel="noopener noreferrer">Tencent Cloud</a> AI Campus Ambassador</span>
-                        <span class="item-date">Aug. 2026 - Present</span>
+                <div class="service-overview">
+                    <div class="service-entry">
+                        <h3><a href="service/social-practice/index.html">Social Practice</a></h3>
+                        <p>I connect my studies with field research and social practice. I was recognized as an Outstanding Participant in Social Practice at Wuhan University and led teams whose research reports received university first and third prizes.</p>
                     </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <span class="project-title">Captain, WHU School of Computer Science Table Tennis Team</span>
-                        <span class="item-date">Sept. 2025 - Jun. 2026</span>
+                    <div class="service-entry">
+                        <h3><a href="service/sports/index.html">Sports</a></h3>
+                        <p>As former captain of the School of Computer Science table tennis team, I led the team to strong results in university competitions. I received Wuhan University's Sunshine Sports Advanced Individual award for two consecutive years.</p>
                     </div>
-                    <div class="project-desc">
-                        Led the school team in table tennis training and competitions.
-                        <div class="medal-board" aria-label="Table tennis achievements">
-                            <div class="medal-row">
-                                <span class="medal-category">Team</span>
-                                <span class="project-badge medal-badge gold-medal"><i class="fas fa-medal" aria-hidden="true"></i> Gold Medal</span>
-                                <span class="project-badge medal-badge silver-medal"><i class="fas fa-medal" aria-hidden="true"></i> Silver Medal</span>
-                            </div>
-                            <div class="medal-row">
-                                <span class="medal-category">Individual</span>
-                                <span class="project-badge medal-badge gold-medal"><i class="fas fa-medal" aria-hidden="true"></i> Gold Medal</span>
-                                <span class="project-badge medal-badge silver-medal"><i class="fas fa-medal" aria-hidden="true"></i> Silver Medal</span>
-                                <span class="project-badge medal-badge bronze-medal"><i class="fas fa-medal" aria-hidden="true"></i> Bronze Medal</span>
-                            </div>
-                        </div>
+                    <div class="service-entry">
+                        <h3><a href="service/student-leadership/index.html">Student Leadership</a></h3>
+                        <p>I currently serve as class monitor of Wuhan University's 2024 Hongyi Honor Class and as a Tencent Cloud AI Campus Ambassador.</p>
                     </div>
-                    <div class="service-gallery">
-                        <img src="assets/pingpang_1.jpg" alt="WHU School of Computer Science table tennis team" class="service-img" loading="lazy">
-                        <img src="assets/pingpang_2.jpg" alt="Table tennis team at Wuhan University venue" class="service-img" loading="lazy">
+                    <div class="service-entry">
+                        <h3><a href="service/volunteering/index.html">Volunteering</a></h3>
+                        <p>I served as an official volunteer at the CCF China Software Conference and was recognized as a CCF Outstanding Volunteer.</p>
                     </div>
-                </div>
-                <div class="project-card service-note-card">
-                    <div class="project-header">
-                        <span class="project-title">Lecture Notes</span>
-                        <span class="item-date">武汉大学 · 计算机学院</span>
-                    </div>
-                    <div class="project-desc">
-                        记录武汉大学计算机学院课程学习中的知识整理、课程思考与实践总结，所有内容均使用中文，并按照课程划分为独立系列。
-                        <div class="service-note-meta" aria-label="课程笔记分支">
-                            <span class="tag">计算机组成与体系结构</span>
-                            <span class="tag">计算理论导引</span>
-                            <span class="tag">机器学习</span>
-                            <span class="tag">C++ 程序设计</span>
-                            <span class="tag">39 篇笔记</span>
-                        </div>
-                        <div class="service-note-links">
-                            <a href="notes/index.html">进入课程笔记 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                            <a href="notes/computer-organization/index.html">查看计组分支 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                            <a href="notes/theory-of-computation/index.html">查看计算理论分支 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                            <a href="notes/machine-learning/index.html">查看机器学习分支 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                            <a href="notes/cpp/index.html">查看 C++ 分支 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card service-note-card">
-                    <div class="project-header">
-                        <span class="project-title">PhD Application Guide</span>
-                        <span class="item-date">Sep. 2026</span>
-                    </div>
-                    <div class="project-desc">
-                        面向本科新生的博士申请与科研成长规划，讨论研究潜力、精力分配、科研积累、推荐信与长期发展。
-                        <div class="service-note-meta" aria-label="文档主题">
-                            <span class="tag">PhD 申请</span>
-                            <span class="tag">本科科研</span>
-                            <span class="tag">经验分享</span>
-                        </div>
-                        <div class="service-note-links">
-                            <a href="service/phd-application-guide/index.html">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                        </div>
+                    <div class="service-entry">
+                        <h3><a href="service/peer-mentoring/index.html">Peer Support &amp; Mentoring</a></h3>
+                        <p>My course notes have attracted tens of thousands of views on Zhihu and other platforms, received positive reader feedback, and earned a Wuhan University Excellence Award. I also shared research experience and study advice at the opening class meeting of the 2026 Hongyi Honor Class.</p>
                     </div>
                 </div>
             </section>

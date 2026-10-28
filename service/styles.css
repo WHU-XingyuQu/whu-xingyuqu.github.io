@@ -1,0 +1,228 @@
+:root {
+    --primary-color: #2f6fb3;
+    --text-color: #252a32;
+    --muted-color: #626b78;
+    --line-color: #e8ebef;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #ffffff;
+    color: var(--text-color);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.75;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+a:hover {
+    text-decoration-thickness: 2px;
+}
+
+a:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+.site-header,
+main {
+    width: min(100% - 4rem, 760px);
+    margin-inline: auto;
+}
+
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    padding: 2.5rem 0 1.2rem;
+    border-bottom: 1px solid var(--line-color);
+    font-size: 0.9rem;
+}
+
+.site-name {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+main {
+    padding: 2.5rem 0 4rem;
+    overflow-wrap: break-word;
+}
+
+.eyebrow {
+    margin: 0 0 0.5rem;
+    color: var(--muted-color);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+h1 {
+    margin: 0 0 1.4rem;
+    font-size: clamp(1.7rem, 4vw, 2.1rem);
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    margin: 2rem 0 0.6rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+p {
+    margin: 0 0 1rem;
+}
+
+.period {
+    color: var(--muted-color);
+    font-size: 0.9rem;
+}
+
+ul {
+    padding-left: 1.25rem;
+    margin: 0.6rem 0 1.5rem;
+}
+
+li + li {
+    margin-top: 0.45rem;
+}
+
+.page-footer {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line-color);
+    font-size: 0.9rem;
+}
+
+.medal-board {
+    display: grid;
+    gap: 0.65rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.medal-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.5rem;
+}
+
+.medal-category {
+    min-width: 4.8rem;
+    color: #334155;
+    font-weight: 800;
+}
+
+.medal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.36rem;
+    padding: 0.2rem 0.58rem 0.2rem 0.46rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.medal-badge i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 0.55rem;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.14);
+}
+
+.gold-medal {
+    border: 1px solid rgba(180, 83, 9, 0.24);
+    background: linear-gradient(135deg, #fffaf0 0%, #fef3c7 100%);
+    color: #92400e;
+    box-shadow: 0 6px 14px rgba(180, 83, 9, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.gold-medal i {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+}
+
+.silver-medal {
+    border: 1px solid rgba(100, 116, 139, 0.25);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: #475569;
+    box-shadow: 0 6px 14px rgba(100, 116, 139, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.silver-medal i {
+    background: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
+}
+
+.bronze-medal {
+    border: 1px solid rgba(146, 64, 14, 0.24);
+    background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+    color: #7c2d12;
+    box-shadow: 0 6px 14px rgba(146, 64, 14, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.bronze-medal i {
+    background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
+}
+
+.service-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+figure {
+    margin: 0;
+}
+
+.service-gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+figcaption {
+    margin-top: 0.5rem;
+    color: var(--muted-color);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 600px) {
+    .site-header,
+    main {
+        width: calc(100% - 2rem);
+    }
+
+    .site-header {
+        padding-top: 1.5rem;
+    }
+
+    main {
+        padding-top: 2rem;
+    }
+
+    .service-gallery {
+        grid-template-columns: 1fr;
+    }
+}
